@@ -6,6 +6,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using PasswordKEEP.Extensions;
 using Serilog;
+using System;
 
 namespace PasswordKEEP
 {
@@ -33,6 +34,8 @@ namespace PasswordKEEP
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "PasswordKEEP", Version = "v1" });
             });
 
+            services.ConfigureCors();
+
             services.AddAutoMapper(typeof(Startup));
             services.AddSingleton(Log.Logger);
 
@@ -42,6 +45,11 @@ namespace PasswordKEEP
 
             services.AddAuthentication();
             services.AddIdentity();
+
+            services.AddHsts(options =>
+            {
+                options.MaxAge = TimeSpan.FromHours(1);
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -53,14 +61,18 @@ namespace PasswordKEEP
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "PasswordKEEP v1"));
             }
+            if (env.IsProduction())
+            {
+                app.UseHsts();
+            }
+            app.UseHttpsRedirection();
 
             app.ConfigureExceptionHandler(logger);
-
-            app.UseHttpsRedirection();
             app.UseStaticFiles();
 
             app.UseRouting();
 
+            app.UseCors("PasswordKEEPPolicy");
             app.UseAuthentication();
             app.UseAuthorization();
 

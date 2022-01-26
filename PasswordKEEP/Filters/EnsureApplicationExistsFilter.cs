@@ -15,9 +15,10 @@ namespace PasswordKEEP.Filters
         private readonly ILogger _logger;
         private readonly IRepositoryManager _repositoryManager;
 
-        public EnsureApplicationExistsFilter(ILogger logger)
+        public EnsureApplicationExistsFilter(ILogger logger, IRepositoryManager repositoryManager)
         {
             _logger = logger;
+            _repositoryManager = repositoryManager;
         }
 
         public void OnActionExecuted(ActionExecutedContext context) { }

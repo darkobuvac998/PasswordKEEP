@@ -4,12 +4,9 @@ using Entities.DataTransferObjects;
 using Entities.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
 using PasswordKEEP.Filters;
-using Serilog;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace PasswordKEEP.Controllers
@@ -19,22 +16,18 @@ namespace PasswordKEEP.Controllers
     public class ApplicationsController : ControllerBase
     {
         private readonly IRepositoryManager _repositoryManager;
-        private readonly ILogger _logger;
         private readonly IMapper _mapper;
 
-        public ApplicationsController(IRepositoryManager repositoryManager, IMapper mapper, ILogger logger)
+        public ApplicationsController(IRepositoryManager repositoryManager, IMapper mapper)
         {
             _repositoryManager = repositoryManager;
             _mapper = mapper;
-            _logger = logger;
         }
 
         [HttpGet]
         public async Task<IActionResult> GetAllApplications(string userId)
         {
             var applications = await _repositoryManager.Application.FindByConditionAsync(app => app.UserId == userId, false);
-            _logger.Information(JsonConvert.SerializeObject(applications).ToString());
-
             if (applications == null)
             {
                 return NotFound();
@@ -46,7 +39,7 @@ namespace PasswordKEEP.Controllers
         }
         [HttpGet("{id}", Name = "GetApplicationById")]
         [EnsureApplicationExists]
-        public IActionResult GetApplicationById(Guid id)
+        public IActionResult GetApplicationById(string userId, Guid id)
         {
             var app = HttpContext.Items["Application"];
             var appDto = _mapper.Map<ApplicationDto>(app);
@@ -54,6 +47,7 @@ namespace PasswordKEEP.Controllers
         }
 
         [HttpPost]
+        [DtoValidation]
         public async Task<IActionResult> AddApplication(string userId, [FromBody] ApplicationForCreationDto appDto)
         {
             var app = _mapper.Map<Application>(appDto);
@@ -64,7 +58,30 @@ namespace PasswordKEEP.Controllers
 
             var appToReturn = _mapper.Map<ApplicationDto>(app);
 
-            return CreatedAtRoute("GetApplicationById", new { id = app.Id }, appToReturn);
+            return CreatedAtRoute("GetApplicationById", new { userId, appToReturn.Id }, appToReturn);
+        }
+
+        [HttpPut("{id}")]
+        [DtoValidation]
+        [EnsureApplicationExists]
+        public async Task<IActionResult> UpdateApplication(string userId, Guid id, [FromBody] ApplicationForCreationDto appDto)
+        {
+            var app = HttpContext.Items["Application"] as Application;
+            _mapper.Map(appDto, app);
+            await _repositoryManager.SaveAsync();
+
+            return NoContent();
+        }
+
+        [HttpDelete("{id}")]
+        [EnsureApplicationExists]
+        public async Task<IActionResult> DeleteApplication(string userId, Guid id)
+        {
+            var appEntity = HttpContext.Items["Application"] as Application;
+            _repositoryManager.Application.Delete(appEntity);
+            await _repositoryManager.SaveAsync();
+
+            return NoContent();
         }
     }
 }
