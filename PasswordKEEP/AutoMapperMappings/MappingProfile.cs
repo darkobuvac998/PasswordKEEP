@@ -16,6 +16,7 @@ namespace PasswordKEEP.AutoMapperMappings
             CreateMap<UserForRegistrationDto, User>();
             CreateMap<ApplicationForCreationDto, Application>();
             CreateMap<Account, AccountDto>().ReverseMap();
+            CreateMap<AccountForCreationDto, Account>();
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Contracts;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,10 +11,10 @@ namespace PasswordKEEP.Services
 {
     public class PasswordService : IPasswordService
     {
-        private string _secretKey = "SecretKey";
+        private string _secretKey;
         public PasswordService()
         {
-            _secretKey = Environment.GetEnvironmentVariable("PasswordKEEPSecret");
+            _secretKey = Environment.GetEnvironmentVariable("PasswordKEEPSecret").Trim().ToLower();
         }
 
         public string Encrypt(string plainText)
@@ -34,12 +35,12 @@ namespace PasswordKEEP.Services
             byte[] resultArray = objCryptoTransform.TransformFinalBlock(toEncryptedArray, 0, toEncryptedArray.Length);
             objTripleDESCryptoService.Clear();
 
-            return Convert.ToBase64String(resultArray, 0, resultArray.Length);
+            return Convert.ToBase64String(resultArray, 0, resultArray.Length)?.Trim();
         }
 
         public string Decrypt(string hashedText)
         {
-            byte[] toEncryptedArray = Encoding.UTF8.GetBytes(hashedText);
+            byte[] toEncryptedArray = Encoding.UTF8.GetBytes(hashedText?.Trim());
 
             MD5CryptoServiceProvider provider = new MD5CryptoServiceProvider();
             byte[] securityKeyArray = provider.ComputeHash(Encoding.UTF8.GetBytes(_secretKey));
