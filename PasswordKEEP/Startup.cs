@@ -40,8 +40,10 @@ namespace PasswordKEEP
             services.AddSingleton(Log.Logger);
 
             services.AddSqlContext(Configuration);
+
             services.AddPasswordService();
             services.AddRepositoryManager();
+            services.AddAccountsService();
 
             services.AddAuthentication();
             services.AddIdentity();

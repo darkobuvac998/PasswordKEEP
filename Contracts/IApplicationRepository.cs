@@ -10,5 +10,6 @@ namespace Contracts
     public interface IApplicationRepository : IRepositoryBase<Application>
     {
         void CreateApplication(string userId, Application app);
+        Task<Application> FindApplicationAsync(Guid id, bool trackChanges);
     }
 }

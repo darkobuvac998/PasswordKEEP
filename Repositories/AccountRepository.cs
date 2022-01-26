@@ -13,5 +13,12 @@ namespace Repositories
         public AccountRepository(RepositoryContext context) : base(context)
         {
         }
+
+        public async Task<Account> GetAccountById(Guid applicationId, Guid id, bool tracking)
+        {
+            var account = await FindByConditionAsync(acc => acc.ApplicationId == applicationId && acc.Id == id, tracking);
+            var result = account.FirstOrDefault();
+            return result;
+        }
     }
 }

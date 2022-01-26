@@ -44,5 +44,8 @@ namespace PasswordKEEP.Extensions
                     builder.AllowAnyOrigin().WithMethods("GET", "POST", "PUT", "DELETE").AllowAnyHeader();
                 });
             });
+
+        public static void AddAccountsService(this IServiceCollection services) =>
+            services.AddScoped<IAccountsService, AccountsService>();
     }
 }

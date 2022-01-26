@@ -19,5 +19,12 @@ namespace Repositories
             app.UserId = userId;
             Create(app);
         }
+
+        public async Task<Application> FindApplicationAsync(Guid id, bool trackChanges)
+        {
+            var app = await FindByConditionAsync(app => app.Id == id, trackChanges);
+            var result = app.FirstOrDefault();
+            return result;
+        }
     }
 }
