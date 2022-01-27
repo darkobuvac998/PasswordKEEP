@@ -2,6 +2,7 @@
 using Serilog;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
@@ -19,44 +20,45 @@ namespace PasswordKEEP.Services
 
         public string Encrypt(string plainText)
         {
-            byte[] toEncryptedArray = Encoding.UTF8.GetBytes(plainText);
-
-            MD5CryptoServiceProvider provider = new MD5CryptoServiceProvider();
-            byte[] securityKeyArray = provider.ComputeHash(Encoding.UTF8.GetBytes(_secretKey));
-            provider.Clear();
-
-            var objTripleDESCryptoService = new TripleDESCryptoServiceProvider();
-            objTripleDESCryptoService.Key = securityKeyArray;
-            objTripleDESCryptoService.Mode = CipherMode.ECB;
-            objTripleDESCryptoService.Padding = PaddingMode.PKCS7;
-
-            var objCryptoTransform = objTripleDESCryptoService.CreateEncryptor();
-
-            byte[] resultArray = objCryptoTransform.TransformFinalBlock(toEncryptedArray, 0, toEncryptedArray.Length);
-            objTripleDESCryptoService.Clear();
-
-            return Convert.ToBase64String(resultArray, 0, resultArray.Length)?.Trim();
+            {
+                byte[] initVectorBytes = Encoding.UTF8.GetBytes(_secretKey);
+                byte[] plainTextBytes = Encoding.UTF8.GetBytes(plainText);
+                PasswordDeriveBytes password = new PasswordDeriveBytes(_secretKey, null);
+                byte[] keyBytes = password.GetBytes(256 / 8);
+                RijndaelManaged symmetricKey = new RijndaelManaged();
+                symmetricKey.Mode = CipherMode.CBC;
+                symmetricKey.Padding = PaddingMode.PKCS7;
+                ICryptoTransform encryptor = symmetricKey.CreateEncryptor(keyBytes, initVectorBytes);
+                MemoryStream memoryStream = new MemoryStream();
+                CryptoStream cryptoStream = new CryptoStream(memoryStream, encryptor, CryptoStreamMode.Write);
+                cryptoStream.Write(plainTextBytes, 0, plainTextBytes.Length);
+                cryptoStream.FlushFinalBlock();
+                byte[] cipherTextBytes = memoryStream.ToArray();
+                memoryStream.Close();
+                cryptoStream.Close();
+                string cipherText = Convert.ToBase64String(cipherTextBytes);
+                return cipherText;
+            }
         }
 
         public string Decrypt(string hashedText)
         {
-            byte[] toEncryptedArray = Encoding.UTF8.GetBytes(hashedText?.Trim());
-
-            MD5CryptoServiceProvider provider = new MD5CryptoServiceProvider();
-            byte[] securityKeyArray = provider.ComputeHash(Encoding.UTF8.GetBytes(_secretKey));
-            provider.Clear();
-
-            var objTripleDESCryptoService = new TripleDESCryptoServiceProvider();
-            objTripleDESCryptoService.Key = securityKeyArray;
-            objTripleDESCryptoService.Mode = CipherMode.ECB;
-            objTripleDESCryptoService.Padding = PaddingMode.PKCS7;
-
-            var objCryptoTransform = objTripleDESCryptoService.CreateDecryptor();
-
-            byte[] resultArray = objCryptoTransform.TransformFinalBlock(toEncryptedArray, 0, toEncryptedArray.Length);
-            objTripleDESCryptoService.Clear();
-
-            return Encoding.UTF8.GetString(resultArray);
+            byte[] initVectorBytes = Encoding.UTF8.GetBytes(_secretKey);
+            byte[] cipherTextBytes = Convert.FromBase64String(hashedText);
+            PasswordDeriveBytes password = new PasswordDeriveBytes(_secretKey, null);
+            byte[] keyBytes = password.GetBytes(256 / 8);
+            RijndaelManaged symmetricKey = new RijndaelManaged();
+            symmetricKey.Mode = CipherMode.CBC;
+            symmetricKey.Padding = PaddingMode.PKCS7;
+            ICryptoTransform decryptor = symmetricKey.CreateDecryptor(keyBytes, initVectorBytes);
+            MemoryStream memoryStream = new MemoryStream(cipherTextBytes);
+            CryptoStream cryptoStream = new CryptoStream(memoryStream, decryptor, CryptoStreamMode.Read);
+            byte[] plainTextBytes = new byte[cipherTextBytes.Length];
+            int decryptedByteCount = cryptoStream.Read(plainTextBytes, 0, plainTextBytes.Length);
+            memoryStream.Close();
+            cryptoStream.Close();
+            string plainText = Encoding.UTF8.GetString(plainTextBytes, 0, decryptedByteCount);
+            return plainText;
         }
     }
 }
