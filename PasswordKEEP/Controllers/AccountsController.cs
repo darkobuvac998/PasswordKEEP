@@ -24,7 +24,10 @@ namespace PasswordKEEP.Controllers
         public async Task<IActionResult> GetAccountsForApplication(Guid applicationId)
         {
             var result = await _accountsService.GetAccountsForApplicationAsync(applicationId);
-            return Ok(result);
+            if (result.Succeded)
+                return Ok(result.Result);
+            else
+                return BadRequest();
         }
 
         [HttpGet("{id}", Name = "GetAccountByIdForApplication")]
@@ -40,9 +43,9 @@ namespace PasswordKEEP.Controllers
         public async Task<IActionResult> CreateAccountForApplication(Guid applicationId, [FromBody] AccountForCreationDto accountDto)
         {
             var result = await _accountsService.CreateAccountForApplication(applicationId, accountDto);
-            if (result != null)
+            if (result.Succeded)
             {
-                return CreatedAtRoute("GetAccountByIdForApplication", new { applicationId, id = result.Id }, result);
+                return CreatedAtRoute("GetAccountByIdForApplication", new { applicationId, id = result.Result.Id }, result.Result);
             }
             else
             {
@@ -50,6 +53,37 @@ namespace PasswordKEEP.Controllers
             }
         }
 
-        
+        [HttpPut("{id}")]
+        [EnsureAccountExists]
+        public async Task<IActionResult> UpdateAccountForCompany(Guid applicationId, Guid id, [FromBody] AccountForCreationDto accountDto)
+        {
+            var result = await _accountsService.UpdateAccountForApplication(applicationId, id, accountDto);
+            if (result.Succeded)
+            {
+                return Ok(result.Result);
+            }
+            else
+            {
+                return BadRequest();
+            }
+        }
+
+
+        [HttpDelete("{id}")]
+        [EnsureAccountExists]
+        public async Task<IActionResult> DeleteAccountForCompany(Guid applicationId, Guid id)
+        {
+            var accont = HttpContext.Items["account"] as Account;
+            if (accont != null)
+            {
+                await _accountsService.DeleteAccountForApplication(accont);
+                return NoContent();
+            }
+            else
+            {
+                return BadRequest();
+            }
+        }
+
     }
 }

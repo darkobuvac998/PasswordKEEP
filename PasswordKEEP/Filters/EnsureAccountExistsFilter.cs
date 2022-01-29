@@ -25,17 +25,20 @@ namespace PasswordKEEP.Filters
 
             var trackChanges = context.HttpContext.Request.Method.Equals("PUT");
 
-            var accountDto = await _accountsService.GetAccountByIdForApplication(applicationId, id, trackChanges);
+            var result = await _accountsService.GetAccountByIdForApplication(applicationId, id, trackChanges);
 
-            if (accountDto == null)
+            if (result.Succeded)
             {
-                _logger.Error($"Account with id {id} for application with id {applicationId} doesn't exists.");
-                context.Result = new NotFoundResult();
-            }
-            else
-            {
-                context.HttpContext.Items.Add("account", accountDto);
-                await next();
+                if (result.Result == null)
+                {
+                    _logger.Error($"Account with id {id} for application with id {applicationId} doesn't exists.");
+                    context.Result = new NotFoundResult();
+                }
+                else
+                {
+                    context.HttpContext.Items.Add("account", result.Result);
+                    await next();
+                } 
             }
         }
     }
