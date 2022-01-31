@@ -12,7 +12,7 @@
     transition: all .4s;  
   }  
   .box:hover{  
-    width: 15%;  
+    width: 15vw;  
     background: #c9c9c9;  
     border-radius: 10px;  
     color: black;  

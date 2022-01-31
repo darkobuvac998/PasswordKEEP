@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { of } from 'rxjs';
+import { of, timer } from 'rxjs';
 
 @Component({
   selector: 'header-bar',
@@ -8,6 +8,7 @@ import { of } from 'rxjs';
 })
 export class HeaderBarComponent implements OnInit {
   public userName: string = 'Username';
+  public toggleFlag = false;
 
   constructor() {}
 
@@ -23,5 +24,13 @@ export class HeaderBarComponent implements OnInit {
         }
       }
     );
+  }
+
+  showDropdown(){
+    this.toggleFlag = !this.toggleFlag;
+    let closeDelay = timer(4000);
+    closeDelay.subscribe(() => {
+      this.toggleFlag = !this.toggleFlag;
+    });
   }
 }

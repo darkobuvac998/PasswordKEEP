@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormMode } from '../shared/form-mode';
 
 @Component({
@@ -9,6 +9,9 @@ import { FormMode } from '../shared/form-mode';
 export class ToolbarComponent implements OnInit {
 
   @Input() mode: FormMode;
+  @Output() modeChange: EventEmitter<FormMode> = new EventEmitter<FormMode>();
+
+  public formMode = FormMode;
 
   constructor() { }
 
@@ -17,6 +20,10 @@ export class ToolbarComponent implements OnInit {
 
   canAdd(){
     return true;
+  }
+
+  onModeChange(mode: FormMode){
+    this.modeChange.emit(mode);
   }
 
 }

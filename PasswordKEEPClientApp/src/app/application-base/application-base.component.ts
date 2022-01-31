@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Application } from '../models/application.model';
 import { FormMode } from '../shared/form-mode';
 
@@ -9,7 +9,7 @@ import { FormMode } from '../shared/form-mode';
 })
 export class ApplicationBaseComponent implements OnInit {
 
-  public items: Application[];
+  @Input() public items: Application[];
   public selectedItem: Application = null;
   public mode: FormMode = FormMode.Thumbnail;
   public formMode = FormMode;
