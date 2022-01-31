@@ -1,11 +1,48 @@
-<div class="d-flex flex-row justify-content-start p-2">
-    <div *ngIf="mode==0" class="col-sm-1">
-        <span><i class="bi bi-border-all icon-size"></i></span>
-    </div>
-    <div *ngIf="mode==1" class="col-sm-1">
-        <span><i class="bi bi-list-columns icon-size"></i></span>
-    </div>
-    <div class="col-sm-1">
-        <span><i class="bi bi-plus-lg icon-size"></i></span>
+<div class="d-flex flex-row justify-content-start  gap-3 border-bottom">
+    <div class="container d-flex flex-row">
+        <div *ngIf="mode==0" class="box d-flex position-relative">
+            <div class="icon save">
+                <i class="bi bi-border-all icon-size"></i>
+            </div>
+            <p class="position-absolute top-50 start-50 translate-middle-y fs-5 hide">{{'Detail' | uppercase}}</p>
+        </div>
+        <div *ngIf="mode==1" class="box d-flex position-relative">
+            <div class="icon save">
+                <i class="bi bi-list-columns icon-size"></i>
+            </div>
+            <p class="position-absolute top-50 start-50 translate-middle-y fs-5 hide">{{'List' | uppercase}}</p>
+        </div>
+        <div class="box d-flex position-relative">
+            <div class="icon save">
+                <i class="bi bi-plus-lg icon-size"></i>
+            </div>
+            <p class="position-absolute top-50 start-50 translate-middle-y fs-5 hide">{{'Add' | uppercase}}</p>
+        </div>
+        <div class="box d-flex position-relative">
+            <div class="icon save">
+                <i class="bi bi-pencil icon-size"></i>
+            </div>
+            <p class="position-absolute top-50 start-50 translate-middle-y fs-5 hide">{{'Edit' | uppercase}}</p>
+        </div>
+        <div class="box d-flex position-relative">
+            <div class="icon save">
+                <i class="bi bi-trash icon-size"></i>
+            </div>
+            <p class="position-absolute top-50 start-50 translate-middle-y fs-5 hide">{{'Delete' | uppercase}}</p>
+        </div>
+        <ng-container *ngIf="mode==2 || mode==3">
+            <div class="box d-flex position-relative">
+                <div class="icon save">
+                    <i class="bi bi-folder-plus icon-size"></i>
+                </div>
+                <p class="position-absolute top-50 start-50 translate-middle-y fs-5 hide">{{'Save' | uppercase}}</p>
+            </div>
+            <div class="box d-flex position-relative">
+                <div class="icon save">
+                    <i class="bi bi-x-lg icon-size"></i>
+                </div>
+                <p class="position-absolute top-50 start-50 translate-middle-y fs-5 hide">{{'Cancel' | uppercase}}</p>
+            </div>
+        </ng-container>
     </div>
 </div>

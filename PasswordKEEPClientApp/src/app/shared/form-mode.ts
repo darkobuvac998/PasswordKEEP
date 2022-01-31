@@ -1,6 +1,6 @@
-export enum FormMode{
-    Thumbnail,
-    Detail,
-    Edit,
-    Add
+export enum FormMode {
+  Thumbnail,
+  Detail,
+  Edit,
+  Add,
 }
