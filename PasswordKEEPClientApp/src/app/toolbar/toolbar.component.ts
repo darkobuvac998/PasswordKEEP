@@ -16,6 +16,7 @@ export class ToolbarComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
+    this.mode = FormMode.Thumbnail;
   }
 
   canAdd(){

@@ -7,7 +7,7 @@ export function PrimaryKey() {
     };
 
     const setter = (next: string | null) => {
-      val = next.toLowerCase();
+      val = next?.toLowerCase();
     };
 
     Object.defineProperty(target, key, {

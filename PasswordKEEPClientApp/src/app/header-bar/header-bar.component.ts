@@ -26,11 +26,13 @@ export class HeaderBarComponent implements OnInit {
     );
   }
 
-  showDropdown(){
+  showDropdown() {
     this.toggleFlag = !this.toggleFlag;
     let closeDelay = timer(4000);
     closeDelay.subscribe(() => {
-      this.toggleFlag = !this.toggleFlag;
+      if (this.toggleFlag) {
+        this.toggleFlag = !this.toggleFlag;
+      }
     });
   }
 }

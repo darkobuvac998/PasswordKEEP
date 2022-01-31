@@ -6,7 +6,10 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { HeaderBarComponent } from './header-bar/header-bar.component';
 import { ApplicationBaseComponent } from './application-base/application-base.component';
 import { ToolbarComponent } from './toolbar/toolbar.component';
-import { ApplicationCardComponent } from './application-card/application-card.component';
+import { AppCardComponent } from './app-card/app-card.component';
+import { AppViewComponent } from './app-view/app-view.component';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -14,13 +17,11 @@ import { ApplicationCardComponent } from './application-card/application-card.co
     HeaderBarComponent,
     ApplicationBaseComponent,
     ToolbarComponent,
-    ApplicationCardComponent
+    AppCardComponent,
+    AppViewComponent,
   ],
-  imports: [
-    BrowserModule,
-    NgbModule
-  ],
+  imports: [BrowserModule, NgbModule, CommonModule, FormsModule],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

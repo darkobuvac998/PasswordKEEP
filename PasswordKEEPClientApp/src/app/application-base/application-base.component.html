@@ -1,23 +1,31 @@
 <div class="p-3">
     <div class="d-flex flex-column justify-content-center">
-        <div class="d-flex flex-row justify-content-start border-bottom">
+        <div class="d-flex flex-row justify-content-start border-bottom gap-2">
             <div class="inline">
                 <p class="display-4 align-self-center">
-                    {{'applications' | uppercase}}
+                    {{this.title | uppercase}}
                 </p>
             </div>
             <div *ngIf="mode==formMode.Detail" class="align-self-center position-relative">
-                <i class="bi bi-caret-right-fill icon-size ps-3 position-absolute top-50 start-50 translate-middle-y"></i>
+                <i class="bi bi-caret-right-fill icon-size ps-3 top-50 start-50 translate-middle-y"></i>
             </div>
-            <div class="align-self-center" *ngIf="mode==formMode.Detail">
-                <p class="display-6"><b>{{selectedItem?.name | uppercase}}</b></p>
+            <div class="align-self-center position-relative d-flex" *ngIf="mode==formMode.Detail">
+                <p class="display-6 position-absolute top-50 start-50 translate-middle-y"><b>{{this.selectedItem?.name}}</b>
+                </p>
             </div>
         </div>
         <div class="align-self-auto">
             <toolbar (modeChange)="onModeChange($event)" [mode]="mode"></toolbar>
         </div>
-        <div>
-            
+        <div class="d-flex" *ngIf="mode==formMode.Thumbnail">
+            <ng-container *ngTemplateOutlet="listTemplate; context{$implicit: items, selectedItem: selectedItem}">
+
+            </ng-container>
+        </div>
+        <div class="d-flex" *ngIf="mode==formMode.Detail">
+            <ng-container *ngTemplateOutlet="detailTemplate; context{$implicit: selectedItem}">
+
+            </ng-container>
         </div>
     </div>
 </div>

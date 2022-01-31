@@ -1,0 +1,14 @@
+<div class="d-flex" >
+    <div class="data-card" [ngClass]="{'data-card-bckg': selected}">
+        <div (click)="onSelecredEvenetHandler()">
+            <h3>{{application?.name}}</h3>
+        </div>
+        <div>
+            <h4>{{'Account number: '+application?.accounts.length}}</h4>
+        </div>
+        <span class="link-text">
+            Go to application
+            <a [href]="application?.url"><i class="bi bi-arrow-right"></i></a>
+        </span>
+    </div>
+</div>
