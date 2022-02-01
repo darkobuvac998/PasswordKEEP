@@ -72,10 +72,10 @@
                         <input [type]="showPassword ? 'text' : 'password'" class="form-control"
                             [(ngModel)]="accountAdd.password" name="appurl" [value]="" [required]="true">
                         <div class="input-group-append">
-                            <span style="cursor: pointer;" (click)="onShowPassword()" *ngIf="showPassword"
-                                class="input-group-text"><i class="bi bi-eye"></i></span>
-                            <span style="cursor: pointer;" (click)="onShowPassword()" *ngIf="!showPassword"
-                                class="input-group-text"><i class="bi bi-eye-slash"></i></span>
+                            <div style="cursor: pointer;" (mousedown)="onShowPassword()"
+                                *ngIf="showPassword" class="input-group-text"><i class="bi bi-eye"></i></div>
+                            <div style="cursor: pointer;" (mouseup)="onShowPassword()" *ngIf="!showPassword"
+                                class="input-group-text"><i class="bi bi-eye-slash"></i></div>
                         </div>
                     </div>
                     <div class="input-group">

@@ -12,6 +12,9 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AccountViewComponent } from './account-view/account-view.component';
 
+import { HttpClientModule } from '@angular/common/http';
+import { HttpService } from './services/http-service.service';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -22,8 +25,14 @@ import { AccountViewComponent } from './account-view/account-view.component';
     AppViewComponent,
     AccountViewComponent,
   ],
-  imports: [BrowserModule, NgbModule, CommonModule, FormsModule],
-  providers: [],
+  imports: [
+    BrowserModule,
+    NgbModule,
+    CommonModule,
+    FormsModule,
+    HttpClientModule,
+  ],
+  providers: [HttpService],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

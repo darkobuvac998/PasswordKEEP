@@ -3,6 +3,7 @@ import { AppCardComponent } from '../app-card/app-card.component';
 import { ApplicationBaseComponent } from '../application-base/application-base.component';
 import { Account } from '../models/account.model';
 import { Application } from '../models/application.model';
+import { HttpService } from '../services/http-service.service';
 import { FormMode } from '../shared/form-mode';
 
 @Component({
@@ -10,13 +11,13 @@ import { FormMode } from '../shared/form-mode';
   templateUrl: './account-view.component.html',
   styleUrls: ['./account-view.component.css'],
 })
-export class AccountViewComponent extends ApplicationBaseComponent {
+export class AccountViewComponent extends ApplicationBaseComponent<Account> {
   @ViewChildren(AppCardComponent) appCards: QueryList<AppCardComponent>;
   public accountAdd: Account;
   public showPassword: boolean = false;
   public confirmPassword: string = null;
-  constructor() {
-    super();
+  constructor(protected override httpService: HttpService) {
+    super(httpService);
     this.title = 'Accounts';
     this.mode = FormMode.Thumbnail;
   }

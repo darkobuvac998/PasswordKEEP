@@ -11,20 +11,28 @@ import { ApplicationBaseComponent } from '../application-base/application-base.c
 import { Account } from '../models/account.model';
 import { Application } from '../models/application.model';
 import { FormMode } from '../shared/form-mode';
+import { ClassConstructor, ClassTransformer } from 'class-transformer';
+import { HttpService } from '../services/http-service.service';
 
 @Component({
   selector: 'app-view',
   templateUrl: './app-view.component.html',
   styleUrls: ['./app-view.component.css'],
 })
-export class AppViewComponent extends ApplicationBaseComponent {
+export class AppViewComponent extends ApplicationBaseComponent<Application> {
   @ViewChildren(AppCardComponent) appCards: QueryList<AppCardComponent>;
   public applicationAddModel: Application;
 
-  constructor(private changeDetector: ChangeDetectorRef) {
-    super();
+  constructor(
+    private changeDetector: ChangeDetectorRef,
+    protected override httpService: HttpService
+  ) {
+    super(httpService);
     this.title = 'Applications';
     this.mode = FormMode.Thumbnail;
+    let userId = 'kdfj;aksdjf;'; //TODO
+    this.resourceUrl = `api/${userId}/appplications`;
+    this.classType = Application;
   }
 
   override ngOnInit(): void {
@@ -50,6 +58,18 @@ export class AppViewComponent extends ApplicationBaseComponent {
       // console.log(this.mode);
     });
     this.applicationAddModel = new Application();
+
+    this.httpService
+      .getAllItems<Application>(this.resourceUrl, this.itemsType)
+      .subscribe(
+        (res) => {
+          this.items = res;
+        },
+        (err) => {
+          console.log(err);
+        },
+        () => {}
+      );
   }
 
   override ngAfterViewInit(): void {

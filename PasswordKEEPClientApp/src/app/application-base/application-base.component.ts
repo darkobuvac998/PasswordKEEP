@@ -6,8 +6,10 @@ import {
   OnInit,
   TemplateRef,
 } from '@angular/core';
+import { ClassConstructor } from 'class-transformer';
 import { timer } from 'rxjs';
 import { Application } from '../models/application.model';
+import { HttpService } from '../services/http-service.service';
 import { FormMode } from '../shared/form-mode';
 
 @Component({
@@ -15,21 +17,24 @@ import { FormMode } from '../shared/form-mode';
   templateUrl: './application-base.component.html',
   styleUrls: ['./application-base.component.css'],
 })
-export class ApplicationBaseComponent implements OnInit, AfterViewInit {
-  @Input() public items: any[] = [];
-  @Input() public selectedItem: any;
+export class ApplicationBaseComponent<T> implements OnInit, AfterViewInit {
+  @Input() public items: any[] | T[] = [];
+  @Input() public selectedItem: T | any;
   private _mode: FormMode;
   private _oldMode: FormMode;
+  private _resourceUrl: string;
+  private _classType: ClassConstructor<T>;
+  private _itemsType: ClassConstructor<T[]>;
   public formMode = FormMode;
   private _title: string;
-  public itemAdd: any;
-  private _component: ApplicationBaseComponent = this;
-  get component(): ApplicationBaseComponent {
+  public itemAdd: T | any;
+  private _component: ApplicationBaseComponent<T> = this;
+  get component(): ApplicationBaseComponent<T> {
     return this._component;
   }
 
   @Input('component')
-  set component(value: ApplicationBaseComponent) {
+  set component(value: ApplicationBaseComponent<T>) {
     this._component = value;
   }
 
@@ -52,10 +57,29 @@ export class ApplicationBaseComponent implements OnInit, AfterViewInit {
     this._title = value;
   }
 
+  public get resourceUrl(){
+    return this._resourceUrl;
+  }
+  public set resourceUrl(value: string){
+    this._resourceUrl = value;
+  }
+  public get classType(){
+    return this._classType;
+  }
+  public set classType(value: ClassConstructor<T>){
+    this._classType = value;
+  }
+  public get itemsType(){
+    return this._itemsType;
+  }
+  public set itemsType(value: ClassConstructor<T[]>){
+    this._itemsType = value;
+  }
+
   @ContentChild('listTemplate') listTemplate: TemplateRef<any>;
   @ContentChild('detailTemplate') detailTemplate: TemplateRef<any>;
 
-  constructor() {}
+  constructor(protected httpService: HttpService) {}
 
   ngOnInit(): void {
     const time = timer(1000, 1000);
