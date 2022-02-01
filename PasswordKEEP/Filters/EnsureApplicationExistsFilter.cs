@@ -36,7 +36,7 @@ namespace PasswordKEEP.Filters
             }
             else
             {
-                context.HttpContext.Items.Add("Application", appEntity);
+                context.HttpContext.Items.Add("app", appEntity.FirstOrDefault());
             }
 
         }

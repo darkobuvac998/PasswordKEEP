@@ -46,4 +46,15 @@ export class HttpService {
       })
     );
   }
+
+  updateItem<T>(url: string, cls: ClassConstructor<T>, data: T) {
+    this.loading = true;
+    return this.httpClient.put<T>(url, data).pipe(
+      map((res) => plainToInstance<T, Object>(cls, res)),
+      catchError((err) => {
+        console.log(err);
+        return throwError(err);
+      })
+    );
+  }
 }

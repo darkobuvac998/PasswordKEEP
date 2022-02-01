@@ -3,12 +3,12 @@ import {
   Component,
   ContentChild,
   Input,
+  OnDestroy,
   OnInit,
   TemplateRef,
 } from '@angular/core';
 import { ClassConstructor } from 'class-transformer';
-import { timer } from 'rxjs';
-import { Application } from '../models/application.model';
+import { Subscription, timer } from 'rxjs';
 import { HttpService } from '../services/http-service.service';
 import { FormMode } from '../shared/form-mode';
 
@@ -17,7 +17,9 @@ import { FormMode } from '../shared/form-mode';
   templateUrl: './application-base.component.html',
   styleUrls: ['./application-base.component.css'],
 })
-export class ApplicationBaseComponent<T> implements OnInit, AfterViewInit {
+export class ApplicationBaseComponent<T>
+  implements OnInit, AfterViewInit, OnDestroy
+{
   @Input() public items: any[] | T[] = [];
   @Input() public selectedItem: T | any;
   private _mode: FormMode;
@@ -26,13 +28,15 @@ export class ApplicationBaseComponent<T> implements OnInit, AfterViewInit {
   private _classType: ClassConstructor<T>;
   private _itemsType: ClassConstructor<T[]>;
   public formMode = FormMode;
+  public loadItems: boolean = false;
+  public showToolbar: boolean = false;
   private _title: string;
   public itemAdd: T | any;
+  public subscription: Subscription;
   private _component: ApplicationBaseComponent<T> = this;
   get component(): ApplicationBaseComponent<T> {
     return this._component;
   }
-
   @Input('component')
   set component(value: ApplicationBaseComponent<T>) {
     this._component = value;
@@ -57,22 +61,22 @@ export class ApplicationBaseComponent<T> implements OnInit, AfterViewInit {
     this._title = value;
   }
 
-  public get resourceUrl(){
+  public get resourceUrl() {
     return this._resourceUrl;
   }
-  public set resourceUrl(value: string){
+  public set resourceUrl(value: string) {
     this._resourceUrl = value;
   }
-  public get classType(){
+  public get classType() {
     return this._classType;
   }
-  public set classType(value: ClassConstructor<T>){
+  public set classType(value: ClassConstructor<T>) {
     this._classType = value;
   }
-  public get itemsType(){
+  public get itemsType() {
     return this._itemsType;
   }
-  public set itemsType(value: ClassConstructor<T[]>){
+  public set itemsType(value: ClassConstructor<T[]>) {
     this._itemsType = value;
   }
 
@@ -82,12 +86,19 @@ export class ApplicationBaseComponent<T> implements OnInit, AfterViewInit {
   constructor(protected httpService: HttpService) {}
 
   ngOnInit(): void {
-    const time = timer(1000, 1000);
-    this.mode = this.component.mode;
-    time.subscribe(() => {});
+    // const time = timer(1000, 1000);
+    // this.mode = this.component.mode;
+    // time.subscribe(() => {});
+    this.component.onLoadItems();
   }
 
-  ngAfterViewInit(): void {}
+  ngAfterViewInit(): void {
+    this.afterLoadItems();
+  }
+
+  ngOnDestroy(): void {
+    this.component?.subscription?.unsubscribe();
+  }
 
   onModeChange(newMode: FormMode) {
     let oldMode = this.component.mode;
@@ -110,5 +121,62 @@ export class ApplicationBaseComponent<T> implements OnInit, AfterViewInit {
   onItemDoubleClick(item: any) {
     this.selectedItem = item;
     this.component.mode = this.formMode.Detail;
+  }
+
+  onReload() {
+    this.onLoadItems();
+    this.afterLoadItems();
+  }
+
+  onLoadItems() {
+    if (this.component.loadItems) {
+      this.component.items = [];
+      this.subscription = this.httpService
+        .getAllItems<T>(this.component.resourceUrl, this.component.itemsType)
+        .subscribe(
+          (res) => {
+            this.component.items = res;
+          },
+          (err) => {
+            console.log(err);
+          },
+          () => {}
+        );
+    }
+  }
+
+  afterLoadItems() {
+    this.subscription = timer(1000).subscribe(() => {
+      if (this.component.items?.length > 0) {
+        this.component.selectedItem = this.component.items[0];
+      }
+    });
+  }
+
+  updateItem() {
+    let url = `${this.component.resourceUrl}/${this.component.selectedItem?.id}`
+    this.subscription = this.httpService
+      .updateItem<T>(
+        url,
+        this.component.classType,
+        this.component.selectedItem
+      )
+      .subscribe(
+        (res) => {
+          this.component.selectedItem = res;
+        },
+        (err) => {
+          console.log(err);
+        },
+        () => {}
+      );
+  }
+
+  onSave(){
+    if(this.component.mode == FormMode.Edit){
+      this.updateItem();
+    }else if(this.component.mode == FormMode.Add){
+
+    }
   }
 }

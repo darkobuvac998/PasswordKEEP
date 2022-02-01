@@ -13,6 +13,12 @@
                 </div>
                 <p class="position-absolute top-50 start-50 translate-middle-y fs-5 hide">{{'List' | uppercase}}</p>
             </div>
+            <div (click)="onReload()" class="box d-flex position-relative">
+                <div class="icon save">
+                    <i class="bi bi-arrow-clockwise icon-size"></i>
+                </div>
+                <p class="position-absolute top-50 start-50 translate-middle-y fs-5 hide">{{'Reload' | uppercase}}</p>
+            </div>
             <div class="box d-flex position-relative" (click)="onModeChange(formMode.Add)">
                 <div class="icon save">
                     <i class="bi bi-plus-lg icon-size"></i>
@@ -33,7 +39,7 @@
             </div>
         </ng-container>
         <ng-container *ngIf="mode==2 || mode==3">
-            <div class="box d-flex position-relative">
+            <div class="box d-flex position-relative" (click)="onSave()">
                 <div class="icon save">
                     <i class="bi bi-folder-plus icon-size"></i>
                 </div>

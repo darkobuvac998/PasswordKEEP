@@ -10,6 +10,8 @@ export class ToolbarComponent implements OnInit {
 
   @Input() mode: FormMode;
   @Output() modeChange: EventEmitter<FormMode> = new EventEmitter<FormMode>();
+  @Output() reload: EventEmitter<any> = new EventEmitter<any>();
+  @Output() save: EventEmitter<any> = new EventEmitter<any>();
 
   public formMode = FormMode;
 
@@ -25,6 +27,14 @@ export class ToolbarComponent implements OnInit {
 
   onModeChange(mode: FormMode){
     this.modeChange.emit(mode);
+  }
+
+  onReload(){
+    this.reload.emit();
+  }
+
+  onSave(){
+    this.save.emit();
   }
 
 }

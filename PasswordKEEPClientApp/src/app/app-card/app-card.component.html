@@ -5,7 +5,7 @@
             <h3 *ngIf="!applicationCard">{{account?.username}}</h3>
         </div>
         <div *ngIf="applicationCard">
-            <h4>{{'Account number: '+application?.accounts.length}}</h4>
+            <h4>{{'Account number: '+application?.accounts?.length}}</h4>
         </div>
         <ng-container *ngIf="application?.url && applicationCard">
             <span class="link-text">

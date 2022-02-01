@@ -66,11 +66,13 @@ namespace PasswordKEEP.Controllers
         [EnsureApplicationExists]
         public async Task<IActionResult> UpdateApplication(string userId, Guid id, [FromBody] ApplicationForCreationDto appDto)
         {
-            var app = HttpContext.Items["Application"] as Application;
+            var app = HttpContext.Items["app"] as Application;
             _mapper.Map(appDto, app);
             await _repositoryManager.SaveAsync();
 
-            return NoContent();
+            var appForReturn = _mapper.Map<ApplicationDto>(app);
+
+            return Ok(appForReturn);
         }
 
         [HttpDelete("{id}")]

@@ -30,55 +30,17 @@ export class AppViewComponent extends ApplicationBaseComponent<Application> {
     super(httpService);
     this.title = 'Applications';
     this.mode = FormMode.Thumbnail;
-    let userId = 'kdfj;aksdjf;'; //TODO
-    this.resourceUrl = `api/${userId}/appplications`;
+    let userId = 'ace7fb5c-0238-472d-a8e0-98954f864fec'; //TODO
+    this.resourceUrl = `api/${userId}/applications`;
     this.classType = Application;
+    this.loadItems = true;
   }
 
   override ngOnInit(): void {
-    let app = new Application();
-    app.name = 'LinkedIn';
-    app.url = 'https://linkedin.com';
-    app.accounts = [];
-    app.id = '1';
-    let acc = new Account();
-    acc.id = '1';
-    acc.username = 'buvacd';
-    acc.password = '12345';
-    acc.lastModified = new Date();
-    app.accounts.push(acc);
-    app.accounts.push(acc);
-    for (let i = 0; i < 10; i++) {
-      app = { ...app, id: i.toString() };
-      this.items.push(app);
-    }
-    const time = timer(2000, 1000);
-    time.subscribe(() => {
-      // console.log(this.title);
-      // console.log(this.mode);
-    });
     this.applicationAddModel = new Application();
-
-    this.httpService
-      .getAllItems<Application>(this.resourceUrl, this.itemsType)
-      .subscribe(
-        (res) => {
-          this.items = res;
-        },
-        (err) => {
-          console.log(err);
-        },
-        () => {}
-      );
   }
 
-  override ngAfterViewInit(): void {
-    if (this.items.length > 0) {
-      this.selectedItem = this.items[0];
-    }
-    this.appCards.first.selected = true;
-    this.changeDetector.detectChanges();
-  }
+  override ngAfterViewInit(): void {}
 
   override onSelectedItemChange(application: Application) {
     super.onSelectedItemChange(application);
