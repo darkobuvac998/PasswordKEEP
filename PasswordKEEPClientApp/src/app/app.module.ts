@@ -10,6 +10,7 @@ import { AppCardComponent } from './app-card/app-card.component';
 import { AppViewComponent } from './app-view/app-view.component';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { AccountViewComponent } from './account-view/account-view.component';
 
 @NgModule({
   declarations: [
@@ -19,6 +20,7 @@ import { FormsModule } from '@angular/forms';
     ToolbarComponent,
     AppCardComponent,
     AppViewComponent,
+    AccountViewComponent,
   ],
   imports: [BrowserModule, NgbModule, CommonModule, FormsModule],
   providers: [],

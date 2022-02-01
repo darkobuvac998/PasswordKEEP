@@ -1,4 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { FormatDate } from '../decorators/property.decorator';
+import { Account } from '../models/account.model';
 import { Application } from '../models/application.model';
 
 @Component({
@@ -8,16 +10,33 @@ import { Application } from '../models/application.model';
 })
 export class AppCardComponent implements OnInit {
   @Input() application: Application;
-  @Output() onSelected: EventEmitter<Application> =
-    new EventEmitter<Application>();
+  @Input() account: Account;
+  @Output() onSelected: EventEmitter<any> =
+    new EventEmitter<any>();
+  @Output() onDoubleClick: EventEmitter<any> = new EventEmitter<any>();
   public selected: boolean = false;
+  @Input() applicationCard: boolean;
 
   constructor() {}
 
   ngOnInit(): void {}
 
   onSelecredEvenetHandler() {
-    this.onSelected.emit(this.application);
+    if(this.applicationCard){
+      this.onSelected.emit(this.application);
+    }else{
+      this.onSelected.emit(this.account);
+    }
+    
     this.selected = !this.selected;
+  }
+
+  onItemDoubleClick(){
+    this.selected = !this.selected;
+    if(this.applicationCard){
+      this.onDoubleClick.emit(this.application);
+    }else{
+      this.onDoubleClick.emit(this.account);
+    }
   }
 }

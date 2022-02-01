@@ -1,4 +1,4 @@
-import { PrimaryKey } from "../decorators/property.decorator";
+import { FormatDate, PrimaryKey } from "../decorators/property.decorator";
 
 export class Account{
     @PrimaryKey()

@@ -1,14 +1,23 @@
-<div class="d-flex" >
-    <div class="data-card" [ngClass]="{'data-card-bckg': selected}">
+<div class="d-flex" (dblclick)="onItemDoubleClick()" style="cursor: pointer;">
+    <div class="data-card" [ngClass]="{'data-card-bckg': selected, 'data-card-min': !applicationCard}">
         <div (click)="onSelecredEvenetHandler()">
-            <h3>{{application?.name}}</h3>
+            <h3 *ngIf="applicationCard">{{application?.name}}</h3>
+            <h3 *ngIf="!applicationCard">{{account?.username}}</h3>
         </div>
-        <div>
+        <div *ngIf="applicationCard">
             <h4>{{'Account number: '+application?.accounts.length}}</h4>
         </div>
-        <span class="link-text">
-            Go to application
-            <a [href]="application?.url"><i class="bi bi-arrow-right"></i></a>
-        </span>
+        <ng-container *ngIf="application?.url && applicationCard">
+            <span class="link-text">
+                Go to application
+                <a [href]="application?.url"><i class="bi bi-arrow-right"></i></a>
+            </span>
+        </ng-container>
+        <ng-container *ngIf="!applicationCard">
+            <span class="link-text">
+                Last modified
+                {{account?.lastModified | date: 'short'}}
+            </span>
+        </ng-container>
     </div>
 </div>

@@ -1,0 +1,92 @@
+<div>
+    <application-base [component]="component">
+        <ng-template #listTemplate let-items>
+            <div class="d-flex justify-content-center">
+                <div class="row gap-0">
+                    <div class="col" *ngFor="let item of items">
+                        <app-card (onSelected)="onSelectedItemChange($event)"
+                            (onDoubleClick)="onItemDoubleClick($event)" [account]="item" [applicationCard]="false">
+                        </app-card>
+                    </div>
+                </div>
+            </div>
+        </ng-template>
+        <ng-template #detailTemplate let-selected>
+            <form action="" class="form p-3" autocomplete="off">
+                <div class="d-flex justify-content-between flex-column gap-3 mt-3" *ngIf="component.mode!=formMode.Add">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="">Username</span>
+                        </div>
+                        <input type="text" class="form-control" [(ngModel)]="selected.username" name="username"
+                            [value]="selected?.username" [required]="true" [disabled]="component.mode==formMode.Detail">
+                    </div>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="">Id</span>
+                        </div>
+                        <input type="text" class="form-control" [(ngModel)]="selected.id" name="userid"
+                            [value]="selected.id" [required]="true" [disabled]="true">
+                    </div>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="">Password</span>
+                        </div>
+                        <input [type]="showPassword ? 'text' : 'password'" class="form-control"
+                            [(ngModel)]="selected.password" name="userpassword" [value]="selected?.password"
+                            [required]="true" [disabled]="component.mode==formMode.Detail">
+                        <div class="input-group-append">
+                            <span style="cursor: pointer;" (click)="onShowPassword()" *ngIf="showPassword"
+                                class="input-group-text"><i class="bi bi-eye"></i></span>
+                            <span style="cursor: pointer;" (click)="onShowPassword()" *ngIf="!showPassword"
+                                class="input-group-text"><i class="bi bi-eye-slash"></i></span>
+                        </div>
+                    </div>
+                    <div class="input-group" *ngIf="component.mode==formMode.Edit">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="">Confirm password</span>
+                        </div>
+                        <input [type]="'password'" class="form-control" [(ngModel)]="confirmPassword"
+                            name="confirmPassword" [value]="selected?.password" [required]="true">
+                    </div>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="">Last modified</span>
+                        </div>
+                        <input type="text" class="form-control" [(ngModel)]="selected.lastModified" name="lastModified"
+                            [value]="selected?.lastModified" [required]="true" [disabled]="true">
+                    </div>
+                </div>
+                <div class="d-flex justify-content-between flex-column gap-3 mt-3" *ngIf="component.mode==formMode.Add">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="">Username</span>
+                        </div>
+                        <input type="text" class="form-control" [(ngModel)]="accountAdd.username" name="appname"
+                            [value]="null" [required]="true">
+                    </div>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="">Password</span>
+                        </div>
+                        <input [type]="showPassword ? 'text' : 'password'" class="form-control"
+                            [(ngModel)]="accountAdd.password" name="appurl" [value]="" [required]="true">
+                        <div class="input-group-append">
+                            <span style="cursor: pointer;" (click)="onShowPassword()" *ngIf="showPassword"
+                                class="input-group-text"><i class="bi bi-eye"></i></span>
+                            <span style="cursor: pointer;" (click)="onShowPassword()" *ngIf="!showPassword"
+                                class="input-group-text"><i class="bi bi-eye-slash"></i></span>
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="">Confirm password</span>
+                        </div>
+                        <input type="text" class="form-control" [(ngModel)]="confirmPassword" name="appurl" [value]=""
+                            [required]="true">
+                    </div>
+                </div>
+            </form>
+        </ng-template>
+    </application-base>
+</div>

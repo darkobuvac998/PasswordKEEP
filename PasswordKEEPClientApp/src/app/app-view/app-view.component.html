@@ -1,34 +1,65 @@
 <div>
-    <application-base [items]="items" [title]="title" [selectedItem]="selectedItem">
+    <application-base [component]="component" [items]="items" [selectedItem]="selectedItem">
         <ng-template #listTemplate let-items let-selected="selectedItem">
             <div class="d-flex justify-content-center">
                 <div class="row gap-0">
                     <div class="col" *ngFor="let item of items">
-                        <app-card (onSelected)="onSelectedItemChange($event)" [application]="item"></app-card>
+                        <app-card [applicationCard]="true" (onSelected)="onSelectedItemChange($event)"
+                            (onDoubleClick)="onItemDoubleClick($event)" [application]="item"></app-card>
                     </div>
                 </div>
             </div>
         </ng-template>
         <ng-template #detailTemplate let-selected>
-            <form action="" class="form p-3">
-                <div class="d-flex justify-content-between flex-column gap-3 mt-3">
-                    <div class="input-group">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text" id="">Application</span>
+            <div class="d-flex flex-column justify-content-between w-100 h-100">
+                <div class="col-md-4">
+                    <form action="" class="form p-3" autocomplete="off">
+                        <div class="d-flex justify-content-between flex-column gap-3 mt-3" *ngIf="component.mode!=formMode.Add">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text" id="">Application</span>
+                                </div>
+                                <input type="text" class="form-control" [(ngModel)]="selected.name" name="appname"
+                                    [value]="selected?.name" [required]="true" [disabled]="component.mode==formMode.Detail">
+                            </div>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text" id="">ApplicationId</span>
+                                </div>
+                                <input type="text" class="form-control" [(ngModel)]="selected.id" name="appid"
+                                    [value]="selected.id" [required]="true" [disabled]="true">
+                            </div>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text" id="">URL</span>
+                                </div>
+                                <input type="text" class="form-control" [(ngModel)]="selected.url" name="appurl"
+                                    [value]="selected?.url" [required]="true" [disabled]="component.mode==formMode.Detail">
+                            </div>
                         </div>
-                        <input type="text" class="form-control" [(ngModel)]="selected.name" name="appname"
-                            [value]="selected?.name" [required]="true">
-                    </div>
-                    <div class="input-group">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text" id="">URL</span>
+                        <div class="d-flex justify-content-between flex-column gap-3 mt-3" *ngIf="component.mode==formMode.Add">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text" id="">Application</span>
+                                </div>
+                                <input type="text" class="form-control" [(ngModel)]="applicationAddModel.name" name="appname"
+                                    [value]="null" [required]="true">
+                            </div>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text" id="">URL</span>
+                                </div>
+                                <input type="text" class="form-control" [(ngModel)]="applicationAddModel.url" name="appurl"
+                                    [value]="" [required]="true">
+                            </div>
                         </div>
-                        <input type="text" class="form-control" [(ngModel)]="selected.url" name="appurl"
-                            [value]="selected?.url" [required]="true">
-                    </div>
+                    </form>
                 </div>
-            </form>
-            {{selected | json}}
+                <div class="col-md-8 w-100">
+                    <account-view [items]="selected?.accounts"></account-view>
+                </div>
+            </div>
+            <!-- {{selected | json}} -->
         </ng-template>
     </application-base>
 </div>
