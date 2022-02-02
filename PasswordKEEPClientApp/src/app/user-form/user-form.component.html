@@ -1,0 +1,83 @@
+<div>
+    <application-base [component]="component">
+        <ng-template #listTemplate let-items>
+            <div class="d-flex justify-content-center">
+                <div class="row gap-0">
+                    <div class="col" *ngFor="let item of items">
+                        <app-card [item]="item">
+                            <ng-template #cardTemplate>
+                                <h3>{{item?.username}}</h3>
+                                <h4>{{item?.email}}</h4>
+                                <ng-container *ngIf="item?.phoneNumber">
+                                    <span class="link-text">
+                                        Phone number:
+                                        <h6 class="fs-6">{{item?.phoneNumber}}</h6>
+                                    </span>
+                                </ng-container>
+                            </ng-template>
+                        </app-card>
+                    </div>
+                </div>
+            </div>
+        </ng-template>
+        <ng-template #detailTemplate let-selected>
+            <div class="d-flex justify-content-between w-100 h-100 flex-column">
+                <div class="col-md-6">
+                    <form class="form p-3" autocomplete="off">
+                        <div class="d-flex justify-content-between flex-column gap-3 mt-3"
+                            *ngIf="component.mode!=formMode.Add">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text" id="">Firstname</span>
+                                </div>
+                                <input type="text" class="form-control" [(ngModel)]="selected.firstname" name="firstname"
+                                    [value]="selected?.firstname" [required]="true"
+                                    [disabled]="component.mode==formMode.Detail">
+                            </div>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text" id="">Lastname</span>
+                                </div>
+                                <input type="text" class="form-control" [(ngModel)]="selected.firstname" name="lastname"
+                                    [value]="selected?.lastname" [required]="true"
+                                    [disabled]="component.mode==formMode.Detail">
+                            </div>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text" id="">Phonenumber</span>
+                                </div>
+                                <input type="text" class="form-control" [(ngModel)]="selected.phoneNumber" name="phoneNumber"
+                                    [value]="selected?.phoneNumber" [required]="true"
+                                    [disabled]="component.mode==formMode.Detail">
+                            </div>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text" id="">Email</span>
+                                </div>
+                                <input type="text" class="form-control" [(ngModel)]="selected.email" name="email"
+                                    [value]="selected?.email" [required]="true"
+                                    [disabled]="component.mode==formMode.Detail">
+                            </div>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text" id="">Username</span>
+                                </div>
+                                <input type="text" class="form-control" [(ngModel)]="selected.username" name="username"
+                                    [value]="selected?.username" [required]="true"
+                                    [disabled]="component.mode==formMode.Detail">
+                            </div>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text" id="">User id</span>
+                                </div>
+                                <input type="text" class="form-control" [(ngModel)]="selected.id" name="id"
+                                    [value]="selected?.id" [required]="true"
+                                    [disabled]="component.mode==formMode.Detail">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </ng-template>
+    </application-base>
+</div>

@@ -14,6 +14,8 @@ import { AccountViewComponent } from './account-view/account-view.component';
 
 import { HttpClientModule } from '@angular/common/http';
 import { HttpService } from './services/http-service.service';
+import { UserFormComponent } from './user-form/user-form.component';
+import { AppRoutingModule } from './app-routing.module';
 
 @NgModule({
   declarations: [
@@ -24,8 +26,10 @@ import { HttpService } from './services/http-service.service';
     AppCardComponent,
     AppViewComponent,
     AccountViewComponent,
+    UserFormComponent,
   ],
   imports: [
+    AppRoutingModule,
     BrowserModule,
     NgbModule,
     CommonModule,

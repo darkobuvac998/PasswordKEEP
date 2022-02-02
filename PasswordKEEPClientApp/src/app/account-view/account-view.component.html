@@ -4,16 +4,23 @@
             <div class="d-flex justify-content-center">
                 <div class="row gap-0">
                     <div class="col" *ngFor="let item of items">
-                        <app-card (onSelected)="onSelectedItemChange($event)"
-                            (onDoubleClick)="onItemDoubleClick($event)" [account]="item" [applicationCard]="false">
+                        <app-card [item]="item" (onSelected)="onSelectedItemChange($event)"
+                            (onDoubleClick)="onItemDoubleClick($event)">
+                            <ng-template #cardTemplate let-item>
+                                <h3>{{item?.username}}</h3>
+                                <span class="link-text">
+                                    Last modified
+                                    {{item?.lastModified | date: 'short'}}
+                                </span>
+                            </ng-template>
                         </app-card>
                     </div>
                 </div>
             </div>
         </ng-template>
         <ng-template #detailTemplate let-selected>
-            <form action="" class="form p-3" autocomplete="off">
-                <div class="d-flex justify-content-between flex-column gap-3 mt-3" *ngIf="component.mode!=formMode.Add">
+            <form action="" class="form p-3 w-50 h-100" autocomplete="off">
+                <div class="d-flex justify-content-between flex-column gap-3 mt-3 w-100" *ngIf="component.mode!=formMode.Add">
                     <div class="input-group">
                         <div class="input-group-prepend">
                             <span class="input-group-text" id="">Username</span>
@@ -72,8 +79,8 @@
                         <input [type]="showPassword ? 'text' : 'password'" class="form-control"
                             [(ngModel)]="accountAdd.password" name="appurl" [value]="" [required]="true">
                         <div class="input-group-append">
-                            <div style="cursor: pointer;" (mousedown)="onShowPassword()"
-                                *ngIf="showPassword" class="input-group-text"><i class="bi bi-eye"></i></div>
+                            <div style="cursor: pointer;" (mousedown)="onShowPassword()" *ngIf="showPassword"
+                                class="input-group-text"><i class="bi bi-eye"></i></div>
                             <div style="cursor: pointer;" (mouseup)="onShowPassword()" *ngIf="!showPassword"
                                 class="input-group-text"><i class="bi bi-eye-slash"></i></div>
                         </div>

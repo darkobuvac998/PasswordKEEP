@@ -1,18 +1,15 @@
 import {
   ChangeDetectorRef,
   Component,
-  OnInit,
   QueryList,
   ViewChildren,
 } from '@angular/core';
-import { timer } from 'rxjs';
 import { AppCardComponent } from '../app-card/app-card.component';
 import { ApplicationBaseComponent } from '../application-base/application-base.component';
-import { Account } from '../models/account.model';
 import { Application } from '../models/application.model';
 import { FormMode } from '../shared/form-mode';
-import { ClassConstructor, ClassTransformer } from 'class-transformer';
 import { HttpService } from '../services/http-service.service';
+import { Account } from '../models/account.model';
 
 @Component({
   selector: 'app-view',
@@ -38,6 +35,21 @@ export class AppViewComponent extends ApplicationBaseComponent<Application> {
 
   override ngOnInit(): void {
     this.applicationAddModel = new Application();
+    let app = new Application();
+    app.name= 'LinkedIn';
+    app.url = 'https://linkedin.com';
+    app.accounts = [];
+    app.id = '111';
+    let acc = new Account();
+    acc.id = '1';
+    acc.username = 'buvacd';
+    acc.password = '123';
+    acc.lastModified = new Date();
+    app.accounts.push(acc);
+    for(let i = 0; i<10; i++){
+      app = {...app, id: i.toString()}
+      this.items.push(app);
+    }
   }
 
   override ngAfterViewInit(): void {}

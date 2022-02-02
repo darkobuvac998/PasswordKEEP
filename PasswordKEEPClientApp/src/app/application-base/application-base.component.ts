@@ -89,7 +89,7 @@ export class ApplicationBaseComponent<T>
     // const time = timer(1000, 1000);
     // this.mode = this.component.mode;
     // time.subscribe(() => {});
-    this.component.onLoadItems();
+    // this.component.onLoadItems();
   }
 
   ngAfterViewInit(): void {
@@ -133,15 +133,15 @@ export class ApplicationBaseComponent<T>
       this.component.items = [];
       this.subscription = this.httpService
         .getAllItems<T>(this.component.resourceUrl, this.component.itemsType)
-        .subscribe(
-          (res) => {
+        .subscribe({
+          next: (res) => {
             this.component.items = res;
           },
-          (err) => {
+          error: (err) => {
             console.log(err);
           },
-          () => {}
-        );
+          complete: () => {},
+        });
     }
   }
 
@@ -153,14 +153,10 @@ export class ApplicationBaseComponent<T>
     });
   }
 
-  updateItem() {
-    let url = `${this.component.resourceUrl}/${this.component.selectedItem?.id}`
+  private updateItem() {
+    let url = `${this.resourceUrl}/${this.selectedItem?.id}`;
     this.subscription = this.httpService
-      .updateItem<T>(
-        url,
-        this.component.classType,
-        this.component.selectedItem
-      )
+      .updateItem<T>(url, this.classType, this.selectedItem)
       .subscribe(
         (res) => {
           this.component.selectedItem = res;
@@ -172,11 +168,29 @@ export class ApplicationBaseComponent<T>
       );
   }
 
-  onSave(){
-    if(this.component.mode == FormMode.Edit){
-      this.updateItem();
-    }else if(this.component.mode == FormMode.Add){
+  private addItem() {
+    let url = `${this.component.resourceUrl}`;
+    this.subscription = this.httpService
+      .postItem<T>(url, this._classType, this.itemAdd)
+      .subscribe({
+        next: (res) => {
+          this.selectedItem = res;
+          this.items.push(res);
+        },
+        error: (err) => {
+          console.log(err);
+        },
+        complete: () => {
+          this.itemAdd = {};
+        },
+      });
+  }
 
+  onSave() {
+    if (this.component.mode == FormMode.Edit) {
+      this.updateItem();
+    } else if (this.component.mode == FormMode.Add) {
+      this.addItem();
     }
   }
 }

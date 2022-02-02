@@ -1,5 +1,5 @@
 <div class="d-flex" (dblclick)="onItemDoubleClick()" style="cursor: pointer;">
-    <div class="data-card" [ngClass]="{'data-card-bckg': selected, 'data-card-min': !applicationCard}">
+    <!-- <div *ngIf="false" class="data-card" [ngClass]="{'data-card-bckg': selected, 'data-card-min': !applicationCard}">
         <div (click)="onSelecredEvenetHandler()">
             <h3 *ngIf="applicationCard">{{application?.name}}</h3>
             <h3 *ngIf="!applicationCard">{{account?.username}}</h3>
@@ -19,5 +19,12 @@
                 {{account?.lastModified | date: 'short'}}
             </span>
         </ng-container>
+    </div> -->
+    <div class="data-card" [ngClass]="{'data-card-bckg': selected}">
+        <div (click)="onSelecredEvenetHandler()">
+            <ng-template *ngTemplateOutlet="cardTemplate; context{$implicit: item}">
+
+            </ng-template>
+        </div>
     </div>
 </div>

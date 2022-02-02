@@ -4,23 +4,38 @@
             <div class="d-flex justify-content-center">
                 <div class="row gap-0">
                     <div class="col" *ngFor="let item of items">
-                        <app-card [applicationCard]="true" (onSelected)="onSelectedItemChange($event)"
-                            (onDoubleClick)="onItemDoubleClick($event)" [application]="item"></app-card>
+                        <!-- <app-card *ngIf="false" [applicationCard]="true" (onSelected)="onSelectedItemChange($event)"
+                            (onDoubleClick)="onItemDoubleClick($event)" [application]="item"></app-card> -->
+                        <app-card [item]="item" (onDoubleClick)="onItemDoubleClick($event)"
+                            (onSelected)="onSelectedItemChange($event)">
+                            <ng-template #cardTemplate let-item>
+                                <h3>{{item?.name}}</h3>
+                                <h4>{{'Account number: ' + item?.accounts?.length}}</h4>
+                                <ng-container *ngIf="item?.url">
+                                    <span class="link-text">
+                                        Go to application
+                                        <a [href]="item?.url"><i class="bi bi-arrow-right"></i></a>
+                                    </span>
+                                </ng-container>
+                            </ng-template>
+                        </app-card>
                     </div>
                 </div>
             </div>
         </ng-template>
         <ng-template #detailTemplate let-selected>
             <div class="d-flex flex-column justify-content-between w-100 h-100">
-                <div class="col-md-4">
+                <div class="col-md-6">
                     <form action="" class="form p-3" autocomplete="off">
-                        <div class="d-flex justify-content-between flex-column gap-3 mt-3" *ngIf="component.mode!=formMode.Add">
+                        <div class="d-flex justify-content-between flex-column gap-3 mt-3"
+                            *ngIf="component.mode!=formMode.Add">
                             <div class="input-group">
                                 <div class="input-group-prepend">
                                     <span class="input-group-text" id="">Application</span>
                                 </div>
                                 <input type="text" class="form-control" [(ngModel)]="selected.name" name="appname"
-                                    [value]="selected?.name" [required]="true" [disabled]="component.mode==formMode.Detail">
+                                    [value]="selected?.name" [required]="true"
+                                    [disabled]="component.mode==formMode.Detail">
                             </div>
                             <div class="input-group">
                                 <div class="input-group-prepend">
@@ -34,28 +49,30 @@
                                     <span class="input-group-text" id="">URL</span>
                                 </div>
                                 <input type="text" class="form-control" [(ngModel)]="selected.url" name="appurl"
-                                    [value]="selected?.url" [required]="true" [disabled]="component.mode==formMode.Detail">
+                                    [value]="selected?.url" [required]="true"
+                                    [disabled]="component.mode==formMode.Detail">
                             </div>
                         </div>
-                        <div class="d-flex justify-content-between flex-column gap-3 mt-3" *ngIf="component.mode==formMode.Add">
+                        <div class="d-flex justify-content-between flex-column gap-3 mt-3"
+                            *ngIf="component.mode==formMode.Add">
                             <div class="input-group">
                                 <div class="input-group-prepend">
                                     <span class="input-group-text" id="">Application</span>
                                 </div>
-                                <input type="text" class="form-control" [(ngModel)]="applicationAddModel.name" name="appname"
-                                    [value]="null" [required]="true">
+                                <input type="text" class="form-control" [(ngModel)]="applicationAddModel.name"
+                                    name="appname" [value]="null" [required]="true">
                             </div>
                             <div class="input-group">
                                 <div class="input-group-prepend">
                                     <span class="input-group-text" id="">URL</span>
                                 </div>
-                                <input type="text" class="form-control" [(ngModel)]="applicationAddModel.url" name="appurl"
-                                    [value]="" [required]="true">
+                                <input type="text" class="form-control" [(ngModel)]="applicationAddModel.url"
+                                    name="appurl" [value]="" [required]="true">
                             </div>
                         </div>
                     </form>
                 </div>
-                <div *ngIf="component.mode==formMode.Detail" class="col-md-8 w-100">
+                <div *ngIf="component.mode==formMode.Detail" class="col-md-12 w-100">
                     <account-view [items]="selected?.accounts"></account-view>
                 </div>
             </div>

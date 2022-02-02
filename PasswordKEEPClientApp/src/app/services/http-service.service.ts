@@ -4,23 +4,30 @@ import {
   ClassConstructor,
   plainToInstance,
 } from 'node_modules/class-transformer';
-import { catchError, map, throwError } from 'rxjs';
+import { catchError, map, of, Subscription, throwError, timer } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class HttpService {
   public loading: boolean = false;
+  public loadingStart: boolean = false;
+  private subscription: Subscription;
 
   constructor(private httpClient: HttpClient) {}
 
   getItem<T>(url: string, cls: ClassConstructor<T>) {
-    this.loading = true;
+    this.loadingStart = true;
+    this.subscription = timer(500).subscribe(() => (this.loading = true));
     return this.httpClient.get<T>(url).pipe(
+      map((res) => {
+        this.resetLoading(this.subscription);
+        return res;
+      }),
       map((res) => plainToInstance<T, Object>(cls, res)),
       catchError((err) => {
         console.log(err);
-        return throwError(err);
+        return throwError(() => new Error(err));
       })
     );
   }
@@ -28,10 +35,14 @@ export class HttpService {
   getAllItems<T>(url: string, cls: ClassConstructor<T[]>) {
     this.loading = true;
     return this.httpClient.get<T>(url).pipe(
+      map((res) => {
+        this.resetLoading(this.subscription);
+        return res;
+      }),
       map((res) => plainToInstance<T[], Object>(cls, res)),
       catchError((err) => {
         console.log(err);
-        return throwError(err);
+        return throwError(() => new Error(err));
       })
     );
   }
@@ -39,10 +50,14 @@ export class HttpService {
   postItem<T>(url: string, cls: ClassConstructor<T>, data: T) {
     this.loading = true;
     return this.httpClient.post<T>(url, data).pipe(
+      map((res) => {
+        this.resetLoading(this.subscription);
+        return res;
+      }),
       map((res) => plainToInstance<T, Object>(cls, res)),
       catchError((err) => {
         console.log(err);
-        return throwError(err);
+        return throwError(() => new Error(err));
       })
     );
   }
@@ -50,11 +65,32 @@ export class HttpService {
   updateItem<T>(url: string, cls: ClassConstructor<T>, data: T) {
     this.loading = true;
     return this.httpClient.put<T>(url, data).pipe(
+      map((res) => {
+        this.resetLoading(this.subscription);
+        return res;
+      }),
       map((res) => plainToInstance<T, Object>(cls, res)),
       catchError((err) => {
         console.log(err);
-        return throwError(err);
+        return throwError(() => new Error(err));
       })
     );
+  }
+
+  deleteItem<T>(url: string, obj?: T) {
+    this.loading = true;
+    return this.httpClient.request<T>('delete', url, { body: obj }).pipe(
+      map((res) => {
+        this.resetLoading(this.subscription);
+        return res;
+      })
+    );
+  }
+
+  private resetLoading(subscription: Subscription) {
+    this.loading = false;
+    subscription.unsubscribe();
+    this.loadingStart = false;
+    return of(null);
   }
 }

@@ -6,10 +6,12 @@
                     {{component.title | uppercase}}
                 </p>
             </div>
-            <div *ngIf="component.mode==formMode.Detail || component.mode==formMode.Edit" class="align-self-center position-relative">
+            <div *ngIf="component.mode==formMode.Detail || component.mode==formMode.Edit"
+                class="align-self-center position-relative">
                 <i class="bi bi-caret-right-fill icon-size ps-3 top-50 start-50 translate-middle-y"></i>
             </div>
-            <div class="align-self-center position-relative d-flex" *ngIf="component.mode==formMode.Detail || component.mode==formMode.Edit">
+            <div class="align-self-center position-relative d-flex"
+                *ngIf="component.mode==formMode.Detail || component.mode==formMode.Edit">
                 <p class="display-6 position-absolute top-50 start-50 translate-middle-y">
                     <b>{{component.selectedItem?.name}}</b>
                     <b>{{component.selectedItem?.username}}</b>
@@ -17,15 +19,19 @@
             </div>
         </div>
         <div class="align-self-auto">
-            <toolbar (save)="onSave()" (reload)="onReload()" (modeChange)="onModeChange($event)" [mode]="component.mode"></toolbar>
+            <toolbar (save)="onSave()" (reload)="onReload()" (modeChange)="onModeChange($event)"
+                [mode]="component.mode"></toolbar>
         </div>
         <div class="d-flex" *ngIf="component.mode==formMode.Thumbnail">
-            <ng-container *ngTemplateOutlet="listTemplate; context{$implicit: component.items, selectedItem: component.selectedItem}">
+            <ng-container
+                *ngTemplateOutlet="listTemplate; context{$implicit: component.items, selectedItem: component.selectedItem}">
 
             </ng-container>
         </div>
-        <div class="d-flex" *ngIf="component.mode==formMode.Detail || component.mode==formMode.Add || component.mode==formMode.Edit">
-            <ng-container *ngTemplateOutlet="detailTemplate; context{$implicit: component.selectedItem, itemAdd: itemAdd}">
+        <div class="d-flex"
+            *ngIf="component.mode==formMode.Detail || component.mode==formMode.Add || component.mode==formMode.Edit">
+            <ng-container
+                *ngTemplateOutlet="detailTemplate; context{$implicit: component.selectedItem, itemAdd: itemAdd}">
 
             </ng-container>
         </div>
