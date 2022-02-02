@@ -15,7 +15,7 @@
                 </button>
                 <ul class="dropdown-menu" role="menu" [ngClass]="{'show': toggleFlag}" aria-labelledby="dropdownMenu">
                     <li>
-                        <button class="btn btn-light w-100">
+                        <button (click)="settings()" class="btn btn-light w-100">
                             <i class="bi bi-gear pe-3 icon-size-20"></i><b>Settings</b>
                         </button>
                     </li>

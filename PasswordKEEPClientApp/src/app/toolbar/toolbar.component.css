@@ -70,3 +70,21 @@
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.26);  
     color: rgb(59, 59, 59);  
   }  
+
+  .icon-style{
+    /* width: 50px;  
+    height: 50px;   */
+    display: flex;  
+    justify-content: center;  
+    align-items: end;  
+    color: rgb(0, 0, 0);  
+    border-radius: 10px;  
+    margin-right: 10px;  
+    transition: all .6s;  
+  }
+  .icon-style:hover{
+    background: #dfdfdf;  
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.26);  
+    color: #3b3b3b; 
+    cursor: pointer;
+  }

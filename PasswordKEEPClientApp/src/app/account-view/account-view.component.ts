@@ -1,4 +1,6 @@
 import { Component, OnInit, QueryList, ViewChildren } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { timer } from 'rxjs';
 import { AppCardComponent } from '../app-card/app-card.component';
 import { ApplicationBaseComponent } from '../application-base/application-base.component';
 import { Account } from '../models/account.model';
@@ -16,8 +18,8 @@ export class AccountViewComponent extends ApplicationBaseComponent<Account> {
   public accountAdd: Account;
   public showPassword: boolean = false;
   public confirmPassword: string = null;
-  constructor(protected override httpService: HttpService) {
-    super(httpService);
+  constructor(protected override httpService: HttpService, protected override router: Router, protected override route: ActivatedRoute) {
+    super(httpService, router, route);
     this.title = 'Accounts';
     this.mode = FormMode.Thumbnail;
   }
@@ -40,5 +42,21 @@ export class AccountViewComponent extends ApplicationBaseComponent<Account> {
 
   onShowPassword(){
     this.showPassword = !this.showPassword;
+  }
+
+  override onModeChange(newMode: FormMode): void {
+      super.onModeChange(newMode);
+      this.onSelectCard(500);
+  }
+
+  onSelectCard(time: number){
+    let delay = timer(time);
+    delay.subscribe(() => {
+      this.appCards.forEach((item) => {
+        if (item.item.id == this.selectedItem?.id) {
+          item.selected = true;
+        }
+      });
+    });
   }
 }

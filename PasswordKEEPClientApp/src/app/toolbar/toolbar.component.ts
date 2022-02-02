@@ -12,6 +12,11 @@ export class ToolbarComponent implements OnInit {
   @Output() modeChange: EventEmitter<FormMode> = new EventEmitter<FormMode>();
   @Output() reload: EventEmitter<any> = new EventEmitter<any>();
   @Output() save: EventEmitter<any> = new EventEmitter<any>();
+  @Output() goBack: EventEmitter<any> = new EventEmitter<any>();
+  @Output() search: EventEmitter<string> = new EventEmitter<string>();
+  @Input() public goBackBtn: boolean = false;
+
+  public searchTerm: string = null;
 
   public formMode = FormMode;
 
@@ -35,6 +40,28 @@ export class ToolbarComponent implements OnInit {
 
   onSave(){
     this.save.emit();
+  }
+
+  onGoToAppsMenu(){
+    this.goBack.emit();
+  }
+
+  onSearch(){
+    if(this.searchTerm){
+      this.search.emit(this.searchTerm);
+    }
+    console.log(this.searchTerm)
+  }
+
+  clearSearch(){
+    this.searchTerm = null;
+    this.search.emit(null);
+  }
+
+  onSearchTermChange(){
+    if(this.searchTerm == ''){
+      this.searchTerm = null;
+    }
   }
 
 }

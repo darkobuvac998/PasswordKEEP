@@ -1,17 +1,23 @@
 <div class="d-flex flex-row justify-content-start  gap-3 border-bottom">
-    <div class="container d-flex flex-row p-0 m-0">
+    <div class="container d-flex flex-row col-md-8 p-0 m-0">
         <ng-container *ngIf="mode==0 || mode==1">
-            <div *ngIf="mode==0" (click)="onModeChange(formMode.Detail)" class="box d-flex position-relative">
+            <div *ngIf="goBackBtn" (click)="onGoToAppsMenu()" class="box d-flex position-relative">
                 <div class="icon save">
-                    <i class="bi bi-border-all icon-size"></i>
+                    <i class="bi bi-grid-3x3-gap icon-size"></i>
                 </div>
-                <p class="position-absolute top-50 start-50 translate-middle-y fs-5 hide">{{'Detail' | uppercase}}</p>
+                <p class="position-absolute top-50 start-50 translate-middle-y fs-5 hide">{{'Apps' | uppercase}}</p>
             </div>
             <div *ngIf="mode==1" (click)="onModeChange(formMode.Thumbnail)" class="box d-flex position-relative">
                 <div class="icon save">
+                    <i class="bi bi-grid icon-size"></i>
+                </div>
+                <p class="position-absolute top-50 start-50 translate-middle-y fs-5 hide">{{'Grid' | uppercase}}</p>
+            </div>
+            <div *ngIf="mode==0" (click)="onModeChange(formMode.Detail)" class="box d-flex position-relative">
+                <div class="icon save">
                     <i class="bi bi-list-columns icon-size"></i>
                 </div>
-                <p class="position-absolute top-50 start-50 translate-middle-y fs-5 hide">{{'List' | uppercase}}</p>
+                <p class="position-absolute top-50 start-50 translate-middle-y fs-5 hide">{{'Detail' | uppercase}}</p>
             </div>
             <div (click)="onReload()" class="box d-flex position-relative">
                 <div class="icon save">
@@ -37,6 +43,9 @@
                 </div>
                 <p class="position-absolute top-50 start-50 translate-middle-y fs-5 hide">{{'Delete' | uppercase}}</p>
             </div>
+            <div>
+
+            </div>
         </ng-container>
         <ng-container *ngIf="mode==2 || mode==3">
             <div class="box d-flex position-relative" (click)="onSave()">
@@ -52,5 +61,21 @@
                 <p class="position-absolute top-50 start-50 translate-middle-y fs-5 hide">{{'Cancel' | uppercase}}</p>
             </div>
         </ng-container>
+    </div>
+    <div *ngIf="mode==0" class="col-md-4 d-flex justify-content-end">
+        <form class="form pe-3 d-flex" autocomplete="off">
+            <div class="d-flex justify-content-center flex-column">
+                <div class="input-group">
+                    <input type="text" class="form-control align-self-center p-2 me-2" [(ngModel)]="searchTerm"
+                        (ngModelChange)="onSearchTermChange()" name="searchTerm">
+                    <div class="input-group-append icon-style" (click)="onSearch()">
+                        <i *ngIf="searchTerm==null" class="bi bi-search icon-size p-2"></i>
+                    </div>
+                    <div class="input-group-append icon-style" (click)="clearSearch()">
+                        <i *ngIf="searchTerm!=null" class="bi bi-x-circle icon-size p-2"></i>
+                    </div>
+                </div>
+            </div>
+        </form>
     </div>
 </div>

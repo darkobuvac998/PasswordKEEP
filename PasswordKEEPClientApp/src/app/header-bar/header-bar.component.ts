@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { of, timer } from 'rxjs';
 
 @Component({
@@ -10,7 +11,7 @@ export class HeaderBarComponent implements OnInit {
   public userName: string = 'Username';
   public toggleFlag = false;
 
-  constructor() {}
+  constructor(private router: Router) {}
 
   ngOnInit(): void {}
 
@@ -34,5 +35,16 @@ export class HeaderBarComponent implements OnInit {
         this.toggleFlag = !this.toggleFlag;
       }
     });
+  }
+
+  settings() {
+    this.router
+      .navigateByUrl('/usersettings')
+      .then(() => {
+        this.toggleFlag = !this.toggleFlag;
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }
 }

@@ -1,4 +1,5 @@
 import {
+  AfterViewChecked,
   AfterViewInit,
   Component,
   ContentChild,
@@ -7,10 +8,12 @@ import {
   OnInit,
   TemplateRef,
 } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ClassConstructor } from 'class-transformer';
 import { Subscription, timer } from 'rxjs';
 import { HttpService } from '../services/http-service.service';
 import { FormMode } from '../shared/form-mode';
+import { UserFormComponent } from '../user-form/user-form.component';
 
 @Component({
   selector: 'application-base',
@@ -34,6 +37,8 @@ export class ApplicationBaseComponent<T>
   public itemAdd: T | any;
   public subscription: Subscription;
   private _component: ApplicationBaseComponent<T> = this;
+  public showGoToAppButton: boolean = false;
+  public showQueryParams: boolean = false;
   get component(): ApplicationBaseComponent<T> {
     return this._component;
   }
@@ -83,13 +88,14 @@ export class ApplicationBaseComponent<T>
   @ContentChild('listTemplate') listTemplate: TemplateRef<any>;
   @ContentChild('detailTemplate') detailTemplate: TemplateRef<any>;
 
-  constructor(protected httpService: HttpService) {}
+  constructor(protected httpService: HttpService, protected router: Router, protected route: ActivatedRoute) {}
 
   ngOnInit(): void {
     // const time = timer(1000, 1000);
     // this.mode = this.component.mode;
     // time.subscribe(() => {});
     // this.component.onLoadItems();
+    // console.log('Component instantiated');
   }
 
   ngAfterViewInit(): void {
@@ -112,6 +118,13 @@ export class ApplicationBaseComponent<T>
     } else {
       return;
     }
+    if (this.showQueryParams) {
+      if (newMode != this.formMode.Thumbnail && newMode != this.formMode.Add) {
+        this.onModeChangeRouteUpdate(true);
+      } else {
+        this.onModeChangeRouteUpdate(false);
+      }
+    }
   }
 
   onSelectedItemChange(item: any) {
@@ -120,7 +133,8 @@ export class ApplicationBaseComponent<T>
 
   onItemDoubleClick(item: any) {
     this.selectedItem = item;
-    this.component.mode = this.formMode.Detail;
+    // this.component.mode = this.formMode.Detail;
+    this.onModeChange(this.formMode.Detail);
   }
 
   onReload() {
@@ -191,6 +205,28 @@ export class ApplicationBaseComponent<T>
       this.updateItem();
     } else if (this.component.mode == FormMode.Add) {
       this.addItem();
+    }
+  }
+
+  goToApplications() {
+    this.router
+      .navigateByUrl('/applications')
+      .then(() => {
+        this.showGoToAppButton = false;
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+
+  onModeChangeRouteUpdate(showParams: boolean){
+    let url = this.component.title.toLowerCase().replace(' ','');
+    if (showParams) {
+      this.router.navigate([`/${url}`], {
+        queryParams: { id: this.component.selectedItem?.id },
+      });
+    }else{
+      this.router.navigate([`/${url}`]);
     }
   }
 }

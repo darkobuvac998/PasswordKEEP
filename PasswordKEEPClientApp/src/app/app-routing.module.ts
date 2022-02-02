@@ -9,7 +9,9 @@ const appRoutes: Routes = [
     path: 'applications',
     component: AppViewComponent,
   },
-  { path: 'userSettings', component: UserFormComponent },
+  { path: 'usersettings', component: UserFormComponent },
+  { path: '', redirectTo: '/applications', pathMatch: 'full' },
+  { path: '**', redirectTo: '/applications', pathMatch: 'full' },
 ];
 
 @NgModule({
