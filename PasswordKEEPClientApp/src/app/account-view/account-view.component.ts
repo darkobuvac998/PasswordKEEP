@@ -1,5 +1,6 @@
 import { Component, OnInit, QueryList, ViewChildren } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { timer } from 'rxjs';
 import { AppCardComponent } from '../app-card/app-card.component';
 import { ApplicationBaseComponent } from '../application-base/application-base.component';
@@ -23,11 +24,14 @@ export class AccountViewComponent extends ApplicationBaseComponent<Account> {
     protected override httpService: HttpService,
     protected override router: Router,
     protected override route: ActivatedRoute,
-    protected override notificationService: NotificationService
+    protected override notificationService: NotificationService,
+    protected override modalService: NgbModal
   ) {
-    super(httpService, router, route, notificationService);
+    super(httpService, router, route, notificationService, modalService);
     this.title = 'Accounts';
     this.mode = FormMode.Thumbnail;
+    let appId = '842093480293'; //TODO
+    this.resourceUrl = `/api/${appId}/accounts`
   }
 
   override ngOnInit(): void {
@@ -35,6 +39,7 @@ export class AccountViewComponent extends ApplicationBaseComponent<Account> {
       this.selectedItem = this.items[0];
     }
     this.accountAdd = new Account();
+    // console.log(this.selectedItem);
   }
 
   override onSelectedItemChange(item: any): void {

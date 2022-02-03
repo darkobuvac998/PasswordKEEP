@@ -1,5 +1,6 @@
 import { Component, OnInit, QueryList, ViewChildren } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { timer } from 'rxjs';
 import { AppCardComponent } from '../app-card/app-card.component';
 import { ApplicationBaseComponent } from '../application-base/application-base.component';
@@ -20,9 +21,10 @@ export class UserFormComponent extends ApplicationBaseComponent<User> {
     protected override httpService: HttpService,
     protected override router: Router,
     protected override route: ActivatedRoute,
-    protected override notificationService: NotificationService
+    protected override notificationService: NotificationService,
+    protected override modalService: NgbModal
   ) {
-    super(httpService, router, route, notificationService);
+    super(httpService, router, route, notificationService, modalService);
     this.title = 'User settings';
     this.resourceUrl = `api/authentication/${this.selectedItem?.id}`;
     this.classType = User;
@@ -41,6 +43,7 @@ export class UserFormComponent extends ApplicationBaseComponent<User> {
     user.phoneNumber = '066/062-952';
     this.items.push(user);
     this.selectedItem = user;
+    this.showQueryParams = true;
   }
 
   override ngAfterViewInit(): void {}

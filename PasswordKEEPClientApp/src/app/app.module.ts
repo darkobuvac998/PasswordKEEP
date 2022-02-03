@@ -1,4 +1,4 @@
-import { ErrorHandler, NgModule } from '@angular/core';
+import { ErrorHandler, Injector, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
@@ -55,4 +55,10 @@ import { SharedModule } from './shared/shared.module';
   providers: [HttpService, NotificationService],
   bootstrap: [AppComponent],
 })
-export class AppModule {}
+export class AppModule {
+  constructor(private injector: Injector){
+    ServiceInjector = this.injector;
+  }
+}
+
+export let ServiceInjector: Injector;

@@ -14,6 +14,7 @@ export class ToolbarComponent implements OnInit {
   @Output() save: EventEmitter<any> = new EventEmitter<any>();
   @Output() goBack: EventEmitter<any> = new EventEmitter<any>();
   @Output() search: EventEmitter<string> = new EventEmitter<string>();
+  @Output() delete: EventEmitter<any> = new EventEmitter<any>();
   @Input() public goBackBtn: boolean = false;
 
   public searchTerm: string = null;
@@ -63,6 +64,10 @@ export class ToolbarComponent implements OnInit {
     if(this.searchTerm == ''){
       this.searchTerm = null;
     }
+  }
+
+  onDelete(){
+    this.delete.emit();
   }
 
 }

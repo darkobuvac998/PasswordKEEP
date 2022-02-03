@@ -10,8 +10,10 @@ import {
   TemplateRef,
 } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ClassConstructor } from 'class-transformer';
 import { Subscription, timer } from 'rxjs';
+import { Confirmable } from '../decorators/method.decorator';
 import { HttpService } from '../services/http-service.service';
 import { NotificationService } from '../services/notification-service.service';
 import { FormMode } from '../shared/form-mode';
@@ -95,7 +97,8 @@ export class ApplicationBaseComponent<T>
     protected httpService: HttpService,
     protected router: Router,
     protected route: ActivatedRoute,
-    protected notificationService: NotificationService
+    protected notificationService: NotificationService,
+    protected modalService: NgbModal
   ) {}
 
   ngOnInit(): void {
@@ -176,18 +179,19 @@ export class ApplicationBaseComponent<T>
   }
 
   private updateItem() {
-    // this.notificationService.showInfo('', 'Information');
     let url = `${this.resourceUrl}/${this.selectedItem?.id}`;
     this.subscription = this.httpService
       .updateItem<T>(url, this.classType, this.selectedItem)
       .subscribe({
         next: (res) => {
           this.component.selectedItem = res;
-          this.notificationService.showSuccess(`Item ${this.selectedItem.id} updated succesfully!`);
+          this.notificationService.showSuccess(
+            `Item ${this.selectedItem.id} updated succesfully!`
+          );
         },
         error: (err: HttpErrorResponse | Error) => {
           // console.log(err);
-          this.notificationService.showError(err.message)
+          this.notificationService.showError(err.message);
         },
         complete: () => {},
       });
@@ -212,6 +216,7 @@ export class ApplicationBaseComponent<T>
       });
   }
 
+  @Confirmable('Question', 'Are you sure?')
   onSave() {
     if (this.component.mode == FormMode.Edit) {
       this.updateItem();
@@ -240,5 +245,23 @@ export class ApplicationBaseComponent<T>
     } else {
       this.router.navigate([`/${url}`]);
     }
+  }
+
+  @Confirmable('Question', 'Are you sure you want to delete this item?')
+  onDelete() {
+    let url = `${this.component.resourceUrl}/${this.component.selectedItem.id}`;
+    this.subscription = this.httpService
+      .deleteItem<T>(url)
+      .subscribe((result) => {
+        if (result) {
+          this.notificationService.showSuccess(
+            `Item with id: ${this.selectedItem.id} removed!`
+          );
+          if (this.items.length > 0) {
+            this.items.filter((item) => item.id != this.selectedItem.id);
+            this.selectedItem = this.items[0];
+          }
+        }
+      });
   }
 }

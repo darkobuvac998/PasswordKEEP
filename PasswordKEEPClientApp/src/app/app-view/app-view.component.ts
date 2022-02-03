@@ -15,6 +15,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { timer } from 'rxjs';
 import { AccountViewComponent } from '../account-view/account-view.component';
 import { NotificationService } from '../services/notification-service.service';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-view',
@@ -31,9 +32,10 @@ export class AppViewComponent extends ApplicationBaseComponent<Application> {
     protected override httpService: HttpService,
     protected override router: Router,
     protected override route: ActivatedRoute,
-    protected override notificationService: NotificationService
+    protected override notificationService: NotificationService,
+    protected override modalService: NgbModal
   ) {
-    super(httpService, router, route, notificationService);
+    super(httpService, router, route, notificationService, modalService);
     this.title = 'Applications';
     this.mode = FormMode.Thumbnail;
     let userId = 'ace7fb5c-0238-472d-a8e0-98954f864fec'; //TODO
@@ -51,13 +53,19 @@ export class AppViewComponent extends ApplicationBaseComponent<Application> {
     app.accounts = [];
     app.id = '111';
     let acc = new Account();
-    acc.id = '1';
+    acc.id = '12312132';
     acc.username = 'buvacd';
     acc.password = '123';
     acc.lastModified = new Date();
     app.accounts.push(acc);
     for (let i = 0; i < 10; i++) {
-      app = { ...app, id: i.toString() };
+      app = {
+        ...app,
+        id: i.toString(),
+        accounts: app.accounts.map((item) => {
+          return { ...item, id: i.toString() } as Account;
+        }),
+      };
       this.items.push(app);
     }
   }

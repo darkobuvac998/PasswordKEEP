@@ -1,0 +1,92 @@
+
+.fa {
+    color: #2b84be;
+    font-size: 90px;
+    padding: 30px 0px
+}
+
+.b1 {
+    background-color: #2b84be;
+    box-shadow: 0px 4px #337095;
+    font-size: 17px
+}
+
+.r3 {
+    color: #c1c1c1;
+    font-weight: 500
+}
+
+a,
+a:hover {
+    text-decoration: none
+}
+
+@import url('https://fonts.googleapis.com/css?family=Roboto+Mono&display=swap');
+
+body {
+    min-height: 81.9vh;
+    font-family: 'Roboto Mono', monospace;
+    background: linear-gradient(#c1e2f1, #f7e8f6)
+}
+
+.container {
+    margin-top: 250px !important
+}
+
+/* p {
+    font-size: calc(12px + (13 - 12) * ((100vw - 360px) / (1600 - 300))) !important;
+} */
+
+button:focus {
+    box-shadow: none !important;
+    outline-width: 0
+}
+
+.card {
+    background: #ffffff;
+    /* border-radius: 9px !important; */
+    border-radius: 0.3rem;
+    /* width: calc(280px + 10 * ((100vw - 320px) / 680)); */
+    width: 100%;
+    box-shadow: 0px 5px 10px rgba(255, 255, 255, 0.5)
+}
+
+.card-header {
+    border: 0;
+    border-radius: 11px !important
+}
+
+.btn-success {
+    border-radius: 20px !important;
+    background-color: #9BEAC0 !important
+}
+
+.btn-success:hover {
+    background-color: #9BEAC0 !important
+}
+
+.card-header {
+    background: #222222 !important;
+    position: relative
+}
+
+img {
+    width: 100px !important
+}
+
+.card-body {
+    border-radius: 9px !important
+}
+
+.card-1 {
+    color: #A4EAC0 !important
+}
+
+.cross {
+    cursor: pointer;
+    width: 45px !important
+}
+
+.modal {
+    background: linear-gradient(#03a9f4, #e91ee3) !important
+}

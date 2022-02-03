@@ -1,19 +1,19 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { ErrorHandler, Inject, Injectable, Injector } from '@angular/core';
+import { timer } from 'rxjs';
+import { ServiceInjector } from '../app.module';
 import { NotificationService } from '../services/notification-service.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class GlobalErrorHandler implements ErrorHandler {
-  private notificationService: any;
-  constructor(private readonly injector: Injector) {
-    console.log('Global error handler');
-  }
+  private notificationService: NotificationService;
+  constructor() {}
 
   handleError(error) {
-    this.notificationService = this.injector.get(NotificationService);
     console.log(error);
+    this.notificationService = ServiceInjector.get(NotificationService);
     if (error instanceof HttpErrorResponse) {
       this.notificationService.showError(
         `Code: ${error.status} Status: ${error.statusText}`
