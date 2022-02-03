@@ -17,6 +17,7 @@ export class ToolbarComponent implements OnInit {
   @Input() public goBackBtn: boolean = false;
 
   public searchTerm: string = null;
+  public isSearchCollapsed: boolean = true;
 
   public formMode = FormMode;
 

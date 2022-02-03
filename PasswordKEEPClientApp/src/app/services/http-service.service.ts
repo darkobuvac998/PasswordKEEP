@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import {
   ClassConstructor,
@@ -25,10 +25,10 @@ export class HttpService {
         return res;
       }),
       map((res) => plainToInstance<T, Object>(cls, res)),
-      catchError((err) => {
-        console.log(err);
-        return throwError(() => new Error(err));
-      })
+      // catchError((err) => {
+      //   console.log(err);
+      //   return throwError(() => new Error(err));
+      // })
     );
   }
 
@@ -40,10 +40,10 @@ export class HttpService {
         return res;
       }),
       map((res) => plainToInstance<T[], Object>(cls, res)),
-      catchError((err) => {
-        console.log(err);
-        return throwError(() => new Error(err));
-      })
+      // catchError((err) => {
+      //   console.log(err);
+      //   return throwError(() => new Error(err));
+      // })
     );
   }
 
@@ -55,10 +55,10 @@ export class HttpService {
         return res;
       }),
       map((res) => plainToInstance<T, Object>(cls, res)),
-      catchError((err) => {
-        console.log(err);
-        return throwError(() => new Error(err));
-      })
+      // catchError((err) => {
+      //   console.log(err);
+      //   return throwError(() => new Error(err));
+      // })
     );
   }
 

@@ -7,13 +7,13 @@
             <p class="fs-2 text-muted position-absolute top-50 start-0 translate-middle-y"><b>PasswordKEEP</b></p>
         </div>
         <div class="w-50 d-flex justify-content-end">
-            <div class="dropdown">
-                <button (click)="showDropdown()" class="btn btn-light dropdown-toggle" type="button" data-bs-toggle="dropdown" id="dropdownMenu" aria-expanded="false">
+            <div ngbDropdown class="d-inline-block">
+                <button ngbDropdownToggle class="btn btn-light dropdown-toggle" type="button" data-bs-toggle="dropdown" id="dropdownMenu" aria-expanded="false">
                     <span>
                         <i class="bi bi-person-circle p-2 icon-size"></i><b>{{userName}}</b>
                     </span>
                 </button>
-                <ul class="dropdown-menu" role="menu" [ngClass]="{'show': toggleFlag}" aria-labelledby="dropdownMenu">
+                <!-- <ul class="dropdown-menu" role="menu" [ngClass]="{'show': toggleFlag}" aria-labelledby="dropdownMenu">
                     <li>
                         <button (click)="settings()" class="btn btn-light w-100">
                             <i class="bi bi-gear pe-3 icon-size-20"></i><b>Settings</b>
@@ -26,7 +26,16 @@
                             </i><b>Logout</b>
                         </button>
                     </li>
-                </ul>
+                </ul> -->
+                <div ngbDropdownMenu aria-labelledby="dropdownMenu">
+                    <button ngbDropdownItem (click)="settings()" class="btn btn-light w-100">
+                        <i class="bi bi-gear pe-3 icon-size-20"></i><b>Settings</b>
+                    </button>
+                    <button ngbDropdownItem (click)="logout()" class="btn btn-light w-100">
+                        <i class="bi bi-box-arrow-right pe-3 icon-size-20">
+                        </i><b>Logout</b>
+                    </button>
+                </div>
             </div>
         </div>
     </div>

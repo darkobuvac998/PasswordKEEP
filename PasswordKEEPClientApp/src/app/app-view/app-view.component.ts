@@ -14,6 +14,7 @@ import { Account } from '../models/account.model';
 import { ActivatedRoute, Router } from '@angular/router';
 import { timer } from 'rxjs';
 import { AccountViewComponent } from '../account-view/account-view.component';
+import { NotificationService } from '../services/notification-service.service';
 
 @Component({
   selector: 'app-view',
@@ -29,9 +30,10 @@ export class AppViewComponent extends ApplicationBaseComponent<Application> {
     private changeDetector: ChangeDetectorRef,
     protected override httpService: HttpService,
     protected override router: Router,
-    protected override route: ActivatedRoute
+    protected override route: ActivatedRoute,
+    protected override notificationService: NotificationService
   ) {
-    super(httpService, router, route);
+    super(httpService, router, route, notificationService);
     this.title = 'Applications';
     this.mode = FormMode.Thumbnail;
     let userId = 'ace7fb5c-0238-472d-a8e0-98954f864fec'; //TODO

@@ -4,7 +4,8 @@
             <div class="d-flex justify-content-center">
                 <div class="row gap-0">
                     <div class="col" *ngFor="let item of items">
-                        <app-card [item]="item">
+                        <app-card (onDoubleClick)="onItemDoubleClick($event)"
+                            (onSelected)="onSelectedItemChange($event)" [item]="item">
                             <ng-template #cardTemplate>
                                 <h3>{{item?.username}}</h3>
                                 <h4>{{item?.email}}</h4>
@@ -30,24 +31,24 @@
                                 <div class="input-group-prepend">
                                     <span class="input-group-text" id="">Firstname</span>
                                 </div>
-                                <input type="text" class="form-control" [(ngModel)]="selected.firstname" name="firstname"
-                                    [value]="selected?.firstname" [required]="true"
+                                <input type="text" class="form-control" [(ngModel)]="selected.firstName"
+                                    name="firstname" [value]="selected?.firstName" [required]="true"
                                     [disabled]="component.mode==formMode.Detail">
                             </div>
                             <div class="input-group">
                                 <div class="input-group-prepend">
                                     <span class="input-group-text" id="">Lastname</span>
                                 </div>
-                                <input type="text" class="form-control" [(ngModel)]="selected.firstname" name="lastname"
-                                    [value]="selected?.lastname" [required]="true"
+                                <input type="text" class="form-control" [(ngModel)]="selected.lastName" name="lastname"
+                                    [value]="selected?.lastName" [required]="true"
                                     [disabled]="component.mode==formMode.Detail">
                             </div>
                             <div class="input-group">
                                 <div class="input-group-prepend">
                                     <span class="input-group-text" id="">Phonenumber</span>
                                 </div>
-                                <input type="text" class="form-control" [(ngModel)]="selected.phoneNumber" name="phoneNumber"
-                                    [value]="selected?.phoneNumber" [required]="true"
+                                <input type="text" class="form-control" [(ngModel)]="selected.phoneNumber"
+                                    name="phoneNumber" [value]="selected?.phoneNumber" [required]="true"
                                     [disabled]="component.mode==formMode.Detail">
                             </div>
                             <div class="input-group">

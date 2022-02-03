@@ -1,3 +1,4 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import {
   AfterViewChecked,
   AfterViewInit,
@@ -12,13 +13,15 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ClassConstructor } from 'class-transformer';
 import { Subscription, timer } from 'rxjs';
 import { HttpService } from '../services/http-service.service';
+import { NotificationService } from '../services/notification-service.service';
 import { FormMode } from '../shared/form-mode';
-import { UserFormComponent } from '../user-form/user-form.component';
+import { GlobalErrorHandler } from '../shared/global-error-handler.service';
 
 @Component({
   selector: 'application-base',
   templateUrl: './application-base.component.html',
   styleUrls: ['./application-base.component.css'],
+  // providers: [GlobalErrorHandler],
 })
 export class ApplicationBaseComponent<T>
   implements OnInit, AfterViewInit, OnDestroy
@@ -88,7 +91,12 @@ export class ApplicationBaseComponent<T>
   @ContentChild('listTemplate') listTemplate: TemplateRef<any>;
   @ContentChild('detailTemplate') detailTemplate: TemplateRef<any>;
 
-  constructor(protected httpService: HttpService, protected router: Router, protected route: ActivatedRoute) {}
+  constructor(
+    protected httpService: HttpService,
+    protected router: Router,
+    protected route: ActivatedRoute,
+    protected notificationService: NotificationService
+  ) {}
 
   ngOnInit(): void {
     // const time = timer(1000, 1000);
@@ -168,18 +176,21 @@ export class ApplicationBaseComponent<T>
   }
 
   private updateItem() {
+    // this.notificationService.showInfo('', 'Information');
     let url = `${this.resourceUrl}/${this.selectedItem?.id}`;
     this.subscription = this.httpService
       .updateItem<T>(url, this.classType, this.selectedItem)
-      .subscribe(
-        (res) => {
+      .subscribe({
+        next: (res) => {
           this.component.selectedItem = res;
+          this.notificationService.showSuccess(`Item ${this.selectedItem.id} updated succesfully!`);
         },
-        (err) => {
-          console.log(err);
+        error: (err: HttpErrorResponse | Error) => {
+          // console.log(err);
+          this.notificationService.showError(err.message)
         },
-        () => {}
-      );
+        complete: () => {},
+      });
   }
 
   private addItem() {
@@ -192,7 +203,8 @@ export class ApplicationBaseComponent<T>
           this.items.push(res);
         },
         error: (err) => {
-          console.log(err);
+          // errorHandler(err,this.notificationService);
+          // console.log(err);
         },
         complete: () => {
           this.itemAdd = {};
@@ -219,13 +231,13 @@ export class ApplicationBaseComponent<T>
       });
   }
 
-  onModeChangeRouteUpdate(showParams: boolean){
-    let url = this.component.title.toLowerCase().replace(' ','');
+  onModeChangeRouteUpdate(showParams: boolean) {
+    let url = this.component.title.toLowerCase().replace(' ', '');
     if (showParams) {
       this.router.navigate([`/${url}`], {
         queryParams: { id: this.component.selectedItem?.id },
       });
-    }else{
+    } else {
       this.router.navigate([`/${url}`]);
     }
   }

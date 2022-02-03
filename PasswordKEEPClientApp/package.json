@@ -24,6 +24,7 @@
     "bootstrap-icons": "^1.7.2",
     "class-transformer": "^0.5.1",
     "jquery": "^3.6.0",
+    "ngx-toastr": "^14.2.1",
     "popper.js": "^1.16.1",
     "reflect-metadata": "^0.1.13",
     "rxjs": "~7.4.0",

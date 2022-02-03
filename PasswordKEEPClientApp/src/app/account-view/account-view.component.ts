@@ -6,6 +6,7 @@ import { ApplicationBaseComponent } from '../application-base/application-base.c
 import { Account } from '../models/account.model';
 import { Application } from '../models/application.model';
 import { HttpService } from '../services/http-service.service';
+import { NotificationService } from '../services/notification-service.service';
 import { FormMode } from '../shared/form-mode';
 
 @Component({
@@ -18,8 +19,13 @@ export class AccountViewComponent extends ApplicationBaseComponent<Account> {
   public accountAdd: Account;
   public showPassword: boolean = false;
   public confirmPassword: string = null;
-  constructor(protected override httpService: HttpService, protected override router: Router, protected override route: ActivatedRoute) {
-    super(httpService, router, route);
+  constructor(
+    protected override httpService: HttpService,
+    protected override router: Router,
+    protected override route: ActivatedRoute,
+    protected override notificationService: NotificationService
+  ) {
+    super(httpService, router, route, notificationService);
     this.title = 'Accounts';
     this.mode = FormMode.Thumbnail;
   }
@@ -40,16 +46,16 @@ export class AccountViewComponent extends ApplicationBaseComponent<Account> {
     this.appCards.forEach((item) => (item.selected = false));
   }
 
-  onShowPassword(){
+  onShowPassword() {
     this.showPassword = !this.showPassword;
   }
 
   override onModeChange(newMode: FormMode): void {
-      super.onModeChange(newMode);
-      this.onSelectCard(500);
+    super.onModeChange(newMode);
+    this.onSelectCard(500);
   }
 
-  onSelectCard(time: number){
+  onSelectCard(time: number) {
     let delay = timer(time);
     delay.subscribe(() => {
       this.appCards.forEach((item) => {

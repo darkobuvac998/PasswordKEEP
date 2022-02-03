@@ -1,5 +1,6 @@
-import { NgModule } from '@angular/core';
+import { ErrorHandler, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { AppComponent } from './app.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
@@ -16,6 +17,10 @@ import { HttpClientModule } from '@angular/common/http';
 import { HttpService } from './services/http-service.service';
 import { UserFormComponent } from './user-form/user-form.component';
 import { AppRoutingModule } from './app-routing.module';
+import { NotificationService } from './services/notification-service.service';
+import { ToastrModule } from 'ngx-toastr';
+import { GlobalErrorHandler } from './shared/global-error-handler.service';
+import { SharedModule } from './shared/shared.module';
 
 @NgModule({
   declarations: [
@@ -35,8 +40,19 @@ import { AppRoutingModule } from './app-routing.module';
     CommonModule,
     FormsModule,
     HttpClientModule,
+    NgbModule,
+    BrowserAnimationsModule,
+    ToastrModule.forRoot({
+      autoDismiss: true,
+      timeOut: 2000,
+      maxOpened: 5,
+      closeButton: true,
+      tapToDismiss: true,
+      progressBar: true,
+    }),
+    SharedModule
   ],
-  providers: [HttpService],
+  providers: [HttpService, NotificationService],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
