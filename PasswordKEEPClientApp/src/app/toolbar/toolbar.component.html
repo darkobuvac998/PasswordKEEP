@@ -66,17 +66,19 @@
         <form class="form pe-3 d-flex" autocomplete="off">
             <div class="d-flex justify-content-center flex-column">
                 <div class="input-group">
-                    <div class="justify-content-center d-flex flex-column pe-3">
-                        <div  #collapse="ngbCollapse" animation="true" [(ngbCollapse)]="isSearchCollapsed">
-                            <input type="text" class="form-control align-self-center p-2 me-2 border-bottom border-primary" [(ngModel)]="searchTerm"
-                                (ngModelChange)="onSearchTermChange()" name="searchTerm">
+                    <div class="justify-content-center d-flex flex-column pe-2">
+                        <div #collapse="ngbCollapse" animation="true" [(ngbCollapse)]="isSearchCollapsed">
+                            <input [placeholder]="'Search'" type="text"
+                                class="form-control align-self-center p-1 me-1"
+                                [(ngModel)]="searchTerm" (ngModelChange)="onSearchTermChange()" (ngModelChange)="onSearch()" name="searchTerm">
                         </div>
                     </div>
                     <div class="input-group-append icon-style" (click)="collapse.toggle()">
-                        <i ngbTooltip="Search" placement="bottom" *ngIf="searchTerm==null" class="bi bi-search icon-size p-2"></i>
+                        <i ngbTooltip="Search" placement="bottom" *ngIf="searchTerm==null"
+                            class="bi bi-search icon-size p-1"></i>
                     </div>
                     <div class="input-group-append icon-style" (click)="clearSearch()">
-                        <i *ngIf="searchTerm!=null" class="bi bi-x-circle icon-size p-2"></i>
+                        <i *ngIf="searchTerm!=null" class="bi bi-x-circle icon-size p-1"></i>
                     </div>
                 </div>
             </div>

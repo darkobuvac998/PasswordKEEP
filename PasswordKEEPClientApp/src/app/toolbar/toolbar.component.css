@@ -1,24 +1,28 @@
+.box {
+  width: 55px;
+  height: 58px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  padding: 5px;
+  cursor: pointer;
+  margin: 0.6em;
+  transition: all .4s;
+}
 
-  .box{  
-    width: 55px;  
-    height: 58px;  
-    position: relative;  
-    display: flex;  
-    align-items: center;  
-    overflow: hidden;  
-    padding: 5px;  
-    cursor: pointer;  
-    margin: 0.6em;  
-    transition: all .4s;  
-  }  
-  .box:hover{  
-    width: 15vw;  
-    background: #c9c9c9;  
-    border-radius: 10px;  
-    color: black;  
-    box-shadow: 0 0 50px #c9c9c9;  
-  }  
-  /* .box:nth-child(2):hover{  
+.box:hover {
+  width: 15vw;
+  /* background: #c9c9c9;   */
+  border-radius: 10px;
+  color: black;
+  box-shadow: 0 0 50px #c9c9c9;
+
+  background-color: #d5fefd;
+  background-image: linear-gradient(315deg, #d5fefd 0%, #fffcff 74%);
+}
+
+/* .box:nth-child(2):hover{  
     background: #1877f2;  
     box-shadow: 0 0 50px #1876f285;  
   }  
@@ -31,60 +35,71 @@
     background: #25d366;  
     box-shadow: 0 0 50px #25d3657e;  
   }   */
-  .box p{  
-    transform: translate(50px);  
-  }
-  .hide{
-      display: none;
-  }
-  .box:hover .hide{
-      display: flex;
-  }
-  
-  .box .icon{  
-    /* position: absolute;   */
-    width: 50px;  
-    height: 50px;  
-    display: flex;  
-    justify-content: center;  
-    align-items: end;  
-    color: rgb(0, 0, 0);  
-    border-radius: 10px;  
-    margin-right: 10px;  
-    transition: all .6s;  
-  }  
-  /* .save{  
+.box p {
+  transform: translate(50px);
+}
+
+.hide {
+  display: none;
+}
+
+.box:hover .hide {
+  display: flex;
+}
+
+.box .icon {
+  /* position: absolute;   */
+  width: 50px;
+  height: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: end;
+  color: rgb(0, 0, 0);
+  border-radius: 10px;
+  margin-right: 10px;
+  transition: all .6s;
+}
+
+/* .save{  
     background: #585858;  
   }   */
-  .facebook{  
-    background: #1877f2;  
-  }  
-  .twitter{  
-    background: #1da1f2;  
-  }  
-  .whatsapp{  
-    background: #25d366;  
-  }  
-  .box:hover .icon{  
+.facebook {
+  background: #1877f2;
+}
+
+.twitter {
+  background: #1da1f2;
+}
+
+.whatsapp {
+  background: #25d366;
+}
+
+/* .box:hover .icon{  
     background: #dfdfdf;  
+    
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.26);  
     color: rgb(59, 59, 59);  
-  }  
+  }   */
 
-  .icon-style{
-    /* width: 50px;  
+.icon-style {
+  /* width: 50px;  
     height: 50px;   */
-    display: flex;  
-    justify-content: center;  
-    align-items: end;  
-    color: rgb(0, 0, 0);  
-    border-radius: 10px;  
-    margin-right: 10px;  
-    transition: all .6s;  
-  }
-  .icon-style:hover{
-    background: #dfdfdf;  
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.26);  
-    color: #3b3b3b; 
-    cursor: pointer;
-  }
+  display: flex;
+  justify-content: center;
+  align-items: end;
+  color: rgb(0, 0, 0);
+  border-radius: 10px;
+  margin-right: 10px;
+  transition: all .6s;
+}
+
+.icon-style:hover {
+  /* background: #dfdfdf;   */
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.26);
+  border-radius: 2em;
+  background-color: #d5fefd;
+  background-image: linear-gradient(315deg, #d5fefd 0%, #fffcff 74%);
+  color: #3b3b3b;
+  cursor: pointer;
+}

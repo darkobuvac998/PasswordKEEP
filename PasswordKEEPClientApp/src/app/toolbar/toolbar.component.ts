@@ -1,13 +1,13 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { delay, of, timer } from 'rxjs';
 import { FormMode } from '../shared/form-mode';
 
 @Component({
   selector: 'toolbar',
   templateUrl: './toolbar.component.html',
-  styleUrls: ['./toolbar.component.css']
+  styleUrls: ['./toolbar.component.css'],
 })
 export class ToolbarComponent implements OnInit {
-
   @Input() mode: FormMode;
   @Output() modeChange: EventEmitter<FormMode> = new EventEmitter<FormMode>();
   @Output() reload: EventEmitter<any> = new EventEmitter<any>();
@@ -15,6 +15,7 @@ export class ToolbarComponent implements OnInit {
   @Output() goBack: EventEmitter<any> = new EventEmitter<any>();
   @Output() search: EventEmitter<string> = new EventEmitter<string>();
   @Output() delete: EventEmitter<any> = new EventEmitter<any>();
+
   @Input() public goBackBtn: boolean = false;
 
   public searchTerm: string = null;
@@ -22,52 +23,48 @@ export class ToolbarComponent implements OnInit {
 
   public formMode = FormMode;
 
-  constructor() { }
+  constructor() {}
 
   ngOnInit(): void {
     this.mode = FormMode.Thumbnail;
   }
 
-  canAdd(){
+  canAdd() {
     return true;
   }
 
-  onModeChange(mode: FormMode){
+  onModeChange(mode: FormMode) {
     this.modeChange.emit(mode);
   }
 
-  onReload(){
+  onReload() {
     this.reload.emit();
   }
 
-  onSave(){
+  onSave() {
     this.save.emit();
   }
 
-  onGoToAppsMenu(){
+  onGoToAppsMenu() {
     this.goBack.emit();
   }
 
-  onSearch(){
-    if(this.searchTerm){
-      this.search.emit(this.searchTerm);
-    }
-    console.log(this.searchTerm)
+  onSearch() {
+    this.search.emit(this.searchTerm);
   }
 
-  clearSearch(){
+  clearSearch() {
     this.searchTerm = null;
     this.search.emit(null);
   }
 
-  onSearchTermChange(){
-    if(this.searchTerm == ''){
+  onSearchTermChange() {
+    if (this.searchTerm == '') {
       this.searchTerm = null;
     }
   }
 
-  onDelete(){
+  onDelete() {
     this.delete.emit();
   }
-
 }

@@ -3,7 +3,7 @@
         <ng-template #listTemplate let-items let-selected="selectedItem">
             <div class="d-flex justify-content-center">
                 <div class="row gap-0">
-                    <div class="col" *ngFor="let item of items">
+                    <div class="col-3" *ngFor="let item of items">
                         <!-- <app-card *ngIf="false" [applicationCard]="true" (onSelected)="onSelectedItemChange($event)"
                             (onDoubleClick)="onItemDoubleClick($event)" [application]="item"></app-card> -->
                         <app-card [item]="item" (onDoubleClick)="onItemDoubleClick($event)"
@@ -12,7 +12,10 @@
                                 <h3>{{item?.name}}</h3>
                                 <h4>{{'Account number: ' + item?.accounts?.length}}</h4>
                                 <ng-container *ngIf="item?.url">
-                                    <span class="link-text">
+                                    <ng-template #tipContent let-greeting="gretting">
+                                        <p>{{item?.url}}</p>
+                                    </ng-template>
+                                    <span [ngbTooltip]="tipContent" class="link-text">
                                         Go to application
                                         <a [href]="item?.url"><i class="bi bi-arrow-right"></i></a>
                                     </span>
@@ -59,16 +62,17 @@
                                 <div class="input-group-prepend">
                                     <span class="input-group-text" id="">Application</span>
                                 </div>
-                                <input type="text" class="form-control" [(ngModel)]="applicationAddModel.name"
-                                    name="appname" [value]="null" [required]="true">
+                                <input type="text" class="form-control" [(ngModel)]="itemAdd.name" name="appname"
+                                    [value]="null" [required]="true">
                             </div>
                             <div class="input-group">
                                 <div class="input-group-prepend">
                                     <span class="input-group-text" id="">URL</span>
                                 </div>
-                                <input type="text" class="form-control" [(ngModel)]="applicationAddModel.url"
-                                    name="appurl" [value]="" [required]="true">
+                                <input type="text" class="form-control" [(ngModel)]="itemAdd.url" name="appurl"
+                                    [value]="" [required]="true">
                             </div>
+                            {{itemAdd | json}}
                         </div>
                     </form>
                 </div>

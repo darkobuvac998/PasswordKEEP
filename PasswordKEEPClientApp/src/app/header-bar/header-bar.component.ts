@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { of, timer } from 'rxjs';
+import { Confirmable } from '../decorators/method.decorator';
 
 @Component({
   selector: 'header-bar',
@@ -15,6 +16,7 @@ export class HeaderBarComponent implements OnInit {
 
   ngOnInit(): void {}
 
+  @Confirmable('Question', 'Are you sure you want to logout?')
   logout() {
     of(window.confirm('Are you sure you want to log out?')).subscribe(
       (result) => {

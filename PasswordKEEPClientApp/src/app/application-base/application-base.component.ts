@@ -1,6 +1,5 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import {
-  AfterViewChecked,
   AfterViewInit,
   Component,
   ContentChild,
@@ -12,18 +11,25 @@ import {
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ClassConstructor } from 'class-transformer';
-import { Subscription, timer } from 'rxjs';
+import {
+  debounceTime,
+  Observable,
+  Subject,
+  Subscription,
+  throwError,
+  timer,
+} from 'rxjs';
 import { Confirmable } from '../decorators/method.decorator';
 import { HttpService } from '../services/http-service.service';
 import { NotificationService } from '../services/notification-service.service';
 import { FormMode } from '../shared/form-mode';
-import { GlobalErrorHandler } from '../shared/global-error-handler.service';
+import { handleError } from '../shared/global-error-handler.service';
+import { QueryParameters } from '../shared/queryParameters';
 
 @Component({
   selector: 'application-base',
   templateUrl: './application-base.component.html',
   styleUrls: ['./application-base.component.css'],
-  // providers: [GlobalErrorHandler],
 })
 export class ApplicationBaseComponent<T>
   implements OnInit, AfterViewInit, OnDestroy
@@ -43,7 +49,13 @@ export class ApplicationBaseComponent<T>
   public subscription: Subscription;
   private _component: ApplicationBaseComponent<T> = this;
   public showGoToAppButton: boolean = false;
-  public showQueryParams: boolean = false;
+  public buildQueryParams: boolean = false;
+  public queryParameters: QueryParameters = new QueryParameters();
+  public selecteItemChange: Subject<T> = new Subject<T>();
+  public selecteItemChange$: Observable<T>;
+  public search: Subject<string> = new Subject<string>();
+  public search$: Observable<string>;
+  private _searchTerm: string = null;
   get component(): ApplicationBaseComponent<T> {
     return this._component;
   }
@@ -99,18 +111,28 @@ export class ApplicationBaseComponent<T>
     protected route: ActivatedRoute,
     protected notificationService: NotificationService,
     protected modalService: NgbModal
-  ) {}
+  ) {
+    this.selecteItemChange$ = this.selecteItemChange.asObservable();
+    this.selecteItemChange$.subscribe((item) => {
+      this.component.queryParameters.currentItem = item;
+    });
+    this.search$ = this.search.asObservable();
+    this.search$.pipe(debounceTime(1000)).subscribe(() => {
+      this.component.queryParameters.search = this._searchTerm;
+      this.updateRouterUrl();
+    });
+  }
 
   ngOnInit(): void {
-    // const time = timer(1000, 1000);
-    // this.mode = this.component.mode;
-    // time.subscribe(() => {});
-    // this.component.onLoadItems();
-    // console.log('Component instantiated');
+    this.queryParameters.mode = this.component.mode;
+    if (this.component.buildQueryParams) {
+      this.updateRouterUrl();
+    }
   }
 
   ngAfterViewInit(): void {
-    this.afterLoadItems();
+    const delay = timer(1000);
+    delay.subscribe(() => this.afterLoadItems());
   }
 
   ngOnDestroy(): void {
@@ -121,61 +143,79 @@ export class ApplicationBaseComponent<T>
     let oldMode = this.component.mode;
     if (oldMode == FormMode.Edit || oldMode == FormMode.Add) {
       this.component.mode = this.component.oldMode;
+      this.component.queryParameters.mode = newMode;
       return;
     }
     this.component.oldMode = oldMode;
     if (newMode != oldMode) {
       this.component.mode = newMode;
+      this.component.queryParameters.mode = newMode;
     } else {
       return;
     }
-    if (this.showQueryParams) {
-      if (newMode != this.formMode.Thumbnail && newMode != this.formMode.Add) {
-        this.onModeChangeRouteUpdate(true);
-      } else {
-        this.onModeChangeRouteUpdate(false);
-      }
+    if (this.component.buildQueryParams) {
+      this.updateRouterUrl();
     }
   }
 
   onSelectedItemChange(item: any) {
     this.component.selectedItem = item;
+    this.selecteItemChange.next(item);
   }
 
   onItemDoubleClick(item: any) {
     this.selectedItem = item;
-    // this.component.mode = this.formMode.Detail;
+    this.selecteItemChange.next(item);
     this.onModeChange(this.formMode.Detail);
   }
 
   onReload() {
-    this.onLoadItems();
-    this.afterLoadItems();
-  }
-
-  onLoadItems() {
-    if (this.component.loadItems) {
-      this.component.items = [];
-      this.subscription = this.httpService
-        .getAllItems<T>(this.component.resourceUrl, this.component.itemsType)
-        .subscribe({
-          next: (res) => {
-            this.component.items = res;
-          },
-          error: (err) => {
-            console.log(err);
-          },
-          complete: () => {},
-        });
+    if (this.component.mode == FormMode.Detail) {
+      this.onCurrentItemLoad();
+    } else {
+      this.onLoadItems();
+      this.afterLoadItems();
     }
   }
-
   afterLoadItems() {
-    this.subscription = timer(1000).subscribe(() => {
+    this.subscription = timer(10).subscribe(() => {
       if (this.component.items?.length > 0) {
         this.component.selectedItem = this.component.items[0];
+
+        this.buildQueryParams ? this.updateRouterUrl() : null;
+        this.component.queryParameters.mode = this.component.mode;
       }
     });
+  }
+  onLoadItems() {
+    this.component.items = [];
+    this.subscription = this.httpService
+      .getAllItems<T>(this.component.resourceUrl, this.component.itemsType)
+      .subscribe({
+        next: (res) => {
+          this.component.items = res;
+        },
+        error: (err) => {
+          handleError(err);
+        },
+        complete: () => {},
+      });
+  }
+
+  onCurrentItemLoad() {
+    let url = `${this.component.resourceUrl}/${this.component.selectedItem.id}`;
+    this.subscription = this.httpService
+      .getItem<T>(url, this.component.classType)
+      .subscribe({
+        next: (res) => {
+          if (res) {
+            this.selectedItem = res;
+            this.updateItems(res);
+          }
+        },
+        error: (err) => handleError(err),
+        complete: () => {},
+      });
   }
 
   private updateItem() {
@@ -190,8 +230,7 @@ export class ApplicationBaseComponent<T>
           );
         },
         error: (err: HttpErrorResponse | Error) => {
-          // console.log(err);
-          this.notificationService.showError(err.message);
+          handleError(err);
         },
         complete: () => {},
       });
@@ -200,15 +239,14 @@ export class ApplicationBaseComponent<T>
   private addItem() {
     let url = `${this.component.resourceUrl}`;
     this.subscription = this.httpService
-      .postItem<T>(url, this._classType, this.itemAdd)
+      .postItem<T>(url, this._classType, this.component.itemAdd)
       .subscribe({
         next: (res) => {
           this.selectedItem = res;
           this.items.push(res);
         },
         error: (err) => {
-          // errorHandler(err,this.notificationService);
-          // console.log(err);
+          handleError(err);
         },
         complete: () => {
           this.itemAdd = {};
@@ -236,23 +274,11 @@ export class ApplicationBaseComponent<T>
       });
   }
 
-  onModeChangeRouteUpdate(showParams: boolean) {
-    let url = this.component.title.toLowerCase().replace(' ', '');
-    if (showParams) {
-      this.router.navigate([`/${url}`], {
-        queryParams: { id: this.component.selectedItem?.id },
-      });
-    } else {
-      this.router.navigate([`/${url}`]);
-    }
-  }
-
   @Confirmable('Question', 'Are you sure you want to delete this item?')
   onDelete() {
     let url = `${this.component.resourceUrl}/${this.component.selectedItem.id}`;
-    this.subscription = this.httpService
-      .deleteItem<T>(url)
-      .subscribe((result) => {
+    this.subscription = this.httpService.deleteItem<T>(url).subscribe({
+      next: (result) => {
         if (result) {
           this.notificationService.showSuccess(
             `Item with id: ${this.selectedItem.id} removed!`
@@ -262,6 +288,33 @@ export class ApplicationBaseComponent<T>
             this.selectedItem = this.items[0];
           }
         }
-      });
+      },
+      error: (err: HttpErrorResponse | Error) => {
+        handleError(err);
+      },
+      complete: () => {},
+    });
+  }
+
+  onSearch(searchTerm: string) {
+    this._searchTerm = searchTerm;
+    this.search.next(this._searchTerm);
+  }
+
+  private updateRouterUrl() {
+    var questionMark = this.router.url.indexOf('?');
+    var url =
+      questionMark > -1
+        ? this.router.url.substring(0, questionMark)
+        : this.router.url;
+    url = `${url}${this.component.queryParameters.buildQueryParameters()}`;
+
+    this.router.navigateByUrl(url, { replaceUrl: true });
+  }
+
+  private updateItems(value: any) {
+    this.items = this.items.map((item) => {
+      item.id != value.id ? item : value;
+    });
   }
 }

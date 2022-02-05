@@ -19,8 +19,8 @@ import { UserFormComponent } from './user-form/user-form.component';
 import { AppRoutingModule } from './app-routing.module';
 import { NotificationService } from './services/notification-service.service';
 import { ToastrModule } from 'ngx-toastr';
-import { GlobalErrorHandler } from './shared/global-error-handler.service';
 import { SharedModule } from './shared/shared.module';
+import { AuthModule } from './auth/auth.module';
 
 @NgModule({
   declarations: [
@@ -50,13 +50,14 @@ import { SharedModule } from './shared/shared.module';
       tapToDismiss: true,
       progressBar: true,
     }),
-    SharedModule
+    SharedModule,
+    AuthModule,
   ],
   providers: [HttpService, NotificationService],
   bootstrap: [AppComponent],
 })
 export class AppModule {
-  constructor(private injector: Injector){
+  constructor(private injector: Injector) {
     ServiceInjector = this.injector;
   }
 }

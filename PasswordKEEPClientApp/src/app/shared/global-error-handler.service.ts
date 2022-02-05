@@ -7,15 +7,17 @@ import { NotificationService } from '../services/notification-service.service';
 @Injectable({
   providedIn: 'root',
 })
-export class GlobalErrorHandler implements ErrorHandler {
+export class GlobalErrorHandler extends ErrorHandler {
   private notificationService: NotificationService;
-  constructor() {}
+  constructor() {
+    super();
+  }
 
-  handleError(error) {
-    console.log(error);
+  override handleError(error) {
     this.notificationService = ServiceInjector.get(NotificationService);
+    console.log('Global error handler handled error!');
     if (error instanceof HttpErrorResponse) {
-      this.notificationService.showError(
+      return this.notificationService.showError(
         `Code: ${error.status} Status: ${error.statusText}`
       );
     } else if (error instanceof Error) {
@@ -26,4 +28,21 @@ export class GlobalErrorHandler implements ErrorHandler {
       this.notificationService.showError(`Message: ${error.message}`);
     }
   }
+}
+
+export function handleError(err: any) {
+  const delay = timer(50);
+  let notificationService;
+  delay.subscribe(() => {
+    notificationService = ServiceInjector.get(NotificationService);
+    if (err instanceof HttpErrorResponse) {
+      return notificationService.showError(
+        `Code: ${err.status} Status: ${err.statusText}`
+      );
+    } else if (err instanceof Error) {
+      notificationService.showError(
+        `Name: ${err.name} Message: ${err.message}`
+      );
+    }
+  });
 }

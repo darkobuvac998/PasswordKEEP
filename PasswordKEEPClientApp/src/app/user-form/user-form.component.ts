@@ -43,7 +43,7 @@ export class UserFormComponent extends ApplicationBaseComponent<User> {
     user.phoneNumber = '066/062-952';
     this.items.push(user);
     this.selectedItem = user;
-    this.showQueryParams = true;
+    this.buildQueryParams = true;
   }
 
   override ngAfterViewInit(): void {}

@@ -25,10 +25,9 @@ export class HttpService {
         return res;
       }),
       map((res) => plainToInstance<T, Object>(cls, res)),
-      // catchError((err) => {
-      //   console.log(err);
-      //   return throwError(() => new Error(err));
-      // })
+      catchError((err) => {
+        return throwError(() => new Error(err));
+      })
     );
   }
 
@@ -40,10 +39,9 @@ export class HttpService {
         return res;
       }),
       map((res) => plainToInstance<T[], Object>(cls, res)),
-      // catchError((err) => {
-      //   console.log(err);
-      //   return throwError(() => new Error(err));
-      // })
+      catchError((err) => {
+        return throwError(() => new Error(err));
+      })
     );
   }
 
@@ -55,10 +53,9 @@ export class HttpService {
         return res;
       }),
       map((res) => plainToInstance<T, Object>(cls, res)),
-      // catchError((err) => {
-      //   console.log(err);
-      //   return throwError(() => new Error(err));
-      // })
+      catchError((err) => {
+        throw new Error(err);
+      })
     );
   }
 
@@ -71,7 +68,6 @@ export class HttpService {
       }),
       map((res) => plainToInstance<T, Object>(cls, res)),
       catchError((err) => {
-        console.log(err);
         return throwError(() => new Error(err));
       })
     );

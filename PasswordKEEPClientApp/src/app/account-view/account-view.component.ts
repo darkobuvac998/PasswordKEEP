@@ -5,10 +5,11 @@ import { timer } from 'rxjs';
 import { AppCardComponent } from '../app-card/app-card.component';
 import { ApplicationBaseComponent } from '../application-base/application-base.component';
 import { Account } from '../models/account.model';
-import { Application } from '../models/application.model';
 import { HttpService } from '../services/http-service.service';
 import { NotificationService } from '../services/notification-service.service';
 import { FormMode } from '../shared/form-mode';
+import { Clipboard } from '@angular/cdk/clipboard';
+import { QueryParameters } from '../shared/queryParameters';
 
 @Component({
   selector: 'account-view',
@@ -20,18 +21,22 @@ export class AccountViewComponent extends ApplicationBaseComponent<Account> {
   public accountAdd: Account;
   public showPassword: boolean = false;
   public confirmPassword: string = null;
+  public copiedToClipboard: boolean = false;
   constructor(
     protected override httpService: HttpService,
     protected override router: Router,
     protected override route: ActivatedRoute,
     protected override notificationService: NotificationService,
-    protected override modalService: NgbModal
+    protected override modalService: NgbModal,
+    private clipboard: Clipboard
   ) {
     super(httpService, router, route, notificationService, modalService);
     this.title = 'Accounts';
     this.mode = FormMode.Thumbnail;
     let appId = '842093480293'; //TODO
-    this.resourceUrl = `/api/${appId}/accounts`
+    this.resourceUrl = `/api/${appId}/accounts`;
+    this.queryParameters = new QueryParameters();
+    this.queryParameters.baseUrl = this.resourceUrl;
   }
 
   override ngOnInit(): void {
@@ -68,6 +73,15 @@ export class AccountViewComponent extends ApplicationBaseComponent<Account> {
           item.selected = true;
         }
       });
+    });
+  }
+
+  copyToClipboard(password: string) {
+    this.copiedToClipboard = true;
+    this.clipboard.copy(password);
+    let delay = timer(3000);
+    delay.subscribe(() => {
+      this.copiedToClipboard = false;
     });
   }
 }

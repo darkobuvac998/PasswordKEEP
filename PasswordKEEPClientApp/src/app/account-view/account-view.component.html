@@ -20,7 +20,8 @@
         </ng-template>
         <ng-template #detailTemplate let-selected>
             <form action="" class="form p-3 w-50 h-100" autocomplete="off">
-                <div class="d-flex justify-content-between flex-column gap-3 mt-3 w-100" *ngIf="component.mode!=formMode.Add">
+                <div class="d-flex justify-content-between flex-column gap-3 mt-3 w-100"
+                    *ngIf="component.mode!=formMode.Add">
                     <div class="input-group">
                         <div class="input-group-prepend">
                             <span class="input-group-text" id="">Username</span>
@@ -47,6 +48,15 @@
                                 class="input-group-text"><i class="bi bi-eye"></i></span>
                             <span style="cursor: pointer;" (click)="onShowPassword()" *ngIf="!showPassword"
                                 class="input-group-text"><i class="bi bi-eye-slash"></i></span>
+
+                        </div>
+                        <div class="input-group-append">
+                            <span ngbTooltip="Copy to clipboard" placement="bottom" style="cursor: pointer;"
+                                (click)="copyToClipboard(selected.password)" *ngIf="!copiedToClipboard"
+                                class="input-group-text"><i class="bi bi-clipboard"></i></span>
+                            <span #t="ngbTooltip" [closeDelay]="1000" ngbTooltip="Copied" placement="botton"
+                                triggers="closeDelay: 1500" style="cursor: pointer;" *ngIf="copiedToClipboard"
+                                class="input-group-text"><i class="bi bi-check" style="color: green;"></i></span>
                         </div>
                     </div>
                     <div class="input-group" *ngIf="component.mode==formMode.Edit">

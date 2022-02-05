@@ -16,7 +16,7 @@ export class NotificationService {
   showError(message: string, title?: string | null) {
     this.toastr.error(message, title ? title : 'Error');
   }
-  showWarning(message: string, title?: string | null){
+  showWarning(message: string, title?: string | null) {
     this.toastr.warning(message, title ? title : 'Warning');
   }
 }

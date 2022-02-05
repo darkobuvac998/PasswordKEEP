@@ -3,7 +3,6 @@ import { timer } from 'rxjs';
 import { ServiceInjector } from '../app.module';
 import { DialogComponent } from '../shared/dialog/dialog.component';
 
-
 export function Confirmable(title: string, message: string) {
   return function (
     targer: Object,
@@ -18,7 +17,7 @@ export function Confirmable(title: string, message: string) {
     });
     descriptor.value = function (...args: any[]) {
       let modalRef = modalService.open(DialogComponent, {
-        backdrop: true,
+        backdrop: 'static',
         centered: true,
       });
       modalRef.componentInstance.title = title;

@@ -16,6 +16,7 @@ import { timer } from 'rxjs';
 import { AccountViewComponent } from '../account-view/account-view.component';
 import { NotificationService } from '../services/notification-service.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { QueryParameters } from '../shared/queryParameters';
 
 @Component({
   selector: 'app-view',
@@ -42,11 +43,14 @@ export class AppViewComponent extends ApplicationBaseComponent<Application> {
     this.resourceUrl = `api/${userId}/applications`;
     this.classType = Application;
     this.loadItems = true;
-    this.showQueryParams = true;
+    this.buildQueryParams = true;
+    this.itemAdd = new Application();
+    this.queryParameters = new QueryParameters();
+    this.queryParameters.baseUrl = this.resourceUrl;
   }
 
   override ngOnInit(): void {
-    this.applicationAddModel = new Application();
+    // this.applicationAddModel = new Application();
     let app = new Application();
     app.name = 'LinkedIn';
     app.url = 'https://linkedin.com';
@@ -85,11 +89,11 @@ export class AppViewComponent extends ApplicationBaseComponent<Application> {
   }
 
   override onModeChange(newMode: FormMode): void {
-      super.onModeChange(newMode);
-      this.onSelectCard(50);
+    super.onModeChange(newMode);
+    this.onSelectCard(50);
   }
 
-  onSelectCard(time: number){
+  onSelectCard(time: number) {
     let delay = timer(time);
     delay.subscribe(() => {
       this.appCards.forEach((item) => {

@@ -1,8 +1,8 @@
-<div class="d-flex flex-column justify-content-between">
-  <div class="w-100">
+<div class="d-flex flex-column justify-content-between w-100 h-100">
+  <div *ngIf="showHeader" class="w-100">
     <header-bar></header-bar>
   </div>
-  <div class="w-100 h-100 flex-grow-1">
-    <router-outlet></router-outlet>
+  <div class="w-100 h-100 flex-grow-1" [ngClass]="{'mt-5': !showHeader}">
+    <router-outlet (activate)="onOutletComponentChange($event)"></router-outlet>
   </div>
 </div>
