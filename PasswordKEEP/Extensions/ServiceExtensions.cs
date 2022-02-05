@@ -41,7 +41,7 @@ namespace PasswordKEEP.Extensions
             {
                 options.AddPolicy("PasswordKEEPPolicy", builder =>
                 {
-                    builder.WithOrigins("http://localhost:4200/").WithMethods("GET", "POST", "PUT", "DELETE").AllowAnyHeader();
+                    builder.WithOrigins("http://localhost:4200").WithMethods("GET", "POST", "PUT", "DELETE").AllowAnyHeader();
                 });
 
             });

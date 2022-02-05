@@ -1,10 +1,6 @@
 ﻿using AutoMapper;
 using Entities.DataTransferObjects;
 using Entities.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace PasswordKEEP.AutoMapperMappings
 {
@@ -17,6 +13,8 @@ namespace PasswordKEEP.AutoMapperMappings
             CreateMap<ApplicationForCreationDto, Application>();
             CreateMap<Account, AccountDto>().ReverseMap();
             CreateMap<AccountForCreationDto, Account>();
+            CreateMap<User, UserDto>();
+
         }
     }
 }
