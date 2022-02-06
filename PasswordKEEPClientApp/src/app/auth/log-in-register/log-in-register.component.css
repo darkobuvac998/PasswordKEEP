@@ -19,7 +19,7 @@
     /* background: linear-gradient(to bottom, #0f0c29, #302b63, #24243e); */
     border-radius: 1.5rem;
     background-color: #e3efe8;
-background-image: linear-gradient(315deg, #e3efe8 0%, #96a7cf 74%);
+    background-image: linear-gradient(315deg, #e3efe8 0%, #96a7cf 74%);
 }
 
 #chk {
@@ -51,6 +51,24 @@ input {
     display: flex;
     margin: 20px auto;
     padding: 10px;
+    border: none;
+    outline: none;
+    border-radius: 5px;
+    width: 80%;
+}
+
+.invalid {
+    background-color: #ffffff;
+    background-image: linear-gradient(315deg, #ffffff 0%, #ff7878 74%);
+
+
+}
+
+em {
+    justify-content: start;
+    display: flex;
+    margin: 20px auto;
+    padding: 1px;
     border: none;
     outline: none;
     border-radius: 5px;
@@ -106,4 +124,16 @@ button:hover {
 
 #chk:checked~.signup label {
     transform: scale(.6);
+}
+
+.has-search{
+    position: absolute;
+    z-index: 2;
+    display: block;
+    width: 2.375rem;
+    height: 2.375rem;
+    line-height: 2.375rem;
+    text-align: center;
+    pointer-events: none;
+    color: #aaa;
 }

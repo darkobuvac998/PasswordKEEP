@@ -35,7 +35,7 @@ export class AuthGuard implements CanActivate {
 
     if (!loggedIn) {
       this.notificationService.showWarning('User is not logged in!');
-      // this.router.navigate(['/log-in']);
+      this.router.navigate(['/log-in']);
     }
     if (expired) {
       this.notificationService.showWarning(

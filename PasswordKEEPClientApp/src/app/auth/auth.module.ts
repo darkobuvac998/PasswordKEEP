@@ -5,14 +5,14 @@ import { JWTTokenService } from './jwttoken.service';
 import { LocalStorageService } from './local-storage.service';
 import { AuthGuard } from './auth.guard';
 import { LogInRegisterComponent } from './log-in-register/log-in-register.component';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthInterceptor } from './auth.interceptor';
 
 @NgModule({
   declarations: [LogInRegisterComponent],
   exports: [LogInRegisterComponent],
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule],
   providers: [
     AuthService,
     JWTTokenService,

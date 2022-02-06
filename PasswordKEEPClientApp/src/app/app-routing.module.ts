@@ -21,8 +21,8 @@ const appRoutes: Routes = [
     component: UserFormComponent,
     canActivate: [AuthGuard],
   },
-  { path: '', redirectTo: '/applications', pathMatch: 'full' },
-  { path: '**', redirectTo: '/applications', pathMatch: 'full' },
+  { path: '', redirectTo: '/log-in', pathMatch: 'full' },
+  { path: '**', redirectTo: '/log-in', pathMatch: 'full' },
 ];
 
 @NgModule({

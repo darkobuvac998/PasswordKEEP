@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { of, timer } from 'rxjs';
+import { AuthService } from '../auth/auth.service';
 import { Confirmable } from '../decorators/method.decorator';
 
 @Component({
@@ -12,7 +13,7 @@ export class HeaderBarComponent implements OnInit {
   public userName: string = 'Username';
   public toggleFlag = false;
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, public authService: AuthService) {}
 
   ngOnInit(): void {}
 

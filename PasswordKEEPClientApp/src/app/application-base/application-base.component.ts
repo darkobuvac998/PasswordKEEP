@@ -168,7 +168,10 @@ export class ApplicationBaseComponent<T>
     this.selecteItemChange.next(item);
     this.onModeChange(this.formMode.Detail);
   }
-
+  /**
+   * @param {string} path
+   * {@Link onLoadItems}
+   */
   onReload() {
     if (this.component.mode == FormMode.Detail) {
       this.onCurrentItemLoad();

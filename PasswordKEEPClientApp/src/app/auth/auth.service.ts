@@ -45,6 +45,7 @@ export class AuthService {
           this.loggedIn = true;
           this.roles = this.jwtService.getUserRoles();
           this.notificationService.showInfo('User successfully logged in!');
+          this.router.navigate(['/applications']);
         },
         error: (err) => handleError(err),
         complete: () => {},
@@ -60,6 +61,8 @@ export class AuthService {
         next: (res) => {
           //TODO
         },
+        error: (err) => handleError(err),
+        complete: () => {},
       });
   }
 
@@ -71,6 +74,7 @@ export class AuthService {
       .subscribe({
         next: (res) => {
           if (res) {
+            console.log(this.user);
             this.user = res;
           }
         },

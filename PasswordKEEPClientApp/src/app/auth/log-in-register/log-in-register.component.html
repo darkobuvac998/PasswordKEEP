@@ -3,30 +3,58 @@
         <div class="main">
             <input type="checkbox" [(ngModel)]="logIn" (ngModelChange)="onModeChange()" id="chk" aria-hidden="true">
             <div class="signup">
-                <form autocomplete="off">
+                <form [formGroup]="registerFg" autocomplete="off">
                     <label for="chk" aria-hidden="true">Sign up</label>
-                    <input type="text" name="firstname" [placeholder]="'Firstname'" required>
-                    <input type="text" name="lastname" [placeholder]="'Lastname'" required>
-                    <input type="text" name="username" [placeholder]="'Username'" required>
-                    <input type="text" name="email" [placeholder]="'Email'" required>
-                    <input type="tel" name="phonenumber" [placeholder]="'Phonenumber'" required>
-                    <input type="password" name="password" [placeholder]="'Password'" required>
-                    <input type="password" name="confirmpassword" [placeholder]="'Confirm password'" required>
-                    <button style="letter-spacing: 0.2rem;" type="button">Register</button>
+                    <input [ngClass]="{'invalid': getControls('firstName')?.invalid && getControls('firstName')?.dirty}"
+                        type="text" name="firstName" formControlName="firstName" [placeholder]="'Firstname'">
+
+                    <input [ngClass]="{'invalid': getControls('lastName')?.invalid && getControls('lastName')?.dirty}"
+                        type="text" name="lastname" [placeholder]="'Lastname'" formControlName="lastName">
+                    <input [ngClass]="{'invalid': getControls('userName')?.invalid && getControls('userName')?.dirty}"
+                        type="text" name="username" [placeholder]="'Username'" formControlName="userName">
+                    <input [ngClass]="{'invalid': getControls('email')?.invalid && getControls('email')?.dirty}"
+                        type="text" name="email" [placeholder]="'Email'" formControlName="email">
+                    <input type="tel" name="phonenumber" [placeholder]="'Phonenumber'" formControlName="phoneNumber">
+                    <input [ngClass]="{'invalid': getControls('password')?.invalid && getControls('password')?.dirty}"
+                        type="password" name="password" [placeholder]="'Password'" formControlName="password">
+                    <input
+                        [ngClass]="{'invalid': getControls('confirmPassword')?.invalid && getControls('confirmPassword')?.dirty}"
+                        type="password" name="confirmpassword" [placeholder]="'Confirm password'"
+                        formControlName="confirmPassword">
+                    <button [ngClass]="{'btn btn-danger': registerFg.invalid}" (click)="register()"
+                        [disabled]="registerFg.invalid" style="letter-spacing: 0.2rem;"
+                        type="button">Register</button>
                 </form>
             </div>
             <div class="login align-content-center">
-                <form autocomplete="off">
+                <form autocomplete="off" [formGroup]="loginFg">
                     <label for="chk" aria-hidden="true">Login</label>
                     <div class="align-self-center">
-                        <input type="text" name="login" [placeholder]="'Username'">
-                        <input type="password" name="password" [placeholder]="'Password'">
+                        <input
+                            [ngClass]="{'invalid': getControlsForLogIn('username')?.invalid && getControlsForLogIn('username')?.dirty}"
+                            type="text" name="username" [placeholder]="'Username'" formControlName="username">
+                        <div class="input-group d-flex justify-content-center">
+                            <input style=" margin: 0;"
+                                [ngClass]="{'invalid': getControlsForLogIn('password')?.invalid && getControlsForLogIn('password')?.dirty}"
+                                [type]="showPassword ? 'text' : 'password'" name="password" [placeholder]="'Password'"
+                                formControlName="password">
+                            <div class="d-flex justify-content-center">
+                                <span *ngIf="!showPassword" (click)="onShowPassword()"
+                                    class="position-absolute m-5 align-self-center d-flex bi bi-eye fs-4 ms-1"
+                                    style="cursor: pointer;"></span>
+                                <span *ngIf="showPassword" (click)="onShowPassword()"
+                                    class="position-absolute m-5 align-self-center d-flex bi bi-eye-slash fs-4 ms-1"
+                                    style="cursor: pointer;"></span>
+                            </div>
+                        </div>
 
-                        <button type="button" style="letter-spacing: 0.2rem;">Login</button>
+                        <button [disabled]="loginFg.invalid" [ngClass]="{'btn btn-danger': loginFg.invalid}"
+                            (click)="login()" type="button" style="letter-spacing: 0.2rem;">Login</button>
                         <div class="d-flex justify-content-center align-content-center flex-column mt-5">
                             <i class="bi bi-lock align-self-center" style="font-size: 80px;"></i>
                             <p class="display-4 align-self-center text-black">{{'PasswordKEEP'}}</p>
                         </div>
+
                     </div>
                 </form>
             </div>
