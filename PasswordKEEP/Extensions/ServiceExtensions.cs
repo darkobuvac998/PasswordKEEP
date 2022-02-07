@@ -1,11 +1,15 @@
 ﻿using Contracts;
 using Entities.Models;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
 using PasswordKEEP.Services;
 using Repositories;
+using System;
+using System.Text;
 
 namespace PasswordKEEP.Extensions
 {
@@ -48,5 +52,33 @@ namespace PasswordKEEP.Extensions
 
         public static void AddAccountsService(this IServiceCollection services) =>
             services.AddScoped<IAccountsService, AccountsService>();
+
+        public static void AddAuthenticationManager(this IServiceCollection services) =>
+            services.AddScoped<IAuthenticationManager, AuthenticationManager>();
+
+        public static void AddJWT(this IServiceCollection services, IConfiguration configuration)
+        {
+            var jwtSetting = configuration.GetSection("JwtSettings");
+            var secret = Environment.GetEnvironmentVariable("PasswordKEEPSecret");
+
+            services.AddAuthentication(opt =>
+            {
+                opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                opt.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(opt =>
+            {
+                opt.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+
+                    ValidIssuer = jwtSetting.GetSection("validIssuer").Value,
+                    ValidAudience = jwtSetting.GetSection("validAudience").Value,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secret))
+                };
+            });
+        }
     }
 }

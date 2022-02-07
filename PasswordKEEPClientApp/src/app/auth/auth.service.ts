@@ -41,6 +41,7 @@ export class AuthService {
         next: (res) => {
           this.storageService.set(TOKEN_KEY, res.token);
           console.log(this.jwtService.decodeToken());
+          console.log(this.jwtService.getDecodeToken());
           this._userId = res.userId;
           this.loggedIn = true;
           this.roles = this.jwtService.getUserRoles();

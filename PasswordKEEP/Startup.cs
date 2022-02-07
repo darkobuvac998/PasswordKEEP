@@ -47,6 +47,9 @@ namespace PasswordKEEP
 
             services.AddAuthentication();
             services.AddIdentity();
+            services.AddJWT(Configuration);
+
+            services.AddAuthenticationManager();
 
             services.AddHsts(options =>
             {
