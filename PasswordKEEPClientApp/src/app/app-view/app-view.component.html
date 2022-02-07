@@ -77,7 +77,8 @@
                     </form>
                 </div>
                 <div *ngIf="component.mode==formMode.Detail" class="col-md-12 w-100">
-                    <account-view #accounts [items]="selected?.accounts"></account-view>
+                    <account-view [app]="component.selectedItem.id" #accounts [items]="selected?.accounts">
+                    </account-view>
                 </div>
             </div>
         </ng-template>

@@ -17,6 +17,7 @@ import { AccountViewComponent } from '../account-view/account-view.component';
 import { NotificationService } from '../services/notification-service.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { QueryParameters } from '../shared/queryParameters';
+import { AuthService } from '../auth/auth.service';
 
 @Component({
   selector: 'app-view',
@@ -34,13 +35,14 @@ export class AppViewComponent extends ApplicationBaseComponent<Application> {
     protected override router: Router,
     protected override route: ActivatedRoute,
     protected override notificationService: NotificationService,
-    protected override modalService: NgbModal
+    protected override modalService: NgbModal, 
+    private authService: AuthService
   ) {
     super(httpService, router, route, notificationService, modalService);
     this.title = 'Applications';
     this.mode = FormMode.Thumbnail;
     let userId = 'ace7fb5c-0238-472d-a8e0-98954f864fec'; //TODO
-    this.resourceUrl = `api/${userId}/applications`;
+    this.resourceUrl = `api/${this.authService.user.nameidentifier}/applications`;
     this.classType = Application;
     this.loadItems = true;
     this.buildQueryParams = true;
@@ -51,27 +53,28 @@ export class AppViewComponent extends ApplicationBaseComponent<Application> {
 
   override ngOnInit(): void {
     // this.applicationAddModel = new Application();
-    let app = new Application();
-    app.name = 'LinkedIn';
-    app.url = 'https://linkedin.com';
-    app.accounts = [];
-    app.id = '111';
-    let acc = new Account();
-    acc.id = '12312132';
-    acc.username = 'buvacd';
-    acc.password = '123';
-    acc.lastModified = new Date();
-    app.accounts.push(acc);
-    for (let i = 0; i < 10; i++) {
-      app = {
-        ...app,
-        id: i.toString(),
-        accounts: app.accounts.map((item) => {
-          return { ...item, id: i.toString() } as Account;
-        }),
-      };
-      this.items.push(app);
-    }
+    // let app = new Application();
+    // app.name = 'LinkedIn';
+    // app.url = 'https://linkedin.com';
+    // app.accounts = [];
+    // app.id = '111';
+    // let acc = new Account();
+    // acc.id = '12312132';
+    // acc.username = 'buvacd';
+    // acc.password = '123';
+    // acc.lastModified = new Date();
+    // app.accounts.push(acc);
+    // for (let i = 0; i < 10; i++) {
+    //   app = {
+    //     ...app,
+    //     id: i.toString(),
+    //     accounts: app.accounts.map((item) => {
+    //       return { ...item, id: i.toString() } as Account;
+    //     }),
+    //   };
+    //   this.items.push(app);
+    // }
+    this.onReload();
   }
 
   override ngAfterViewInit(): void {

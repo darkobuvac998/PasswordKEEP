@@ -19,15 +19,7 @@ export class HeaderBarComponent implements OnInit {
 
   @Confirmable('Question', 'Are you sure you want to logout?')
   logout() {
-    of(window.confirm('Are you sure you want to log out?')).subscribe(
-      (result) => {
-        if (result) {
-          console.log('You loged out');
-        } else {
-          console.log('You stay in!');
-        }
-      }
-    );
+    this.authService.logOut();
   }
 
   showDropdown() {

@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { debounceTime } from 'rxjs';
+import { debounceTime, of } from 'rxjs';
 import { User } from '../models/user.model';
 import { NotificationService } from '../services/notification-service.service';
 import { handleError } from '../shared/global-error-handler.service';
@@ -12,10 +12,10 @@ import { LocalStorageService } from './local-storage.service';
   providedIn: 'root',
 })
 export class AuthService {
-  private AUTH_API = `/api/authenticate`;
+  private AUTH_API = `/api/authentication`;
   private _userId: string = null;
   public loggedIn: boolean = false;
-  public user: User = null;
+  public user: any = null;
   private _roles: any[] = [];
   constructor(
     private storageService: LocalStorageService,
@@ -40,16 +40,22 @@ export class AuthService {
       .subscribe({
         next: (res) => {
           this.storageService.set(TOKEN_KEY, res.token);
-          console.log(this.jwtService.decodeToken());
-          console.log(this.jwtService.getDecodeToken());
-          this._userId = res.userId;
+          // console.log(res);
+          // console.log(this.jwtService.getUserObject());
+          // console.log(this.jwtService.decodeToken());
+          // console.log(this.jwtService.getDecodeToken());
+          this.user = this.jwtService.getUserObject();
           this.loggedIn = true;
           this.roles = this.jwtService.getUserRoles();
-          this.notificationService.showInfo('User successfully logged in!');
+          this.notificationService.showInfo(
+            `${this.user.name} successfully logged in!`
+          );
           this.router.navigate(['/applications']);
         },
         error: (err) => handleError(err),
-        complete: () => {},
+        complete: () => {
+          console.log(this.user);
+        },
       });
   }
 
@@ -87,13 +93,19 @@ export class AuthService {
   }
 
   logOut() {
-    this.storageService.remove(TOKEN_KEY);
-    this.router.navigate(['log-in']);
+    of(1)
+      .pipe(debounceTime(1500))
+      .subscribe(() => {
+        this.storageService.remove(TOKEN_KEY);
+        this.roles = [];
+        this.user = null;
+        this.router.navigate(['log-in']);
+      });
   }
 
   isLoggedIn() {
     let token = this.storageService.get(TOKEN_KEY);
-    console.log(token);
+    // console.log(token);
     if (token) {
       this.loggedIn = true;
     } else {

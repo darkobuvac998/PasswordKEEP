@@ -18,7 +18,7 @@ export class JWTTokenService {
   decodeToken() {
     let token = this.localStorage.get(TOKEN_KEY);
     if (token) {
-      this.decodeToken = jwt_decode(token, { header: true });
+      this.decodedToken = jwt_decode(token, { header: true });
     }
   }
 
@@ -33,12 +33,18 @@ export class JWTTokenService {
 
   getExpiaryTime() {
     this.decodeToken();
-    return this.decodedToken ? this.decodedToken['expiration'] : null;
+    return this.decodedToken ? this.decodedToken['exp'] : null;
   }
 
   getUserRoles() {
-    this.decodeToken();
-    return this.decodeToken ? this.decodeToken['roles'] : null;
+    let token = jwt_decode(this.localStorage.get(TOKEN_KEY));
+    let roles = [];
+    Object.keys(token).forEach((prop) => {
+      if (prop.toString().endsWith('role')) {
+        roles.push(token[prop]);
+      }
+    });
+    return roles;
   }
 
   isTokenExpired(): boolean {
@@ -48,5 +54,22 @@ export class JWTTokenService {
     } else {
       return false;
     }
+  }
+
+  getUserObject() {
+    let user = {};
+    let props = ['name', 'nameidentifier', 'emailaddress', 'role'];
+
+    let token = jwt_decode(this.localStorage.get(TOKEN_KEY));
+    let res = Object.keys(token).forEach((prop) => {
+      props.forEach((item) => {
+        if (prop.toString().endsWith(item)) {
+          user = { ...user, [item.toString()]: token[prop] };
+        }
+      });
+    });
+
+    // console.log(user);
+    return user;
   }
 }

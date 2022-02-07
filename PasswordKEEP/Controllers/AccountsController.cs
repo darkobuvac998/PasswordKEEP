@@ -55,7 +55,7 @@ namespace PasswordKEEP.Controllers
 
         [HttpPut("{id}")]
         [EnsureAccountExists]
-        public async Task<IActionResult> UpdateAccountForCompany(Guid applicationId, Guid id, [FromBody] AccountForCreationDto accountDto)
+        public async Task<IActionResult> UpdateAccountForApplication(Guid applicationId, Guid id, [FromBody] AccountForCreationDto accountDto)
         {
             var result = await _accountsService.UpdateAccountForApplication(applicationId, id, accountDto);
             if (result.Succeded)

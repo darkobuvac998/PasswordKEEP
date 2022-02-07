@@ -33,6 +33,7 @@ export class HttpService {
 
   getAllItems<T>(url: string, cls: ClassConstructor<T[]>) {
     this.loading = true;
+    this.subscription = timer(500).subscribe(() => (this.loading = true));
     return this.httpClient.get<T>(url).pipe(
       map((res) => {
         this.resetLoading(this.subscription);
@@ -47,6 +48,7 @@ export class HttpService {
 
   postItem<T>(url: string, cls: ClassConstructor<T>, data: T) {
     this.loading = true;
+    this.subscription = timer(500).subscribe(() => (this.loading = true));
     return this.httpClient.post<T>(url, data).pipe(
       map((res) => {
         this.resetLoading(this.subscription);
@@ -61,6 +63,7 @@ export class HttpService {
 
   updateItem<T>(url: string, cls: ClassConstructor<T>, data: T) {
     this.loading = true;
+    this.subscription = timer(500).subscribe(() => (this.loading = true));
     return this.httpClient.put<T>(url, data).pipe(
       map((res) => {
         this.resetLoading(this.subscription);
@@ -75,6 +78,7 @@ export class HttpService {
 
   deleteItem<T>(url: string, obj?: T) {
     this.loading = true;
+    this.subscription = timer(500).subscribe(() => (this.loading = true));
     return this.httpClient.request<T>('delete', url, { body: obj }).pipe(
       map((res) => {
         this.resetLoading(this.subscription);

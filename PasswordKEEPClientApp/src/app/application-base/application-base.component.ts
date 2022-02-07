@@ -222,7 +222,7 @@ export class ApplicationBaseComponent<T>
   }
 
   private updateItem() {
-    let url = `${this.resourceUrl}/${this.selectedItem?.id}`;
+    let url = `${this.component.resourceUrl}/${this.component.selectedItem?.id}`;
     this.subscription = this.httpService
       .updateItem<T>(url, this.classType, this.selectedItem)
       .subscribe({
@@ -245,8 +245,9 @@ export class ApplicationBaseComponent<T>
       .postItem<T>(url, this._classType, this.component.itemAdd)
       .subscribe({
         next: (res) => {
-          this.selectedItem = res;
-          this.items.push(res);
+          console.log(res);
+          this.component.selectedItem = res;
+          this.component.items.push(res);
         },
         error: (err) => {
           handleError(err);

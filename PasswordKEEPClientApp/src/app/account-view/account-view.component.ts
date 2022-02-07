@@ -1,4 +1,10 @@
-import { Component, OnInit, QueryList, ViewChildren } from '@angular/core';
+import {
+  Component,
+  Input,
+  OnInit,
+  QueryList,
+  ViewChildren,
+} from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { timer } from 'rxjs';
@@ -22,6 +28,7 @@ export class AccountViewComponent extends ApplicationBaseComponent<Account> {
   public showPassword: boolean = false;
   public confirmPassword: string = null;
   public copiedToClipboard: boolean = false;
+  @Input('app') appId: string = null;
   constructor(
     protected override httpService: HttpService,
     protected override router: Router,
@@ -33,8 +40,7 @@ export class AccountViewComponent extends ApplicationBaseComponent<Account> {
     super(httpService, router, route, notificationService, modalService);
     this.title = 'Accounts';
     this.mode = FormMode.Thumbnail;
-    let appId = '842093480293'; //TODO
-    this.resourceUrl = `/api/${appId}/accounts`;
+
     this.queryParameters = new QueryParameters();
     this.queryParameters.baseUrl = this.resourceUrl;
   }
@@ -44,6 +50,9 @@ export class AccountViewComponent extends ApplicationBaseComponent<Account> {
       this.selectedItem = this.items[0];
     }
     this.accountAdd = new Account();
+    this.resourceUrl = `/api/${this.appId}/accounts`;
+    this.onReload();
+
     // console.log(this.selectedItem);
   }
 

@@ -61,6 +61,7 @@ export class LogInRegisterComponent implements OnInit {
   register() {
     console.log(this.onPrepareModel(this.registerFg));
     let user = this.onPrepareModel(this.registerFg);
+    user = {...user, roles: ['User']};
     this.authService.signIn(user);
   }
   getControls(control: string) {
@@ -84,7 +85,7 @@ export class LogInRegisterComponent implements OnInit {
       res = { ...res, [prop.toString()]: controls[prop].value };
     });
 
-    return res as User;
+    return res;
   }
 
   onShowPassword() {
