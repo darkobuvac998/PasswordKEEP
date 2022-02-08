@@ -1,9 +1,12 @@
-﻿using Contracts;
+﻿using AutoMapper;
+using Contracts;
 using Entities.DataTransferObjects;
 using Entities.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using PasswordKEEP.Filters;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
@@ -18,19 +21,28 @@ namespace PasswordKEEP
 
         private readonly UserManager<User> _userManager;
         private readonly IConfiguration _configuration;
+        private readonly IMapper _mapper;
 
         private User _user;
 
-        public AuthenticationManager(UserManager<User> userManager, IConfiguration configuration)
+        public AuthenticationManager(UserManager<User> userManager, IConfiguration configuration, IMapper mapper)
         {
             _userManager = userManager;
             _configuration = configuration;
+            _mapper = mapper;
         }
         public async Task<bool> ValidateUser(UserForAuthenticationDto user)
         {
             _user = await _userManager.FindByNameAsync(user.Username);
 
             return (_user != null && await _userManager.CheckPasswordAsync(_user, user.Password));
+        }
+
+        public async Task<UserDto> GetUser(string userName)
+        {
+            var user = await _userManager.FindByNameAsync(userName);
+            var userDto = _mapper.Map<UserDto>(user);
+            return userDto;
         }
 
         public async Task<string> CreateToken()
@@ -44,7 +56,7 @@ namespace PasswordKEEP
 
         private SigningCredentials GetSigningCredentials()
         {
-            var key = Encoding.UTF8.GetBytes(Environment.GetEnvironmentVariable("PasswordKEEPSecret").Trim().ToLower());
+            var key = Encoding.UTF8.GetBytes(Environment.GetEnvironmentVariable("PasswordKEEPSecret"));
             var secret = new SymmetricSecurityKey(key);
 
             return new SigningCredentials(secret, SecurityAlgorithms.HmacSha256);
@@ -82,5 +94,20 @@ namespace PasswordKEEP
             return tokenOptions;
         }
 
+        public async Task<UserDto> UpdateUser(string userName, UserForRegistrationDto userDto)
+        {
+            var user = await _userManager.FindByNameAsync(userName);
+            if (user != null)
+            {
+                _mapper.Map(userDto, user);
+                var result = await _userManager.UpdateAsync(user);
+                if (result.Succeeded)
+                {
+                    var userResult = _mapper.Map<UserDto>(user);
+                    return userResult;
+                }
+            }
+            return null;
+        }
     }
 }

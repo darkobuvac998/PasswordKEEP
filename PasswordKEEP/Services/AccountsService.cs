@@ -37,6 +37,7 @@ namespace PasswordKEEP.Services
                 account.Password = _passwordService.Encrypt(account.Password);
                 _repositoryManager.Account.Create(account);
                 await _repositoryManager.SaveAsync();
+                account.Password = _passwordService.Decrypt(account.Password);
                 var appDto = _mapper.Map<AccountDto>(account);
                 return new ServiceResult<AccountDto> { Succeded = true, Result = appDto };
             }

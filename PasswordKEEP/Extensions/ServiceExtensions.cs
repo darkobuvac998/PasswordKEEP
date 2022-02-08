@@ -9,6 +9,7 @@ using Microsoft.IdentityModel.Tokens;
 using PasswordKEEP.Services;
 using Repositories;
 using System;
+using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -80,6 +81,14 @@ namespace PasswordKEEP.Extensions
                     ValidAudience = jwtSetting.GetSection("validAudience").Value,
                     IssuerSigningKey = new SymmetricSecurityKey(hmac.Key)
                 };
+            });
+        }
+
+        public static void ConfigureAuthorization(this IServiceCollection services)
+        {
+            services.AddAuthorization(opt =>
+            {
+                opt.AddPolicy("CanManageUsers", policy => policy.RequireClaim(ClaimTypes.Role, "Admin"));
             });
         }
     }

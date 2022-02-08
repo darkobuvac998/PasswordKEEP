@@ -51,6 +51,8 @@ namespace PasswordKEEP
 
             services.AddAuthenticationManager();
 
+            services.ConfigureAuthorization();
+
             services.AddHsts(options =>
             {
                 options.MaxAge = TimeSpan.FromHours(1);

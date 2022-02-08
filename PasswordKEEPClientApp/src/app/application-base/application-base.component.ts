@@ -221,7 +221,7 @@ export class ApplicationBaseComponent<T>
       });
   }
 
-  private updateItem() {
+  updateItem() {
     let url = `${this.component.resourceUrl}/${this.component.selectedItem?.id}`;
     this.subscription = this.httpService
       .updateItem<T>(url, this.classType, this.component.selectedItem)
@@ -231,6 +231,7 @@ export class ApplicationBaseComponent<T>
           this.notificationService.showSuccess(
             `Item ${this.component.selectedItem?.id} updated succesfully!`
           );
+          this.onModeChange(FormMode.Thumbnail);
         },
         error: (err: HttpErrorResponse | Error) => {
           handleError(err);
@@ -239,7 +240,7 @@ export class ApplicationBaseComponent<T>
       });
   }
 
-  private addItem() {
+  addItem() {
     let url = `${this.component.resourceUrl}`;
     console.log(this.component.itemAdd);
     this.subscription = this.httpService
@@ -249,6 +250,9 @@ export class ApplicationBaseComponent<T>
           console.log(res);
           this.component.selectedItem = res;
           this.component.items.push(res);
+          this.clearAddItem();
+          this.notificationService.showSuccess('Successfully saved!');
+          this.onModeChange(FormMode.Thumbnail);
         },
         error: (err) => {
           handleError(err);
@@ -325,5 +329,11 @@ export class ApplicationBaseComponent<T>
       console.log(item);
       item.id != value.id ? item : value;
     });
+  }
+
+  private clearAddItem() {
+    for (const prop of Object.getOwnPropertyNames(this.component.itemAdd)) {
+      delete this.component.itemAdd[prop];
+    }
   }
 }

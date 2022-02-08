@@ -3,7 +3,7 @@
         <div class="main">
             <input type="checkbox" [(ngModel)]="logIn" (ngModelChange)="onModeChange()" id="chk" aria-hidden="true">
             <div class="signup">
-                <form [formGroup]="registerFg" autocomplete="off">
+                <form [formGroup]="registerFg" autocomplete="off" (ngSubmit)="register()">
                     <label for="chk" aria-hidden="true">Sign up</label>
                     <input [ngClass]="{'invalid': getControls('firstName')?.invalid && getControls('firstName')?.dirty}"
                         type="text" name="firstName" formControlName="firstName" [placeholder]="'Firstname'">
@@ -21,13 +21,12 @@
                         [ngClass]="{'invalid': getControls('confirmPassword')?.invalid && getControls('confirmPassword')?.dirty}"
                         type="password" name="confirmpassword" [placeholder]="'Confirm password'"
                         formControlName="confirmPassword">
-                    <button [ngClass]="{'btn btn-danger': registerFg.invalid}" (click)="register()"
-                        [disabled]="registerFg.invalid" style="letter-spacing: 0.2rem;"
-                        type="button">Register</button>
+                    <button [ngClass]="{'btn btn-danger': registerFg.invalid}" [disabled]="registerFg.invalid"
+                        style="letter-spacing: 0.2rem;" type="submit">Register</button>
                 </form>
             </div>
             <div class="login align-content-center">
-                <form autocomplete="off" [formGroup]="loginFg">
+                <form autocomplete="off" [formGroup]="loginFg" (ngSubmit)="login()">
                     <label for="chk" aria-hidden="true">Login</label>
                     <div class="align-self-center">
                         <input
@@ -49,7 +48,7 @@
                         </div>
 
                         <button [disabled]="loginFg.invalid" [ngClass]="{'btn btn-danger': loginFg.invalid}"
-                            (click)="login()" type="button" style="letter-spacing: 0.2rem;">Login</button>
+                            type="submit" style="letter-spacing: 0.2rem;">Login</button>
                         <div class="d-flex justify-content-center align-content-center flex-column mt-5">
                             <i class="bi bi-lock align-self-center" style="font-size: 80px;"></i>
                             <p class="display-4 align-self-center text-black">{{'PasswordKEEP'}}</p>

@@ -18,7 +18,7 @@ import { AuthService } from '../auth.service';
   styleUrls: ['./log-in-register.component.css'],
 })
 export class LogInRegisterComponent implements OnInit {
-  public logIn: boolean = false;
+  public logIn: boolean = true;
   public userForRegistration: User;
   public registerFg: FormGroup;
   public loginFg: FormGroup;

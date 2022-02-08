@@ -1,6 +1,7 @@
 ﻿using Contracts;
 using Entities.DataTransferObjects;
 using Entities.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -13,6 +14,7 @@ namespace PasswordKEEP.Controllers
     [Route("api/{applicationId}/accounts")]
     [EnableCors(PolicyName = "PasswordKEEPPolicy")]
     [ApiController]
+    [Authorize]
     public class AccountsController : ControllerBase
     {
         private readonly IAccountsService _accountsService;
@@ -23,6 +25,7 @@ namespace PasswordKEEP.Controllers
         }
 
         [HttpGet]
+        [ProducesResponseType(200)]
         public async Task<IActionResult> GetAccountsForApplication(Guid applicationId)
         {
             var result = await _accountsService.GetAccountsForApplicationAsync(applicationId);

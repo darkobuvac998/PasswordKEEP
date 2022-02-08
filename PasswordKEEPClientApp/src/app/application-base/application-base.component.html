@@ -12,15 +12,15 @@
             </div>
             <div class="align-self-center position-relative d-flex"
                 *ngIf="component.mode==formMode.Detail || component.mode==formMode.Edit">
-                <p class="display-6 position-absolute top-50 start-50 translate-middle-y">
+                <p class="display-6 ">
                     <b>{{component.selectedItem?.name}}</b>
-                    <b>{{component.selectedItem?.username}}</b>
+                    <b>{{component.selectedItem?.userName}}</b>
                 </p>
             </div>
         </div>
         <div class="align-self-auto">
             <toolbar (search)="onSearch($event)" (delete)="onDelete()" [goBackBtn]="component.showGoToAppButton"
-                (goBack)="goToApplications()" (save)="onSave()" (reload)="onReload()"
+                (goBack)="goToApplications()" (save)="component.onSave()" (reload)="component.onReload()"
                 (modeChange)="component.onModeChange($event)" [mode]="component.mode"></toolbar>
         </div>
         <div class="">

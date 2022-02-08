@@ -1,4 +1,5 @@
 ﻿using Entities.DataTransferObjects;
+using Entities.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,5 +12,7 @@ namespace Contracts
     {
         Task<bool> ValidateUser(UserForAuthenticationDto user);
         Task<string> CreateToken();
+        Task<UserDto> GetUser(string userName);
+        Task<UserDto> UpdateUser(string userName, UserForRegistrationDto user);
     }
 }

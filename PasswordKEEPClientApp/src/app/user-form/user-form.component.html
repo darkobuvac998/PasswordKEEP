@@ -7,7 +7,7 @@
                         <app-card (onDoubleClick)="onItemDoubleClick($event)"
                             (onSelected)="onSelectedItemChange($event)" [item]="item">
                             <ng-template #cardTemplate>
-                                <h3>{{item?.username}}</h3>
+                                <h3>{{item?.userName}}</h3>
                                 <h4>{{item?.email}}</h4>
                                 <ng-container *ngIf="item?.phoneNumber">
                                     <span class="link-text">
@@ -63,8 +63,8 @@
                                 <div class="input-group-prepend">
                                     <span class="input-group-text" id="">Username</span>
                                 </div>
-                                <input type="text" class="form-control" [(ngModel)]="selected.username" name="username"
-                                    [value]="selected?.username" [required]="true"
+                                <input type="text" class="form-control" [(ngModel)]="selected.userName" name="userName"
+                                    [value]="selected?.userName" [required]="true"
                                     [disabled]="component.mode==formMode.Detail">
                             </div>
                             <div class="input-group">

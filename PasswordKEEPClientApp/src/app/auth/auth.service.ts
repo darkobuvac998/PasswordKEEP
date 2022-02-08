@@ -74,22 +74,14 @@ export class AuthService {
   }
 
   getUserProfile() {
-    let url = `${this.AUTH_API}/user/${this._userId}`;
-    return this.httpClient
-      .get<User>(url)
-      .pipe(debounceTime(1000))
-      .subscribe({
-        next: (res) => {
-          if (res) {
-            console.log(this.user);
-            this.user = res;
-          }
-        },
-        error: (err) => {
-          handleError(err);
-        },
-        complete: () => {},
-      });
+    let url = `${this.AUTH_API}/user/${this.user.name}`;
+    return this.httpClient.get<User>(url).pipe(debounceTime(1000));
+  }
+
+  updateUserProfile(user: any) {
+    let url = `${this.AUTH_API}/user/${this.user.name}`;
+    console.log(user);
+    return this.httpClient.put<User>(url, user).pipe(debounceTime(1000));
   }
 
   logOut() {
