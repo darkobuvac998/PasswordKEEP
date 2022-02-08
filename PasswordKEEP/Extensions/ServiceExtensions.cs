@@ -9,6 +9,7 @@ using Microsoft.IdentityModel.Tokens;
 using PasswordKEEP.Services;
 using Repositories;
 using System;
+using System.Security.Cryptography;
 using System.Text;
 
 namespace PasswordKEEP.Extensions
@@ -67,6 +68,7 @@ namespace PasswordKEEP.Extensions
                 opt.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
             }).AddJwtBearer(opt =>
             {
+                var hmac = new HMACSHA256(Encoding.UTF8.GetBytes(secret));
                 opt.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidateIssuer = true,
@@ -76,7 +78,7 @@ namespace PasswordKEEP.Extensions
 
                     ValidIssuer = jwtSetting.GetSection("validIssuer").Value,
                     ValidAudience = jwtSetting.GetSection("validAudience").Value,
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secret))
+                    IssuerSigningKey = new SymmetricSecurityKey(hmac.Key)
                 };
             });
         }

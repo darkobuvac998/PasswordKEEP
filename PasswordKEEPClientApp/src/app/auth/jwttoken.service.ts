@@ -4,6 +4,7 @@ import jwt_decode from 'jwt-decode';
 import { LocalStorageService } from './local-storage.service';
 
 export const TOKEN_KEY = 'auth-token';
+export const USER_KEY = 'app-user';
 
 @Injectable({
   providedIn: 'root',
@@ -13,7 +14,9 @@ export class JWTTokenService {
   decodedToken: { [key: string]: string };
   constructor(private localStorage: LocalStorageService) {}
 
-  setToken() {}
+  setToken(value: any) {
+    this.localStorage.set(TOKEN_KEY, value);
+  }
 
   decodeToken() {
     let token = this.localStorage.get(TOKEN_KEY);
@@ -56,7 +59,7 @@ export class JWTTokenService {
     }
   }
 
-  getUserObject() {
+  setUserObject() {
     let user = {};
     let props = ['name', 'nameidentifier', 'emailaddress', 'role'];
 
@@ -69,7 +72,14 @@ export class JWTTokenService {
       });
     });
 
-    // console.log(user);
-    return user;
+    this.localStorage.set(USER_KEY, JSON.stringify(user));
+  }
+
+  getUserObject() {
+    let user = this.localStorage.get(USER_KEY);
+    if (user) {
+      return JSON.parse(user);
+    }
+    return null;
   }
 }

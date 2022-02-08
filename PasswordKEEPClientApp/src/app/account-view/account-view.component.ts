@@ -49,7 +49,7 @@ export class AccountViewComponent extends ApplicationBaseComponent<Account> {
     if (this.items?.length > 0) {
       this.selectedItem = this.items[0];
     }
-    this.accountAdd = new Account();
+    this.itemAdd = new Account();
     this.resourceUrl = `/api/${this.appId}/accounts`;
     this.onReload();
 

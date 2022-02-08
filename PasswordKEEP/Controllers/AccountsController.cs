@@ -1,6 +1,7 @@
 ﻿using Contracts;
 using Entities.DataTransferObjects;
 using Entities.Models;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using PasswordKEEP.Filters;
@@ -10,6 +11,7 @@ using System.Threading.Tasks;
 namespace PasswordKEEP.Controllers
 {
     [Route("api/{applicationId}/accounts")]
+    [EnableCors(PolicyName = "PasswordKEEPPolicy")]
     [ApiController]
     public class AccountsController : ControllerBase
     {

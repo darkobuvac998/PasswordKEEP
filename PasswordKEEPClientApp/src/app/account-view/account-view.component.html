@@ -79,7 +79,7 @@
                         <div class="input-group-prepend">
                             <span class="input-group-text" id="">Username</span>
                         </div>
-                        <input type="text" class="form-control" [(ngModel)]="accountAdd.username" name="appname"
+                        <input type="text" class="form-control" [(ngModel)]="itemAdd.username" name="appname"
                             [value]="null" [required]="true">
                     </div>
                     <div class="input-group">
@@ -87,7 +87,7 @@
                             <span class="input-group-text" id="">Password</span>
                         </div>
                         <input [type]="showPassword ? 'text' : 'password'" class="form-control"
-                            [(ngModel)]="accountAdd.password" name="appurl" [value]="" [required]="true">
+                            [(ngModel)]="itemAdd.password" name="appurl" [value]="" [required]="true">
                         <div class="input-group-append">
                             <div style="cursor: pointer;" (mousedown)="onShowPassword()" *ngIf="showPassword"
                                 class="input-group-text"><i class="bi bi-eye"></i></div>

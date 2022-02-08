@@ -43,7 +43,7 @@ namespace PasswordKEEP.Controllers
         [EnsureApplicationExists]
         public IActionResult GetApplicationById(string userId, Guid id)
         {
-            var app = HttpContext.Items["Application"];
+            var app = HttpContext.Items["app"];
             var appDto = _mapper.Map<ApplicationDto>(app);
             return Ok(appDto);
         }
@@ -81,7 +81,7 @@ namespace PasswordKEEP.Controllers
         [EnsureApplicationExists]
         public async Task<IActionResult> DeleteApplication(string userId, Guid id)
         {
-            var appEntity = HttpContext.Items["Application"] as Application;
+            var appEntity = HttpContext.Items["app"] as Application;
             _repositoryManager.Application.Delete(appEntity);
             await _repositoryManager.SaveAsync();
 

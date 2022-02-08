@@ -224,12 +224,12 @@ export class ApplicationBaseComponent<T>
   private updateItem() {
     let url = `${this.component.resourceUrl}/${this.component.selectedItem?.id}`;
     this.subscription = this.httpService
-      .updateItem<T>(url, this.classType, this.selectedItem)
+      .updateItem<T>(url, this.classType, this.component.selectedItem)
       .subscribe({
         next: (res) => {
           this.component.selectedItem = res;
           this.notificationService.showSuccess(
-            `Item ${this.selectedItem.id} updated succesfully!`
+            `Item ${this.component.selectedItem?.id} updated succesfully!`
           );
         },
         error: (err: HttpErrorResponse | Error) => {
@@ -241,6 +241,7 @@ export class ApplicationBaseComponent<T>
 
   private addItem() {
     let url = `${this.component.resourceUrl}`;
+    console.log(this.component.itemAdd);
     this.subscription = this.httpService
       .postItem<T>(url, this._classType, this.component.itemAdd)
       .subscribe({
@@ -283,14 +284,17 @@ export class ApplicationBaseComponent<T>
     let url = `${this.component.resourceUrl}/${this.component.selectedItem.id}`;
     this.subscription = this.httpService.deleteItem<T>(url).subscribe({
       next: (result) => {
-        if (result) {
-          this.notificationService.showSuccess(
-            `Item with id: ${this.selectedItem.id} removed!`
+        this.notificationService.showSuccess(
+          `Item with id: ${this.selectedItem.id} removed!`
+        );
+        if (this.component.items.length > 0) {
+          console.log(this.component.items);
+          this.component.items = this.component.items.filter(
+            (item) => item.id != this.component.selectedItem.id
           );
-          if (this.items.length > 0) {
-            this.items.filter((item) => item.id != this.selectedItem.id);
-            this.selectedItem = this.items[0];
-          }
+          this.selectedItem = this.items[0];
+          console.log(this.component.items);
+          this.onModeChange(FormMode.Thumbnail);
         }
       },
       error: (err: HttpErrorResponse | Error) => {
@@ -318,6 +322,7 @@ export class ApplicationBaseComponent<T>
 
   private updateItems(value: any) {
     this.items = this.items.map((item) => {
+      console.log(item);
       item.id != value.id ? item : value;
     });
   }

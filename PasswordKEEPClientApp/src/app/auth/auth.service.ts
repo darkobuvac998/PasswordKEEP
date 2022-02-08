@@ -5,7 +5,7 @@ import { debounceTime, of } from 'rxjs';
 import { User } from '../models/user.model';
 import { NotificationService } from '../services/notification-service.service';
 import { handleError } from '../shared/global-error-handler.service';
-import { JWTTokenService, TOKEN_KEY } from './jwttoken.service';
+import { JWTTokenService, TOKEN_KEY, USER_KEY } from './jwttoken.service';
 import { LocalStorageService } from './local-storage.service';
 
 @Injectable({
@@ -23,7 +23,10 @@ export class AuthService {
     private jwtService: JWTTokenService,
     private router: Router,
     private notificationService: NotificationService
-  ) {}
+  ) {
+    console.log('Auth service initialized');
+    this.user = jwtService.getUserObject();
+  }
 
   public get roles() {
     return this._roles;
@@ -39,11 +42,8 @@ export class AuthService {
       .pipe(debounceTime(1000))
       .subscribe({
         next: (res) => {
-          this.storageService.set(TOKEN_KEY, res.token);
-          // console.log(res);
-          // console.log(this.jwtService.getUserObject());
-          // console.log(this.jwtService.decodeToken());
-          // console.log(this.jwtService.getDecodeToken());
+          this.jwtService.setToken(res.token);
+          this.jwtService.setUserObject();
           this.user = this.jwtService.getUserObject();
           this.loggedIn = true;
           this.roles = this.jwtService.getUserRoles();
@@ -97,6 +97,7 @@ export class AuthService {
       .pipe(debounceTime(1500))
       .subscribe(() => {
         this.storageService.remove(TOKEN_KEY);
+        this.storageService.remove(USER_KEY);
         this.roles = [];
         this.user = null;
         this.router.navigate(['log-in']);

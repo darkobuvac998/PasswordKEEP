@@ -99,6 +99,7 @@ namespace PasswordKEEP.Services
                 _mapper.Map(accountDto, acc);
                 acc.Password = _passwordService.Encrypt(acc.Password);
                 await _repositoryManager.SaveAsync();
+                acc.Password = _passwordService.Decrypt(acc.Password);
 
                 var accountToReturn = _mapper.Map<AccountDto>(acc);
                 return new ServiceResult<AccountDto> { Succeded = true, Result = accountToReturn };
