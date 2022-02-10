@@ -13,7 +13,8 @@
                 </div>
                 <p class="position-absolute top-50 start-50 translate-middle-y fs-5 hide">{{'Grid' | uppercase}}</p>
             </div>
-            <div *ngIf="mode==0" (click)="onModeChange(formMode.Detail)" class="box d-flex position-relative">
+            <div *ngIf="mode==0" (click)="onModeChange(formMode.Detail)"
+                [ngClass]="{'box': canDetail, 'box-invalid': !canDetail}" class="d-flex position-relative">
                 <div class="icon save">
                     <i class="bi bi-list-columns icon-size"></i>
                 </div>
@@ -25,19 +26,22 @@
                 </div>
                 <p class="position-absolute top-50 start-50 translate-middle-y fs-5 hide">{{'Reload' | uppercase}}</p>
             </div>
-            <div class="box d-flex position-relative" (click)="onModeChange(formMode.Add)">
+            <div class="box d-flex position-relative" [ngClass]="{'box': canAdd, 'box-invalid': !canAdd}"
+                (click)="onModeChange(formMode.Add)">
                 <div class="icon save">
                     <i class="bi bi-plus-lg icon-size"></i>
                 </div>
                 <p class="position-absolute top-50 start-50 translate-middle-y fs-5 hide">{{'Add' | uppercase}}</p>
             </div>
-            <div class="box d-flex position-relative" (click)="onModeChange(formMode.Edit)">
+            <div class="box d-flex position-relative" [ngClass]="{'box': canEdit, 'box-invalid': !canEdit}"
+                (click)="onModeChange(formMode.Edit)">
                 <div class="icon save">
                     <i class="bi bi-pencil icon-size"></i>
                 </div>
                 <p class="position-absolute top-50 start-50 translate-middle-y fs-5 hide">{{'Edit' | uppercase}}</p>
             </div>
-            <div class="box d-flex position-relative" (click)="onDelete()">
+            <div class="box d-flex position-relative" [ngClass]="{'box': canDelete, 'box-invalid': !canDelete}"
+                (click)="onDelete()">
                 <div class="icon save">
                     <i class="bi bi-trash icon-size"></i>
                 </div>
@@ -48,7 +52,8 @@
             </div>
         </ng-container>
         <ng-container *ngIf="mode==2 || mode==3">
-            <div class="box d-flex position-relative" (click)="onSave()">
+            <div [ngClass]="{'box': canSave, 'box-invalid': !canSave}" class="d-flex position-relative"
+                (click)="onSave()">
                 <div class="icon save">
                     <i class="bi bi-folder-plus icon-size"></i>
                 </div>
@@ -68,9 +73,9 @@
                 <div class="input-group">
                     <div class="justify-content-center d-flex flex-column pe-2">
                         <div #collapse="ngbCollapse" animation="true" [(ngbCollapse)]="isSearchCollapsed">
-                            <input [placeholder]="'Search'" type="text"
-                                class="form-control align-self-center p-1 me-1"
-                                [(ngModel)]="searchTerm" (ngModelChange)="onSearchTermChange()" (ngModelChange)="onSearch()" name="searchTerm">
+                            <input [placeholder]="'Search'" type="text" class="form-control align-self-center p-1 me-1"
+                                [(ngModel)]="searchTerm" (ngModelChange)="onSearchTermChange()"
+                                (ngModelChange)="onSearch()" name="searchTerm">
                         </div>
                     </div>
                     <div class="input-group-append icon-style" (click)="collapse.toggle()">

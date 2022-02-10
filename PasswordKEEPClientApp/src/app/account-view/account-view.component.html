@@ -31,7 +31,7 @@
                     </div>
                     <div class="input-group">
                         <div class="input-group-prepend">
-                            <span class="input-group-text" id="">UserId</span>
+                            <span class="input-group-text" id="">AccountId</span>
                         </div>
                         <input type="text" class="form-control" [(ngModel)]="selected.id" name="id"
                             [value]="selected?.id" [required]="true" [disabled]="true">
@@ -75,33 +75,40 @@
                     </div>
                 </div>
                 <div class="d-flex justify-content-between flex-column gap-3 mt-3" *ngIf="component.mode==formMode.Add">
-                    <div class="input-group">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text" id="">Username</span>
+                    <form [formGroup]="formAdd" autocomplete="off">
+                        <div class="align-self-center">
+                            <div class="input-group mb-2">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text" id="">Username</span>
+                                </div>
+                                <input type="text" class="form-control" formControlName="userName" name="usreName"
+                                    [ngClass]="{'invalid' : getControls('userName')?.invalid && getControls('userName')?.dirty}">
+                            </div>
+                            <div class="input-group mb-2">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text" id="">Password</span>
+                                </div>
+                                <input [type]="showPassword ? 'text' : 'password'" class="form-control"
+                                    [ngClass]="{'invalid' : getControls('password')?.invalid && getControls('password')?.dirty}"
+                                    formControlName="password" name="password">
+                                <div class="input-group-append">
+                                    <div style="cursor: pointer;" (mousedown)="onShowPassword()" *ngIf="showPassword"
+                                        class="input-group-text"><i class="bi bi-eye"></i></div>
+                                    <div style="cursor: pointer;" (mouseup)="onShowPassword()" *ngIf="!showPassword"
+                                        class="input-group-text"><i class="bi bi-eye-slash"></i></div>
+                                </div>
+                            </div>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text" id="">Confirm password</span>
+                                </div>
+                                <input
+                                    [ngClass]="{'invalid' : getControls('confirmPassword')?.invalid && getControls('confirmPassword')?.dirty}"
+                                    type="text" class="form-control" formControlName="confirmPassword"
+                                    name="confirmPassword">
+                            </div>
                         </div>
-                        <input type="text" class="form-control" [(ngModel)]="itemAdd.username" name="appname"
-                            [value]="null" [required]="true">
-                    </div>
-                    <div class="input-group">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text" id="">Password</span>
-                        </div>
-                        <input [type]="showPassword ? 'text' : 'password'" class="form-control"
-                            [(ngModel)]="itemAdd.password" name="appurl" [value]="" [required]="true">
-                        <div class="input-group-append">
-                            <div style="cursor: pointer;" (mousedown)="onShowPassword()" *ngIf="showPassword"
-                                class="input-group-text"><i class="bi bi-eye"></i></div>
-                            <div style="cursor: pointer;" (mouseup)="onShowPassword()" *ngIf="!showPassword"
-                                class="input-group-text"><i class="bi bi-eye-slash"></i></div>
-                        </div>
-                    </div>
-                    <div class="input-group">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text" id="">Confirm password</span>
-                        </div>
-                        <input type="text" class="form-control" [(ngModel)]="confirmPassword" name="appurl" [value]=""
-                            [required]="true">
-                    </div>
+                    </form>
                 </div>
             </form>
         </ng-template>

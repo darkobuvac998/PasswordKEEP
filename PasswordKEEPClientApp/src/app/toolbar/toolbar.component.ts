@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { delay, of, timer } from 'rxjs';
 import { FormMode } from '../shared/form-mode';
 
@@ -7,7 +7,7 @@ import { FormMode } from '../shared/form-mode';
   templateUrl: './toolbar.component.html',
   styleUrls: ['./toolbar.component.css'],
 })
-export class ToolbarComponent implements OnInit {
+export class ToolbarComponent implements OnInit, OnChanges {
   @Input() mode: FormMode;
   @Output() modeChange: EventEmitter<FormMode> = new EventEmitter<FormMode>();
   @Output() reload: EventEmitter<any> = new EventEmitter<any>();
@@ -15,6 +15,11 @@ export class ToolbarComponent implements OnInit {
   @Output() goBack: EventEmitter<any> = new EventEmitter<any>();
   @Output() search: EventEmitter<string> = new EventEmitter<string>();
   @Output() delete: EventEmitter<any> = new EventEmitter<any>();
+  @Input() canEdit: boolean;
+  @Input() canAdd: boolean;
+  @Input() canDetail: boolean;
+  @Input() canDelete: boolean;
+  @Input() canSave: boolean;
 
   @Input() public goBackBtn: boolean = false;
 
@@ -29,12 +34,22 @@ export class ToolbarComponent implements OnInit {
     this.mode = FormMode.Thumbnail;
   }
 
-  canAdd() {
-    return true;
+  ngOnChanges(changes: SimpleChanges): void {
+      console.log(changes);
   }
 
-  onModeChange(mode: FormMode) {
-    this.modeChange.emit(mode);
+  onModeChange(newMode: FormMode) {
+    console.log(newMode);
+    if (newMode == FormMode.Detail && this.canDetail) {
+      this.modeChange.emit(newMode);
+    } else if (newMode == FormMode.Edit && this.canEdit) {
+      console.log('Mode emited');
+      this.modeChange.emit(newMode);
+    } else if (newMode == FormMode.Add && this.canAdd) {
+      this.modeChange.emit(newMode);
+    }else if(newMode == FormMode.Thumbnail){
+      this.modeChange.emit(newMode);
+    }
   }
 
   onReload() {
@@ -42,7 +57,9 @@ export class ToolbarComponent implements OnInit {
   }
 
   onSave() {
-    this.save.emit();
+    if (this.canSave) {
+      this.save.emit();
+    }
   }
 
   onGoToAppsMenu() {
@@ -65,6 +82,8 @@ export class ToolbarComponent implements OnInit {
   }
 
   onDelete() {
-    this.delete.emit();
+    if (this.canDelete) {
+      this.delete.emit();
+    }
   }
 }

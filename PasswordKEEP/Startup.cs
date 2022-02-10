@@ -27,6 +27,16 @@ namespace PasswordKEEP
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            var postgre = Configuration.GetValue<bool>("Database:PostgreSQL");
+            var sqlserver = Configuration.GetValue<bool>("Database:SQLServer");
+            if(postgre == true && sqlserver == true)
+            {
+                sqlserver = false;
+            }
+            else if(postgre == false && sqlserver == false)
+            {
+                postgre = true;
+            }
 
             services.AddControllers();
             services.AddSwaggerGen(c =>
@@ -39,7 +49,14 @@ namespace PasswordKEEP
             services.AddAutoMapper(typeof(Startup));
             services.AddSingleton(Log.Logger);
 
-            services.AddSqlContext(Configuration);
+            if (sqlserver == true)
+            {
+                services.AddSqlContext(Configuration); 
+            }
+            if(postgre == true)
+            {
+                services.ConfigurePostgreSQL(Configuration);
+            }
 
             services.AddPasswordService();
             services.AddRepositoryManager();

@@ -19,9 +19,12 @@
             </div>
         </div>
         <div class="align-self-auto">
-            <toolbar (search)="onSearch($event)" (delete)="onDelete()" [goBackBtn]="component.showGoToAppButton"
-                (goBack)="goToApplications()" (save)="component.onSave()" (reload)="component.onReload()"
-                (modeChange)="component.onModeChange($event)" [mode]="component.mode"></toolbar>
+            <toolbar [canSave]="component.canSave()" [canAdd]="component.canAdd()" [canDelete]="component.canDelete()"
+                [canDetail]="component.canDetail()" [canEdit]="component.canEdit()" (search)="onSearch($event)"
+                (delete)="onDelete()" [goBackBtn]="component.showGoToAppButton" (goBack)="goToApplications()"
+                (save)="component.onSave()" (reload)="component.onReload()"
+                (modeChange)="component.onModeChange($event)" [mode]="component.mode">
+            </toolbar>
         </div>
         <div class="">
             <div class="d-flex" *ngIf="component.mode==formMode.Thumbnail">

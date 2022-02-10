@@ -16,6 +16,12 @@ import { NotificationService } from '../services/notification-service.service';
 import { FormMode } from '../shared/form-mode';
 import { Clipboard } from '@angular/cdk/clipboard';
 import { QueryParameters } from '../shared/queryParameters';
+import {
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
 
 @Component({
   selector: 'account-view',
@@ -28,6 +34,7 @@ export class AccountViewComponent extends ApplicationBaseComponent<Account> {
   public showPassword: boolean = false;
   public confirmPassword: string = null;
   public copiedToClipboard: boolean = false;
+  public formAdd: FormGroup;
   @Input('app') appId: string = null;
   constructor(
     protected override httpService: HttpService,
@@ -35,7 +42,8 @@ export class AccountViewComponent extends ApplicationBaseComponent<Account> {
     protected override route: ActivatedRoute,
     protected override notificationService: NotificationService,
     protected override modalService: NgbModal,
-    private clipboard: Clipboard
+    private clipboard: Clipboard,
+    private fb: FormBuilder
   ) {
     super(httpService, router, route, notificationService, modalService);
     this.title = 'Accounts';
@@ -53,7 +61,11 @@ export class AccountViewComponent extends ApplicationBaseComponent<Account> {
     this.resourceUrl = `/api/${this.appId}/accounts`;
     this.onReload();
 
-    // console.log(this.selectedItem);
+    this.formAdd = this.fb.group({
+      userName: ['', [Validators.required]],
+      password: ['', [Validators.required]],
+      confirmPassword: ['', [Validators.required]],
+    });
   }
 
   override onSelectedItemChange(item: any): void {
@@ -67,6 +79,9 @@ export class AccountViewComponent extends ApplicationBaseComponent<Account> {
 
   onShowPassword() {
     this.showPassword = !this.showPassword;
+    setTimeout(() => {
+      this.showPassword = false;
+    }, 1500);
   }
 
   override onModeChange(newMode: FormMode): void {
@@ -92,5 +107,27 @@ export class AccountViewComponent extends ApplicationBaseComponent<Account> {
     delay.subscribe(() => {
       this.copiedToClipboard = false;
     });
+  }
+
+  getControls(control: string) {
+    return this.formAdd.get(control) as FormControl;
+  }
+
+  override canDetail(): boolean {
+    return this.selectedItem != null ? true : false;
+  }
+  override canEdit(): boolean {
+    return this.selectedItem != null ? true : false;
+  }
+  override canDelete(): boolean {
+    return this.selectedItem != null ? true : false;
+  }
+
+  override canSave(): boolean {
+    if (this.mode == FormMode.Add && this.formAdd.valid) {
+      return true;
+    } else {
+      return false;
+    }
   }
 }

@@ -58,20 +58,24 @@
                         </div>
                         <div class="d-flex justify-content-between flex-column gap-3 mt-3"
                             *ngIf="component.mode==formMode.Add">
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text" id="">Application</span>
+                            <form [formGroup]="formAdd" autocomplete="off">
+                                <div class="input-group mb-2">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text" id="">Application</span>
+                                    </div>
+                                    <input type="text" class="form-control" formControlName="applicationName"
+                                    [ngClass]="{'invalid' : getControls('applicationName')?.invalid && getControls('applicationName')?.dirty}"
+                                        name="applicationName">
                                 </div>
-                                <input type="text" class="form-control" [(ngModel)]="itemAdd.name" name="appname"
-                                    [value]="null" [required]="true">
-                            </div>
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text" id="">URL</span>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text" id="">URL</span>
+                                    </div>
+                                    <input type="text" class="form-control" formControlName="appUrl" name="appUrl"
+                                    [ngClass]="{'invalid' : getControls('appUrl')?.invalid && getControls('appUrl')?.dirty}"
+                                    >
                                 </div>
-                                <input type="text" class="form-control" [(ngModel)]="itemAdd.url" name="appurl"
-                                    [value]="" [required]="true">
-                            </div>
+                            </form>
                             <!-- {{itemAdd | json}} -->
                         </div>
                     </form>

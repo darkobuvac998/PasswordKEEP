@@ -140,6 +140,7 @@ export class ApplicationBaseComponent<T>
   }
 
   onModeChange(newMode: FormMode) {
+    console.log(newMode);
     let oldMode = this.component.mode;
     if (oldMode == FormMode.Edit || oldMode == FormMode.Add) {
       this.component.mode = this.component.oldMode;
@@ -311,6 +312,24 @@ export class ApplicationBaseComponent<T>
   onSearch(searchTerm: string) {
     this._searchTerm = searchTerm;
     this.search.next(this._searchTerm);
+  }
+
+  canSave() {
+    return true;
+  }
+  canEdit() {
+    return true;
+  }
+  canDetail() {
+    return true;
+  }
+
+  canAdd() {
+    return true;
+  }
+
+  canDelete(){
+    return true;
   }
 
   private updateRouterUrl() {

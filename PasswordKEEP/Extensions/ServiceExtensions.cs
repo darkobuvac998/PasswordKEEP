@@ -91,5 +91,12 @@ namespace PasswordKEEP.Extensions
                 opt.AddPolicy("CanManageUsers", policy => policy.RequireClaim(ClaimTypes.Role, "Admin"));
             });
         }
+
+        public static void ConfigurePostgreSQL(this IServiceCollection services, IConfiguration configuration)
+        {
+            services.AddDbContext<RepositoryContext>(options => 
+                    options.UseNpgsql(configuration.GetConnectionString("postgreConnection"), 
+                    b => b.MigrationsAssembly("PasswordKEEP")));
+        }
     }
 }

@@ -10,7 +10,7 @@ import { ToolbarComponent } from './toolbar/toolbar.component';
 import { AppCardComponent } from './app-card/app-card.component';
 import { AppViewComponent } from './app-view/app-view.component';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AccountViewComponent } from './account-view/account-view.component';
 
 import { HttpClientModule } from '@angular/common/http';
@@ -52,6 +52,7 @@ import { AuthModule } from './auth/auth.module';
     }),
     SharedModule,
     AuthModule,
+    ReactiveFormsModule
   ],
   providers: [HttpService, NotificationService],
   bootstrap: [AppComponent],
