@@ -4,18 +4,18 @@
             <div class="d-flex justify-content-center w-100 h-100">
                 <div class="row gap-0 w-100 h-100">
                     <!-- <div class="d-flex"> -->
-                        <div class="col" *ngFor="let item of items">
-                            <app-card [item]="item" (onSelected)="onSelectedItemChange($event)"
-                                (onDoubleClick)="onItemDoubleClick($event)">
-                                <ng-template #cardTemplate let-item>
-                                    <h3 class="fs-3">{{item?.username}}</h3>
-                                    <span class="link-text">
-                                        Last modified
-                                        {{item?.lastModified | date: 'short'}}
-                                    </span>
-                                </ng-template>
-                            </app-card>
-                        </div>
+                    <div class="col" *ngFor="let item of items">
+                        <app-card [item]="item" (onSelected)="onSelectedItemChange($event)"
+                            (onDoubleClick)="onItemDoubleClick($event)">
+                            <ng-template #cardTemplate let-item>
+                                <h3 class="fs-3">{{item?.username}}</h3>
+                                <span class="link-text">
+                                    Last modified
+                                    {{item?.lastModified | date: 'short'}}
+                                </span>
+                            </ng-template>
+                        </app-card>
+                    </div>
                     <!-- </div> -->
                 </div>
             </div>
@@ -89,29 +89,49 @@
                                 <input type="text" class="form-control" formControlName="userName" name="usreName"
                                     [ngClass]="{'invalid' : getControls('userName')?.invalid && getControls('userName')?.dirty}">
                             </div>
-                            <div class="input-group mb-2">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text" id="">Password</span>
+                            <div class="input-group d-flex flex-row mb-2">
+                                <div class="form-check form-switch align-self-center">
+                                    <input class="form-check-input" formControlName="generatePassword" type="checkbox"
+                                        id="flexSwitchCheckChecked" checked>
+                                    <label class="form-check-label" for="flexSwitchCheckChecked">Generate
+                                        password</label>
                                 </div>
-                                <input [type]="showPassword ? 'text' : 'password'" class="form-control"
-                                    [ngClass]="{'invalid' : getControls('password')?.invalid && getControls('password')?.dirty}"
-                                    formControlName="password" name="password">
-                                <div class="input-group-append">
-                                    <div style="cursor: pointer;" (mousedown)="onShowPassword()" *ngIf="showPassword"
-                                        class="input-group-text"><i class="bi bi-eye"></i></div>
-                                    <div style="cursor: pointer;" (mouseup)="onShowPassword()" *ngIf="!showPassword"
-                                        class="input-group-text"><i class="bi bi-eye-slash"></i></div>
-                                </div>
+                                <ng-container *ngIf="getControls('generatePassword')?.value">
+                                    <div class="form-select-sm">
+                                        <input class="form-control-sm m-2" style="border: none;" type="number"
+                                            id="gridCheck" formControlName="passwordLength">
+                                        <label [attr.min]="5" class="form-check-label" for="gridCheck">
+                                            Password length
+                                        </label>
+                                    </div>
+                                </ng-container>
                             </div>
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text" id="">Confirm password</span>
+                            <ng-container *ngIf="!getControls('generatePassword')?.value">
+                                <div class="input-group mb-2">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text" id="">Password</span>
+                                    </div>
+                                    <input [type]="showPassword ? 'text' : 'password'" class="form-control"
+                                        [ngClass]="{'invalid' : getControls('password')?.invalid && getControls('password')?.dirty}"
+                                        formControlName="password" name="password">
+                                    <div class="input-group-append">
+                                        <div style="cursor: pointer;" (mousedown)="onShowPassword()"
+                                            *ngIf="showPassword" class="input-group-text"><i class="bi bi-eye"></i>
+                                        </div>
+                                        <div style="cursor: pointer;" (mouseup)="onShowPassword()" *ngIf="!showPassword"
+                                            class="input-group-text"><i class="bi bi-eye-slash"></i></div>
+                                    </div>
                                 </div>
-                                <input
-                                    [ngClass]="{'invalid' : getControls('confirmPassword')?.invalid && getControls('confirmPassword')?.dirty}"
-                                    type="password" class="form-control" formControlName="confirmPassword"
-                                    name="confirmPassword">
-                            </div>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text" id="">Confirm password</span>
+                                    </div>
+                                    <input
+                                        [ngClass]="{'invalid' : getControls('confirmPassword')?.invalid && getControls('confirmPassword')?.dirty}"
+                                        type="password" class="form-control" formControlName="confirmPassword"
+                                        name="confirmPassword">
+                                </div>
+                            </ng-container>
                         </div>
                     </form>
                 </div>

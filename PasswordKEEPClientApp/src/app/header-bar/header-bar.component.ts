@@ -32,7 +32,7 @@ export class HeaderBarComponent implements OnInit, AfterViewChecked {
     this.httpService.onLoading$.subscribe((res) => {
       setTimeout(() => {
         this.showLoader = res;
-      }, 150);
+      }, 50);
     });
   }
 

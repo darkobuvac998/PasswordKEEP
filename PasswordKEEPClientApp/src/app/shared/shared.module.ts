@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { GlobalErrorHandler } from './global-error-handler.service';
 import { DialogComponent } from './dialog/dialog.component';
 import { LoaderComponent } from './loader/loader.component';
-// import { DialogComponent } from './dialog/dialog.component';
 
 @NgModule({
   declarations: [DialogComponent, LoaderComponent],

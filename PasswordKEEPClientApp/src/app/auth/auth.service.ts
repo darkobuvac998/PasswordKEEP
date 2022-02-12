@@ -100,7 +100,6 @@ export class AuthService {
 
   isLoggedIn() {
     let token = this.storageService.get(TOKEN_KEY);
-    // console.log(token);
     if (token) {
       this.loggedIn = true;
     } else {

@@ -65,6 +65,8 @@ export class AccountViewComponent extends ApplicationBaseComponent<Account> {
       userName: ['', [Validators.required]],
       password: ['', [Validators.required]],
       confirmPassword: ['', [Validators.required]],
+      generatePassword: [false],
+      passwordLength: ['']
     });
   }
 
@@ -145,6 +147,7 @@ export class AccountViewComponent extends ApplicationBaseComponent<Account> {
     });
 
     this.itemAdd = res;
+    console.log(this.itemAdd);
   }
 
   private checkSelectedItem() {
