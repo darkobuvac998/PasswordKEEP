@@ -126,8 +126,41 @@ export class AccountViewComponent extends ApplicationBaseComponent<Account> {
   override canSave(): boolean {
     if (this.mode == FormMode.Add && this.formAdd.valid) {
       return true;
-    } else {
-      return false;
     }
+    if (this.mode == FormMode.Edit && this.checkSelectedItem() && this.passwordConfirmed()) {
+      return true;
+    }
+    return false;
+  }
+
+  override onSave(): void {
+    this.prepareAddObject();
+    super.onSave();
+  }
+
+  private prepareAddObject() {
+    let res = {};
+    Object.keys(this.formAdd.controls).forEach((prop) => {
+      res = { ...res, [prop.toString()]: this.formAdd.controls[prop].value };
+    });
+
+    this.itemAdd = res;
+  }
+
+  private checkSelectedItem() {
+    let res = true;
+    Object.keys(this.selectedItem).forEach((prop) => {
+      if (!this.selectedItem[prop]) {
+        res = false;
+      }
+    });
+    return res;
+  }
+
+  passwordConfirmed(){
+    if(this.mode == FormMode.Edit){
+      return this.selectedItem?.password == this.confirmPassword;
+    }
+    return false;
   }
 }

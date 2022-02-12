@@ -5,24 +5,38 @@
             <div class="signup">
                 <form [formGroup]="registerFg" autocomplete="off" (ngSubmit)="register()">
                     <label for="chk" aria-hidden="true">Sign up</label>
-                    <input [ngClass]="{'invalid': getControls('firstName')?.invalid && getControls('firstName')?.dirty}"
-                        type="text" name="firstName" formControlName="firstName" [placeholder]="'Firstname'">
-
-                    <input [ngClass]="{'invalid': getControls('lastName')?.invalid && getControls('lastName')?.dirty}"
-                        type="text" name="lastname" [placeholder]="'Lastname'" formControlName="lastName">
-                    <input [ngClass]="{'invalid': getControls('userName')?.invalid && getControls('userName')?.dirty}"
-                        type="text" name="username" [placeholder]="'Username'" formControlName="userName">
-                    <input [ngClass]="{'invalid': getControls('email')?.invalid && getControls('email')?.dirty}"
-                        type="text" name="email" [placeholder]="'Email'" formControlName="email">
-                    <input type="tel" name="phonenumber" [placeholder]="'Phonenumber'" formControlName="phoneNumber">
-                    <input [ngClass]="{'invalid': getControls('password')?.invalid && getControls('password')?.dirty}"
-                        type="password" name="password" [placeholder]="'Password'" formControlName="password">
-                    <input
-                        [ngClass]="{'invalid': getControls('confirmPassword')?.invalid && getControls('confirmPassword')?.dirty}"
-                        type="password" name="confirmpassword" [placeholder]="'Confirm password'"
-                        formControlName="confirmPassword">
-                    <button [ngClass]="{'btn btn-danger': registerFg.invalid}" [disabled]="registerFg.invalid"
-                        style="letter-spacing: 0.2rem;" type="submit">Register</button>
+                    <div class="d-flex flex-column justify-content-center m-2">
+                        <div class="d-flex flex-row gap-2">
+                            <input
+                                [ngClass]="{'invalid': getControls('firstName')?.invalid && getControls('firstName')?.dirty}"
+                                type="text" name="firstName" formControlName="firstName" [placeholder]="'Firstname'">
+                            <input
+                                [ngClass]="{'invalid': getControls('lastName')?.invalid && getControls('lastName')?.dirty}"
+                                type="text" name="lastname" [placeholder]="'Lastname'" formControlName="lastName">
+                        </div>
+                        <div class="d-flex flex-row gap-2">
+                            <input
+                                [ngClass]="{'invalid': getControls('userName')?.invalid && getControls('userName')?.dirty}"
+                                type="text" name="username" [placeholder]="'Username'" formControlName="userName">
+                            <input [ngClass]="{'invalid': getControls('email')?.invalid && getControls('email')?.dirty}"
+                                type="text" name="email" [placeholder]="'Email'" formControlName="email">
+                            <input type="tel" name="phonenumber" [placeholder]="'Phonenumber'"
+                                formControlName="phoneNumber">
+                        </div>
+                        <div class="d-flex flex-row gap-2">
+                            <input
+                                [ngClass]="{'invalid': getControls('password')?.invalid && getControls('password')?.dirty}"
+                                type="password" name="password" [placeholder]="'Password'" formControlName="password">
+                            <input
+                                [ngClass]="{'invalid': getControls('confirmPassword')?.invalid && getControls('confirmPassword')?.dirty}"
+                                type="password" name="confirmpassword" [placeholder]="'Confirm password'"
+                                formControlName="confirmPassword">
+                        </div>
+                        <div class="d-flex flex-row jus gap-2 w-100">
+                            <button [ngClass]="{'btn btn-danger': registerFg.invalid}" [disabled]="registerFg.invalid"
+                                style="letter-spacing: 0.2rem;" type="submit">Register</button>
+                        </div>
+                    </div>
                 </form>
             </div>
             <div class="login align-content-center">
@@ -46,14 +60,12 @@
                                     style="cursor: pointer;"></span>
                             </div>
                         </div>
-
                         <button [disabled]="loginFg.invalid" [ngClass]="{'btn btn-danger': loginFg.invalid}"
                             type="submit" style="letter-spacing: 0.2rem;">Login</button>
                         <div class="d-flex justify-content-center align-content-center flex-column mt-5">
                             <i class="bi bi-lock align-self-center" style="font-size: 80px;"></i>
                             <p class="display-4 align-self-center text-black">{{'PasswordKEEP'}}</p>
                         </div>
-
                     </div>
                 </form>
             </div>

@@ -3,26 +3,27 @@
         <ng-template #listTemplate let-items let-selected="selectedItem">
             <div class="d-flex justify-content-center w-100 h-100">
                 <div class="row gap-0 w-100 h-100">
-                    <div class="col-3" *ngFor="let item of items">
-                        <!-- <app-card *ngIf="false" [applicationCard]="true" (onSelected)="onSelectedItemChange($event)"
-                            (onDoubleClick)="onItemDoubleClick($event)" [application]="item"></app-card> -->
-                        <app-card [item]="item" (onDoubleClick)="onItemDoubleClick($event)"
-                            (onSelected)="onSelectedItemChange($event)">
-                            <ng-template #cardTemplate let-item>
-                                <h3>{{item?.name}}</h3>
-                                <h4 *ngIf="item?.accounts">{{'Account number: ' + item?.accounts?.length}}</h4>
-                                <ng-container *ngIf="item?.url">
-                                    <ng-template #tipContent let-greeting="gretting">
-                                        <p>{{item?.url}}</p>
-                                    </ng-template>
-                                    <span [ngbTooltip]="tipContent" class="link-text">
-                                        Go to application
-                                        <a [href]="item?.url"><i class="bi bi-arrow-right"></i></a>
-                                    </span>
-                                </ng-container>
-                            </ng-template>
-                        </app-card>
-                    </div>
+                    <!-- <div class="d-flex"> -->
+                        <div class="col" *ngFor="let item of items">
+                            <app-card [item]="item" (onDoubleClick)="onItemDoubleClick($event)"
+                                (onSelected)="onSelectedItemChange($event)">
+                                <ng-template #cardTemplate let-item>
+                                    <h3 class="fs-2">{{item?.name}}</h3>
+                                    <!-- <h4 *ngIf="accounts?.items?.length">{{'Account number: ' + accounts?.items?.length}}
+                                    </h4> -->
+                                    <ng-container *ngIf="item?.url">
+                                        <ng-template #tipContent let-greeting="gretting">
+                                            <p>{{item?.url}}</p>
+                                        </ng-template>
+                                        <span [ngbTooltip]="tipContent" class="link-text">
+                                            Go to application
+                                            <a [href]="item?.url"><i class="bi bi-arrow-right"></i></a>
+                                        </span>
+                                    </ng-container>
+                                </ng-template>
+                            </app-card>
+                        </div>
+                    <!-- </div> -->
                 </div>
             </div>
         </ng-template>
@@ -63,20 +64,18 @@
                                     <div class="input-group-prepend">
                                         <span class="input-group-text" id="">Application</span>
                                     </div>
-                                    <input type="text" class="form-control" formControlName="applicationName"
-                                    [ngClass]="{'invalid' : getControls('applicationName')?.invalid && getControls('applicationName')?.dirty}"
-                                        name="applicationName">
+                                    <input type="text" class="form-control" formControlName="name"
+                                        [ngClass]="{'invalid' : getControls('name')?.invalid && getControls('name')?.dirty}"
+                                        name="name">
                                 </div>
                                 <div class="input-group">
                                     <div class="input-group-prepend">
                                         <span class="input-group-text" id="">URL</span>
                                     </div>
-                                    <input type="text" class="form-control" formControlName="appUrl" name="appUrl"
-                                    [ngClass]="{'invalid' : getControls('appUrl')?.invalid && getControls('appUrl')?.dirty}"
-                                    >
+                                    <input type="text" class="form-control" formControlName="url" name="url"
+                                        [ngClass]="{'invalid' : getControls('url')?.invalid && getControls('url')?.dirty}">
                                 </div>
                             </form>
-                            <!-- {{itemAdd | json}} -->
                         </div>
                     </form>
                 </div>

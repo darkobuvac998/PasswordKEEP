@@ -54,14 +54,12 @@ export class LogInRegisterComponent implements OnInit {
       .addValidators(this.confirmPasswordValidator());
   }
 
-  onModeChange() {
-    console.log(this.logIn);
-  }
+  onModeChange() {}
 
   register() {
     console.log(this.onPrepareModel(this.registerFg));
     let user = this.onPrepareModel(this.registerFg);
-    user = {...user, roles: ['User']};
+    user = { ...user, roles: ['User'] };
     this.authService.signIn(user);
   }
   getControls(control: string) {
@@ -73,7 +71,6 @@ export class LogInRegisterComponent implements OnInit {
   }
 
   login() {
-    console.log(this.onPrepareModel(this.loginFg));
     let user = this.onPrepareModel(this.loginFg);
     this.authService.logIn(user);
   }

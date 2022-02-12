@@ -14,8 +14,8 @@ export class GlobalErrorHandler extends ErrorHandler {
   }
 
   override handleError(error) {
+    console.log(error);
     this.notificationService = ServiceInjector.get(NotificationService);
-    console.log('Global error handler handled error!');
     if (error instanceof HttpErrorResponse) {
       return this.notificationService.showError(
         `Code: ${error.status} Status: ${error.statusText}`

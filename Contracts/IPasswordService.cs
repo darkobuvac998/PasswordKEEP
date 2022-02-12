@@ -10,5 +10,6 @@ namespace Contracts
     {
         public string Encrypt(string plainText);
         public string Decrypt(string hashedText);
+        public string GeneratePassword(int length = 8);
     }
 }

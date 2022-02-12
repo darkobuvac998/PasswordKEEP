@@ -24,7 +24,6 @@ export class AuthService {
     private router: Router,
     private notificationService: NotificationService
   ) {
-    console.log('Auth service initialized');
     this.user = jwtService.getUserObject();
   }
 
@@ -54,7 +53,6 @@ export class AuthService {
         },
         error: (err) => handleError(err),
         complete: () => {
-          console.log(this.user);
         },
       });
   }
@@ -66,7 +64,11 @@ export class AuthService {
       .pipe(debounceTime(1000))
       .subscribe({
         next: (res) => {
-          //TODO
+          console.log(res);
+          if(res && res.created){
+            let userLogIn = { userName: res.userName, password: res.password };
+            this.logIn(userLogIn);
+          }
         },
         error: (err) => handleError(err),
         complete: () => {},

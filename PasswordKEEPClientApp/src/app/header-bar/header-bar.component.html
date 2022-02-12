@@ -6,12 +6,15 @@
         <div class="w-50 position-relative">
             <p class="fs-2 text-muted position-absolute top-50 start-0 translate-middle-y"><b>PasswordKEEP</b></p>
         </div>
+        <div class="w-25">
+            <loader [show]="showLoader"></loader>
+        </div>
         <div class="w-50 d-flex justify-content-end">
             <div ngbDropdown class="d-inline-block">
-                <button ngbDropdownToggle class="btn btn-style dropdown-toggle" type="button" data-bs-toggle="dropdown"
-                    id="dropdownMenu" aria-expanded="false">
+                <button ngbDropdownToggle class="btn btn-style dropdown-toggle w-100" type="button"
+                    data-bs-toggle="dropdown" id="dropdownMenu" aria-expanded="false">
                     <span>
-                        <i class="bi bi-person-circle p-2 icon-size"></i><b>{{authService?.user?.name}}</b>
+                        <i class="bi bi-person-circle p-3 icon-size"></i><b>{{authService?.user?.name}}</b>
                     </span>
                 </button>
                 <div ngbDropdownMenu aria-labelledby="dropdownMenu" class="btn-style">

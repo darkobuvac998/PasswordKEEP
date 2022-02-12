@@ -4,20 +4,31 @@ import {
   ClassConstructor,
   plainToInstance,
 } from 'node_modules/class-transformer';
-import { catchError, map, of, Subscription, throwError, timer } from 'rxjs';
-
+import {
+  catchError,
+  map,
+  Observable,
+  of,
+  Subject,
+  Subscription,
+  throwError,
+  timer,
+} from 'rxjs';
 @Injectable({
   providedIn: 'root',
 })
 export class HttpService {
   public loading: boolean = false;
   public loadingStart: boolean = false;
+  private onLoading: Subject<boolean> = new Subject<boolean>();
+  public onLoading$: Observable<boolean> = new Observable<boolean>();
   private subscription: Subscription;
-
-  constructor(private httpClient: HttpClient) {}
-
+  constructor(private httpClient: HttpClient) {
+    this.onLoading$ = this.onLoading.asObservable();
+  }
   getItem<T>(url: string, cls: ClassConstructor<T>) {
     this.loadingStart = true;
+    this.onLoading.next(this.loading);
     this.subscription = timer(500).subscribe(() => (this.loading = true));
     return this.httpClient.get<T>(url).pipe(
       map((res) => {
@@ -30,9 +41,9 @@ export class HttpService {
       })
     );
   }
-
   getAllItems<T>(url: string, cls: ClassConstructor<T[]>) {
     this.loading = true;
+    this.onLoading.next(this.loading);
     this.subscription = timer(500).subscribe(() => (this.loading = true));
     return this.httpClient.get<T>(url).pipe(
       map((res) => {
@@ -45,9 +56,9 @@ export class HttpService {
       })
     );
   }
-
   postItem<T>(url: string, cls: ClassConstructor<T>, data: T) {
     this.loading = true;
+    this.onLoading.next(this.loading);
     this.subscription = timer(500).subscribe(() => (this.loading = true));
     return this.httpClient.post<T>(url, data).pipe(
       map((res) => {
@@ -60,9 +71,9 @@ export class HttpService {
       })
     );
   }
-
   updateItem<T>(url: string, cls: ClassConstructor<T>, data: T) {
     this.loading = true;
+    this.onLoading.next(this.loading);
     this.subscription = timer(500).subscribe(() => (this.loading = true));
     return this.httpClient.put<T>(url, data).pipe(
       map((res) => {
@@ -75,9 +86,9 @@ export class HttpService {
       })
     );
   }
-
   deleteItem<T>(url: string, obj?: T) {
     this.loading = true;
+    this.onLoading.next(this.loading);
     this.subscription = timer(500).subscribe(() => (this.loading = true));
     return this.httpClient.request<T>('delete', url, { body: obj }).pipe(
       map((res) => {
@@ -86,11 +97,14 @@ export class HttpService {
       })
     );
   }
-
   private resetLoading(subscription: Subscription) {
     this.loading = false;
     subscription.unsubscribe();
     this.loadingStart = false;
+    this.onLoading.next(this.loading);
     return of(null);
+  }
+  isLoading() {
+    return this.loading;
   }
 }

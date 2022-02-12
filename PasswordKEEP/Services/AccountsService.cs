@@ -34,6 +34,11 @@ namespace PasswordKEEP.Services
                 var account = _mapper.Map<Account>(accountDto);
                 account.ApplicationId = app.Id;
                 account.LastModified = DateTime.Now;
+                if (accountDto.GeneratePassword == true)
+                {
+                    var password = _passwordService.GeneratePassword(accountDto.PasswordLength);
+                    account.Password = password;
+                }
                 account.Password = _passwordService.Encrypt(account.Password);
                 _repositoryManager.Account.Create(account);
                 await _repositoryManager.SaveAsync();
@@ -99,6 +104,7 @@ namespace PasswordKEEP.Services
             {
                 _mapper.Map(accountDto, acc);
                 acc.Password = _passwordService.Encrypt(acc.Password);
+                acc.LastModified = DateTime.Now;
                 await _repositoryManager.SaveAsync();
                 acc.Password = _passwordService.Decrypt(acc.Password);
 

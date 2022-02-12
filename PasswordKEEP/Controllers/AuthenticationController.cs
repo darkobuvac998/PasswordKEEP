@@ -52,7 +52,7 @@ namespace PasswordKEEP.Controllers
 
             await _userManager.AddToRolesAsync(user, userDto.Roles);
 
-            return StatusCode(201);
+            return Created("Created", new { Created = true, UserName = userDto.UserName, userDto.Password });
         }
         
         [AllowAnonymous]

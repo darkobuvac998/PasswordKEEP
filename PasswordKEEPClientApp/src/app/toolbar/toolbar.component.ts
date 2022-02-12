@@ -1,4 +1,12 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges,
+  OnInit,
+  Output,
+  SimpleChanges,
+} from '@angular/core';
 import { delay, of, timer } from 'rxjs';
 import { FormMode } from '../shared/form-mode';
 
@@ -7,7 +15,7 @@ import { FormMode } from '../shared/form-mode';
   templateUrl: './toolbar.component.html',
   styleUrls: ['./toolbar.component.css'],
 })
-export class ToolbarComponent implements OnInit, OnChanges {
+export class ToolbarComponent implements OnInit {
   @Input() mode: FormMode;
   @Output() modeChange: EventEmitter<FormMode> = new EventEmitter<FormMode>();
   @Output() reload: EventEmitter<any> = new EventEmitter<any>();
@@ -34,20 +42,14 @@ export class ToolbarComponent implements OnInit, OnChanges {
     this.mode = FormMode.Thumbnail;
   }
 
-  ngOnChanges(changes: SimpleChanges): void {
-      console.log(changes);
-  }
-
   onModeChange(newMode: FormMode) {
-    console.log(newMode);
     if (newMode == FormMode.Detail && this.canDetail) {
       this.modeChange.emit(newMode);
     } else if (newMode == FormMode.Edit && this.canEdit) {
-      console.log('Mode emited');
       this.modeChange.emit(newMode);
     } else if (newMode == FormMode.Add && this.canAdd) {
       this.modeChange.emit(newMode);
-    }else if(newMode == FormMode.Thumbnail){
+    } else if (newMode == FormMode.Thumbnail) {
       this.modeChange.emit(newMode);
     }
   }

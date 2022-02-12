@@ -41,6 +41,8 @@
   border-bottom: 2px solid #753BBD;
   transition: color 0.45s ease, border 0.45s ease;
   cursor: pointer;
+  overflow: scroll;
+  overflow-wrap: break-word;
 }
 
 .data-card h4 {

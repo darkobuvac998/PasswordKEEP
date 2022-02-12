@@ -140,7 +140,6 @@ export class ApplicationBaseComponent<T>
   }
 
   onModeChange(newMode: FormMode) {
-    console.log(newMode);
     let oldMode = this.component.mode;
     if (oldMode == FormMode.Edit || oldMode == FormMode.Add) {
       this.component.mode = this.component.oldMode;

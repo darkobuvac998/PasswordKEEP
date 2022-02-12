@@ -83,7 +83,6 @@ export class UserFormComponent extends ApplicationBaseComponent<User> {
     this.authService.getUserProfile().subscribe({
       next: (res) => {
         if (res) {
-          console.log(res);
           this.selectedItem = res;
           this.items = [];
           this.items.push(this.selectedItem);
@@ -97,7 +96,6 @@ export class UserFormComponent extends ApplicationBaseComponent<User> {
   }
 
   override onReload(): void {
-    console.log('OnLoad');
     this.onLoadItems();
   }
 

@@ -60,5 +60,21 @@ namespace PasswordKEEP.Services
             string plainText = Encoding.UTF8.GetString(plainTextBytes, 0, decryptedByteCount);
             return plainText;
         }
+
+        public string GeneratePassword(int length = 8)
+        {
+            var characters = "ABCDEFGHJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*?_-";
+
+            Random random = new Random();
+
+            char[] chars = new char[length];
+
+            for(int i=0; i<length; i++)
+            {
+                chars[i] = characters[random.Next(0, characters.Length)];
+            }
+
+            return new string(chars);
+        }
     }
 }

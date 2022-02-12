@@ -13,5 +13,7 @@ namespace Entities.DataTransferObjects
         public string Username { get; set; }
         [Required(ErrorMessage = "Password required")]
         public string Password { get; set; }
+        public bool GeneratePassword { get; set; }
+        public int PasswordLength { get; set; }
     }
 }

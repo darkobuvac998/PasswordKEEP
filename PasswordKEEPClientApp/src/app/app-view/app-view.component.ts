@@ -43,7 +43,7 @@ export class AppViewComponent extends ApplicationBaseComponent<Application> {
     protected override notificationService: NotificationService,
     protected override modalService: NgbModal,
     private authService: AuthService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
   ) {
     super(httpService, router, route, notificationService, modalService);
     this.title = 'Applications';
@@ -61,8 +61,8 @@ export class AppViewComponent extends ApplicationBaseComponent<Application> {
   override ngOnInit(): void {
     this.onReload();
     this.formAdd = this.fb.group({
-      applicationName: ['', [Validators.required]],
-      appUrl: ['', [Validators.required]],
+      name: ['', [Validators.required]],
+      url: ['', [Validators.required]],
     });
   }
 
@@ -108,7 +108,8 @@ export class AppViewComponent extends ApplicationBaseComponent<Application> {
   override canSave(): boolean {
     if (this.mode == FormMode.Add && this.formAdd.valid) {
       return true;
-    } if(this.mode==FormMode.Edit) {
+    }
+    if (this.mode == FormMode.Edit && this.checkSelectedItem()) {
       return true;
     }
     return false;
@@ -116,5 +117,29 @@ export class AppViewComponent extends ApplicationBaseComponent<Application> {
 
   getControls(control: string) {
     return this.formAdd.get(control) as FormControl;
+  }
+
+  override onSave(): void {
+    this.prepareAddObject();
+    super.onSave();
+  }
+
+  private prepareAddObject() {
+    let res = {};
+    Object.keys(this.formAdd.controls).forEach((prop) => {
+      res = { ...res, [prop.toString()]: this.formAdd.controls[prop].value };
+    });
+
+    this.itemAdd = res;
+  }
+
+  private checkSelectedItem(){
+    let res = true;
+    Object.keys(this.selectedItem).forEach(prop =>{
+      if(!this.selectedItem[prop]){
+        res = false;
+      }
+    });
+    return res;
   }
 }
