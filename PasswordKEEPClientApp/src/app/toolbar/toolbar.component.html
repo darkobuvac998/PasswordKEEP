@@ -7,6 +7,12 @@
                 </div>
                 <p class="position-absolute top-50 start-50 translate-middle-y fs-5 hide">{{'Apps' | uppercase}}</p>
             </div>
+            <div *ngIf="showManageUsers" (click)="manageUsers()" class="box d-flex position-relative">
+                <div class="icon save">
+                    <i class="bi bi-people icon-size"></i>
+                </div>
+                <p class="position-absolute top-50 start-50 translate-middle-y fs-5 hide">{{'Manage users' | uppercase}}</p>
+            </div>
             <div *ngIf="mode==1" (click)="onModeChange(formMode.Thumbnail)" class="box d-flex position-relative">
                 <div class="icon save">
                     <i class="bi bi-grid icon-size"></i>

@@ -98,9 +98,10 @@
                                 </div>
                                 <ng-container *ngIf="getControls('generatePassword')?.value">
                                     <div class="form-select-sm">
-                                        <input class="form-control-sm m-2" style="border: none;" type="number"
-                                            id="gridCheck" formControlName="passwordLength">
-                                        <label [attr.min]="5" class="form-check-label" for="gridCheck">
+                                        <input [ngClass]="{'invalid': getControls('passwordLength')?.invalid}"
+                                            [attr.min]="5" class="form-control-sm m-2" style="border: none;"
+                                            type="number" id="gridCheck" formControlName="passwordLength">
+                                        <label class="form-check-label" for="gridCheck">
                                             Password length
                                         </label>
                                     </div>

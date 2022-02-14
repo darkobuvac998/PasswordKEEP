@@ -7,8 +7,11 @@ import {
   Output,
   SimpleChanges,
 } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { delay, of, timer } from 'rxjs';
+import { AuthService } from '../auth/auth.service';
 import { FormMode } from '../shared/form-mode';
+import { UserFormComponent } from '../user-form/user-form.component';
 
 @Component({
   selector: 'toolbar',
@@ -23,6 +26,7 @@ export class ToolbarComponent implements OnInit {
   @Output() goBack: EventEmitter<any> = new EventEmitter<any>();
   @Output() search: EventEmitter<string> = new EventEmitter<string>();
   @Output() delete: EventEmitter<any> = new EventEmitter<any>();
+  @Output() mngUsers: EventEmitter<any> = new EventEmitter<any>();
   @Input() canEdit: boolean;
   @Input() canAdd: boolean;
   @Input() canDetail: boolean;
@@ -30,16 +34,21 @@ export class ToolbarComponent implements OnInit {
   @Input() canSave: boolean;
 
   @Input() public goBackBtn: boolean = false;
+  public showManageUsers: boolean = false;
 
   public searchTerm: string = null;
   public isSearchCollapsed: boolean = true;
 
   public formMode = FormMode;
 
-  constructor() {}
+  constructor(private authService: AuthService, private route: ActivatedRoute) {}
 
   ngOnInit(): void {
     this.mode = FormMode.Thumbnail;
+    let roles =  this.authService.roles.pop().includes('Admin');
+    let userComponent = this.route.snapshot.routeConfig.component.name == 'UserFormComponent'
+    this.showManageUsers = roles && userComponent;
+    this.canAdd = !userComponent;
   }
 
   onModeChange(newMode: FormMode) {
@@ -87,5 +96,9 @@ export class ToolbarComponent implements OnInit {
     if (this.canDelete) {
       this.delete.emit();
     }
+  }
+
+  manageUsers(){
+    this.mngUsers.emit();
   }
 }

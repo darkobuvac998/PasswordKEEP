@@ -15,6 +15,6 @@ namespace Contracts
         Task<ServiceResult<AccountDto>> UpdateAccountForApplication(Guid applicationId, Guid id, AccountForCreationDto accountDto);
 
         Task DeleteAccountForApplication(Guid applicationId, Guid id);
-        Task DeleteAccountForApplication(Account account);
+        Task DeleteAccountForApplication(AccountDto account);
     }
 }

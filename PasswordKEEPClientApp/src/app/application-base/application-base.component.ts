@@ -247,7 +247,6 @@ export class ApplicationBaseComponent<T>
       .postItem<T>(url, this._classType, this.component.itemAdd)
       .subscribe({
         next: (res) => {
-          console.log(res);
           this.component.selectedItem = res;
           this.component.items.push(res);
           this.clearAddItem();
@@ -353,5 +352,9 @@ export class ApplicationBaseComponent<T>
     for (const prop of Object.getOwnPropertyNames(this.component.itemAdd)) {
       delete this.component.itemAdd[prop];
     }
+  }
+
+  mngUsers(){
+    
   }
 }

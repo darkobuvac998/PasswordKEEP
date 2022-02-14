@@ -21,6 +21,7 @@ import { NotificationService } from './services/notification-service.service';
 import { ToastrModule } from 'ngx-toastr';
 import { SharedModule } from './shared/shared.module';
 import { AuthModule } from './auth/auth.module';
+import { UserLookupComponent } from './user-form/user-lookup/user-lookup.component';
 
 @NgModule({
   declarations: [
@@ -32,6 +33,7 @@ import { AuthModule } from './auth/auth.module';
     AppViewComponent,
     AccountViewComponent,
     UserFormComponent,
+    UserLookupComponent,
   ],
   imports: [
     AppRoutingModule,

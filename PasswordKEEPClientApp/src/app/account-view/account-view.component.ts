@@ -66,7 +66,7 @@ export class AccountViewComponent extends ApplicationBaseComponent<Account> {
       password: ['', [Validators.required]],
       confirmPassword: ['', [Validators.required]],
       generatePassword: [false],
-      passwordLength: ['']
+      passwordLength: ['', [Validators.min(5)]],
     });
   }
 
@@ -126,10 +126,24 @@ export class AccountViewComponent extends ApplicationBaseComponent<Account> {
   }
 
   override canSave(): boolean {
-    if (this.mode == FormMode.Add && this.formAdd.valid) {
-      return true;
+    if (this.mode == FormMode.Add) {
+      let valid;
+      let userName = this.formAdd.get('userName')?.valid;
+      let password = this.formAdd.get('password')?.valid;
+      let confirmPassword = this.formAdd.get('confirmPassword')?.valid;
+      if (this.formAdd.get('generatePassword')?.value) {
+        let passwordLength = this.formAdd.get('passwordLength')?.valid;
+        valid = userName && passwordLength;
+      } else {
+        valid = userName && password && confirmPassword;
+      }
+      return valid;
     }
-    if (this.mode == FormMode.Edit && this.checkSelectedItem() && this.passwordConfirmed()) {
+    if (
+      this.mode == FormMode.Edit &&
+      this.checkSelectedItem() &&
+      this.passwordConfirmed()
+    ) {
       return true;
     }
     return false;
@@ -146,6 +160,11 @@ export class AccountViewComponent extends ApplicationBaseComponent<Account> {
       res = { ...res, [prop.toString()]: this.formAdd.controls[prop].value };
     });
 
+    if(this.formAdd.get('generatePassword')?.value){
+      res = {...res, password: 'Auto generate password'}
+    }else{
+      res = {...res, passwordLength: 0}
+    }
     this.itemAdd = res;
     console.log(this.itemAdd);
   }
@@ -160,8 +179,8 @@ export class AccountViewComponent extends ApplicationBaseComponent<Account> {
     return res;
   }
 
-  passwordConfirmed(){
-    if(this.mode == FormMode.Edit){
+  passwordConfirmed() {
+    if (this.mode == FormMode.Edit) {
       return this.selectedItem?.password == this.confirmPassword;
     }
     return false;

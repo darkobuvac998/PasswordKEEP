@@ -97,8 +97,9 @@ namespace PasswordKEEP
         public async Task<UserDto> UpdateUser(string userName, UserForRegistrationDto userDto)
         {
             var user = await _userManager.FindByNameAsync(userName);
-            if (user != null)
+            if (user != null && await _userManager.CheckPasswordAsync(user, userDto.Password))
             {
+
                 _mapper.Map(userDto, user);
                 var result = await _userManager.UpdateAsync(user);
                 if (result.Succeeded)
@@ -108,6 +109,46 @@ namespace PasswordKEEP
                 }
             }
             return null;
+        }
+
+        public async Task<bool> DeleteUser(string userName)
+        {
+            var user = await _userManager.FindByNameAsync(userName);
+            if(user != null)
+            {
+                var result = await _userManager.DeleteAsync(user);
+                if (result.Succeeded)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            return false;
+        }
+
+        public async Task<IdentityResult> ChangePasswordAsync(PasswordChangeDto passwordChangeDto)
+        {
+            var user = await _userManager.FindByNameAsync(passwordChangeDto.UserName);
+            
+            if(user != null && await _userManager.CheckPasswordAsync(user, passwordChangeDto.CurrentPassword))
+            {
+                var result = await _userManager.ChangePasswordAsync(user, passwordChangeDto.CurrentPassword, passwordChangeDto.NewPassword);
+                return result;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        public async Task<IEnumerable<UserDto>> GetUsers()
+        {
+            var users = await _userManager.GetUsersInRoleAsync("User");
+            var usersDto = _mapper.Map<IEnumerable<UserDto>>(users);
+            return usersDto;
         }
     }
 }

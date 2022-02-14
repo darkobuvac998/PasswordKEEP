@@ -93,5 +93,48 @@ namespace PasswordKEEP.Controllers
             }
             return BadRequest();
         }
+
+        [HttpDelete("user/{userName}")]
+        public async Task<IActionResult> DeleteUser(string userName)
+        {
+            var result = await _authManager.DeleteUser(userName);
+            if (result == true)
+            {
+                return Ok(true);
+            }
+            else
+            {
+                return BadRequest();
+            }
+        }
+
+        [HttpPost("user/password")]
+        public async Task<IActionResult> ChangeUserPassword([FromBody] PasswordChangeDto passwordChangeDto)
+        {
+            var result = await _authManager.ChangePasswordAsync(passwordChangeDto);
+            if(result != null)
+            {
+                if (result.Succeeded)
+                {
+                    return Ok();
+                }
+                else
+                {
+                    return BadRequest(result.Errors);
+                }
+            }
+            else
+            {
+                return NotFound();
+            }
+        }
+
+        [HttpGet("users")]
+        [Authorize(Policy = "CanManageUsers")]
+        public async Task<IActionResult> GetUsers()
+        {
+            var users = await _authManager.GetUsers();
+            return Ok(users);
+        }
     }
 }

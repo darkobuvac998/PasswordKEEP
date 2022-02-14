@@ -1,0 +1,44 @@
+<div class="container">
+    <div class="modal-header">
+        <div class="d-flex justify-content-between w-100">
+            <div class="col-md-8">
+                <p class="fs-5" style="letter-spacing: 0.2rem;">
+                    <b>{{user?.firstName}}&nbsp;{{user?.lastName}}</b>
+                </p>
+            </div>
+            <div class="col-md-4">
+                <div class="d-flex justify-content-end">
+                    <button (click)="dismiss()" type="button" class="btn btn-outline-danger">
+                        <i class="bi bi-x-circle"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-body">
+        <div class="d-flex justify-content-center flex-column w-100 g-2">
+            <div class="col-md-12 m-1">
+                <input type="text" class="form-control" [value]="user?.id">
+            </div>
+            <div class="col-md-12 m-1">
+                <input type="text" class="form-control" [value]="user?.userName">
+            </div>
+            <div class="col-md-12 m-1">
+                <input type="text" class="form-control" [value]="user?.email">
+            </div>
+            <div class="col-md-12 m-1">
+                <input type="text" class="form-control" [value]="user?.phoneNumber">
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <div class="d-flex justify-content-end flex-row gap-2">
+            <button class="btn btn-outline-success" (click)="deleteUser()">
+                <i class="bi bi-trash pe-2"></i>Delete
+            </button>
+            <button (click)="dismiss()" class="btn btn-outline-danger">
+                <i class="bi bi-x pe-2"></i>Cancel
+            </button>
+        </div>
+    </div>
+</div>

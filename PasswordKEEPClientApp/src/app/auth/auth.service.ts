@@ -28,6 +28,10 @@ export class AuthService {
   }
 
   public get roles() {
+    if(this._roles.length == 0){
+      let roles = this.jwtService.getUserRoles();
+      return roles;
+    }
     return this._roles;
   }
   public set roles(value: any[]) {
@@ -84,6 +88,20 @@ export class AuthService {
     let url = `${this.AUTH_API}/user/${this.user.name}`;
     console.log(user);
     return this.httpClient.put<User>(url, user).pipe(debounceTime(1000));
+  }
+  deleteUser(userName: string){
+    let url = `${this.AUTH_API}/user/${userName}`;
+    return this.httpClient.delete(url).pipe(debounceTime(1000));
+  }
+
+  changePassword(object: any){
+    let url = `${this.AUTH_API}/user/password`;
+    return this.httpClient.post(url, object).pipe(debounceTime(1000));
+  }
+
+  getUsers(){
+    let url = `${this.AUTH_API}/users`;
+    return this.httpClient.get<User[]>(url).pipe(debounceTime(500));
   }
 
   logOut() {

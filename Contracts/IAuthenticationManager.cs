@@ -1,5 +1,6 @@
 ﻿using Entities.DataTransferObjects;
 using Entities.Models;
+using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,5 +15,8 @@ namespace Contracts
         Task<string> CreateToken();
         Task<UserDto> GetUser(string userName);
         Task<UserDto> UpdateUser(string userName, UserForRegistrationDto user);
+        Task<bool> DeleteUser(string userName);
+        Task<IdentityResult> ChangePasswordAsync(PasswordChangeDto passwordChangeDto);
+        Task<IEnumerable<UserDto>> GetUsers();
     }
 }

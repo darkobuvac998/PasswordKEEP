@@ -4,5 +4,5 @@ export class User{
     public lastName: string = null;
     public phoneNumber: string = null;
     public email: string = null;
-    public username: string = null;
+    public userName: string = null;
 }

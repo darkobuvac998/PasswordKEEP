@@ -21,8 +21,8 @@
         <div class="align-self-auto">
             <toolbar [canSave]="component.canSave()" [canAdd]="component.canAdd()" [canDelete]="component.canDelete()"
                 [canDetail]="component.canDetail()" [canEdit]="component.canEdit()" (search)="onSearch($event)"
-                (delete)="onDelete()" [goBackBtn]="component.showGoToAppButton" (goBack)="goToApplications()"
-                (save)="component.onSave()" (reload)="component.onReload()"
+                (delete)="component.onDelete()" [goBackBtn]="component.showGoToAppButton" (goBack)="goToApplications()"
+                (save)="component.onSave()" (reload)="component.onReload()" (mngUsers)="component.mngUsers()"
                 (modeChange)="component.onModeChange($event)" [mode]="component.mode">
             </toolbar>
         </div>

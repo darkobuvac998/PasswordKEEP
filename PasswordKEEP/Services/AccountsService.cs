@@ -65,11 +65,12 @@ namespace PasswordKEEP.Services
             { return; }
         }
 
-        public async Task DeleteAccountForApplication(Account account)
+        public async Task DeleteAccountForApplication(AccountDto account)
         {
-            if (account != null)
+            var acc = _repositoryManager.Account.FindByCondition(acc => acc.ApplicationId == account.ApplicationId && acc.Id == account.Id, false).FirstOrDefault();
+            if (acc != null)
             {
-                _repositoryManager.Account.Delete(account);
+                _repositoryManager.Account.Delete(acc);
                 await _repositoryManager.SaveAsync();
                 return;
             }

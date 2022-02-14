@@ -78,7 +78,7 @@ namespace PasswordKEEP.Controllers
         [EnsureAccountExists]
         public async Task<IActionResult> DeleteAccountForCompany(Guid applicationId, Guid id)
         {
-            var accont = HttpContext.Items["account"] as Account;
+            var accont = HttpContext.Items["account"] as AccountDto;
             if (accont != null)
             {
                 await _accountsService.DeleteAccountForApplication(accont);

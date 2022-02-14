@@ -1,25 +1,49 @@
 <div>
     <application-base [component]="component">
         <ng-template #listTemplate let-items>
-            <div class="d-flex justify-content-center">
-                <div class="row gap-0">
-                    <div class="col" *ngFor="let item of items">
-                        <app-card (onDoubleClick)="onItemDoubleClick($event)"
-                            (onSelected)="onSelectedItemChange($event)" [item]="item">
-                            <ng-template #cardTemplate>
-                                <h3>{{item?.userName}}</h3>
-                                <h4>{{item?.email}}</h4>
-                                <ng-container *ngIf="item?.phoneNumber">
-                                    <span class="link-text">
-                                        Phone number:
-                                        <h6 class="fs-6">{{item?.phoneNumber}}</h6>
-                                    </span>
-                                </ng-container>
-                            </ng-template>
-                        </app-card>
+            <ng-container *ngIf="!showUsersManagement">
+                <div class="d-flex justify-content-center">
+                    <div class="row gap-0">
+                        <div class="col" *ngFor="let item of items">
+                            <app-card (onDoubleClick)="onItemDoubleClick($event)"
+                                (onSelected)="onSelectedItemChange($event)" [item]="item">
+                                <ng-template #cardTemplate>
+                                    <h3>{{item?.userName}}</h3>
+                                    <h4>{{item?.email}}</h4>
+                                    <ng-container *ngIf="item?.phoneNumber">
+                                        <span class="link-text">
+                                            Phone number:
+                                            <h6 class="fs-6">{{item?.phoneNumber}}</h6>
+                                        </span>
+                                    </ng-container>
+                                </ng-template>
+                            </app-card>
+                        </div>
                     </div>
                 </div>
-            </div>
+            </ng-container>
+            <ng-container *ngIf="showUsersManagement">
+                <div class="d-flex justify-content-center">
+                    <div class="row gap-0">
+                        <div class="col" *ngFor="let user of users">
+                            <app-card [item]="user" (onDoubleClick)="userDetalis($event)">
+                                <ng-template #cardTemplate>
+                                    <h3>
+                                        {{user?.userName}}
+                                    </h3>
+                                    <h4>{{user?.email}}</h4>
+                                    <ng-container *ngIf="user?.phoneNumber">
+                                        <span class="link-text">
+                                            Phone number:
+                                            <h6 class="fs-6">{{user?.phoneNumber}}</h6>
+                                        </span>
+                                    </ng-container>
+                                </ng-template>
+                            </app-card>
+                        </div>
+                    </div>
+                </div>
+            </ng-container>
         </ng-template>
         <ng-template #detailTemplate let-selected>
             <div class="d-flex justify-content-between w-100 h-100 flex-column">
@@ -69,14 +93,49 @@
                             </div>
                             <div class="input-group">
                                 <div class="input-group-prepend">
+                                    <span class="input-group-text" id="">Password</span>
+                                </div>
+                                <input type="password" class="form-control" [(ngModel)]="confirmPassword"
+                                    name="password" [required]="true" [disabled]="component.mode==formMode.Detail">
+                            </div>
+                            <div>
+                                <em *ngIf="mode==2 && (confirmPassword==null || confirmPassword.length==0)"
+                                    class="alert-danger">You must confirm your
+                                    password!</em>
+                            </div>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
                                     <span class="input-group-text" id="">User id</span>
                                 </div>
                                 <input type="text" class="form-control" [(ngModel)]="selected.id" name="id"
-                                    [value]="selected?.id" [required]="true"
-                                    [disabled]="component.mode==formMode.Detail">
+                                    [value]="selected?.id" [required]="true" [disabled]="true">
                             </div>
                         </div>
                     </form>
+                    <ng-container *ngIf="mode==2">
+                        <form [formGroup]="formChangePassword" (ngSubmit)="changePassword()">
+                            <div class="d-flex justify-content-center gap-3 m-3">
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text" id="">Current Password</span>
+                                    </div>
+                                    <input type="password" class="form-control" formControlName="currentPassword">
+                                </div>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text" id="">New password</span>
+                                    </div>
+                                    <input type="password" class="form-control" name="newPassword"
+                                        formControlName="newPassword">
+                                </div>
+                            </div>
+                            <div class="d-flex justify-content-end me-3">
+                                <button [disabled]="formChangePassword.invalid"
+                                    [ngClass]="{'btn btn-outline-danger': formChangePassword.invalid, 'btn btn-outline-success': formChangePassword.valid}"
+                                    type="submit">Change password</button>
+                            </div>
+                        </form>
+                    </ng-container>
                 </div>
             </div>
         </ng-template>

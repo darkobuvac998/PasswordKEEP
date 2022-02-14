@@ -5,6 +5,7 @@ import { LocalStorageService } from './local-storage.service';
 
 export const TOKEN_KEY = 'auth-token';
 export const USER_KEY = 'app-user';
+export const ROLES_KEY = 'user-roles';
 
 @Injectable({
   providedIn: 'root',
