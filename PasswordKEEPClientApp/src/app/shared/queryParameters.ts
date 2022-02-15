@@ -23,6 +23,10 @@ export class QueryParameters {
     return result;
   }
 
+  public resetPageNumber(){
+    this.pageNumber = 1;
+  }
+
   private buildQueryParamsObject() {
     let result = {};
 

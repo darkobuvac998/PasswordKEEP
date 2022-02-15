@@ -2,6 +2,7 @@
 using Contracts;
 using Entities.DataTransferObjects;
 using Entities.Models;
+using Entities.Queries;
 using Entities.ResultModel;
 using Serilog;
 using System;
@@ -95,6 +96,22 @@ namespace PasswordKEEP.Services
             }
             var accountsDto = _mapper.Map<IEnumerable<AccountDto>>(accounts);
 
+            return new ServiceResult<IEnumerable<AccountDto>> { Succeded = true, Result = accountsDto };
+        }
+
+        public async Task<ServiceResult<IEnumerable<AccountDto>>> PagedListAccountsAsync(Guid applicationId, QueryParameters queryParameters)
+        {
+            var result = await _repositoryManager.Account.PagedListAsync(acc => acc.ApplicationId == applicationId, false, queryParameters);
+            foreach (var account in result)
+            {
+                account.Password = _passwordService.Decrypt(account.Password);
+            }
+            var accountsDto = _mapper.Map<IEnumerable<AccountDto>>(result);
+            if (queryParameters.Search != null)
+            {
+                accountsDto = accountsDto.Where(acc => acc.Username.Contains(queryParameters.Search)).ToList();
+                return new ServiceResult<IEnumerable<AccountDto>> { Succeded = true, Result = accountsDto };
+            }
             return new ServiceResult<IEnumerable<AccountDto>> { Succeded = true, Result = accountsDto };
         }
 

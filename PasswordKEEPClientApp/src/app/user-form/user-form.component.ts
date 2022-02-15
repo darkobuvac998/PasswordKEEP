@@ -13,7 +13,6 @@ import { NotificationService } from '../services/notification-service.service';
 import { FormMode } from '../shared/form-mode';
 import { handleError } from '../shared/global-error-handler.service';
 import { UserLookupComponent } from './user-lookup/user-lookup.component';
-
 @Component({
   selector: 'app-user-form',
   templateUrl: './user-form.component.html',
@@ -25,7 +24,6 @@ export class UserFormComponent extends ApplicationBaseComponent<User> {
   public formChangePassword: FormGroup;
   public showUsersManagement: boolean;
   public users: User[];
-
   constructor(
     protected override httpService: HttpService,
     protected override router: Router,
@@ -42,7 +40,6 @@ export class UserFormComponent extends ApplicationBaseComponent<User> {
     this.mode = FormMode.Thumbnail;
     this.showGoToAppButton = true;
   }
-
   override ngOnInit(): void {
     super.ngOnInit();
     this.onReload();
@@ -52,24 +49,19 @@ export class UserFormComponent extends ApplicationBaseComponent<User> {
       newPassword: ['', [Validators.required]],
     });
   }
-
   override ngAfterViewInit(): void {}
-
   override onSelectedItemChange(item: any): void {
     super.onSelectedItemChange(item);
     this.userCards.forEach((item) => (item.selected = false));
   }
-
   override onItemDoubleClick(item: any): void {
     super.onItemDoubleClick(item);
     this.userCards.forEach((item) => (item.selected = false));
   }
-
   override onModeChange(newMode: FormMode): void {
     super.onModeChange(newMode);
     this.onSelectCard(500);
   }
-
   onSelectCard(time: number) {
     let delay = timer(time);
     delay.subscribe(() => {
@@ -80,7 +72,6 @@ export class UserFormComponent extends ApplicationBaseComponent<User> {
       });
     });
   }
-
   override onLoadItems(): void {
     this.authService.getUserProfile().subscribe({
       next: (res) => {
@@ -96,11 +87,9 @@ export class UserFormComponent extends ApplicationBaseComponent<User> {
       complete: () => {},
     });
   }
-
   override onReload(): void {
     this.onLoadItems();
   }
-
   override updateItem(): void {
     console.log('update');
     this.authService.updateUserProfile(this.selectedItem).subscribe({
@@ -115,7 +104,6 @@ export class UserFormComponent extends ApplicationBaseComponent<User> {
       complete: () => {},
     });
   }
-
   @Confirmable(
     'Question',
     `Do you wan't to delete you profile? All your passwords will be lost!`
@@ -132,7 +120,6 @@ export class UserFormComponent extends ApplicationBaseComponent<User> {
       complete: () => {},
     });
   }
-
   override onSave(): void {
     this.selectedItem = {
       ...this.selectedItem,
@@ -140,7 +127,6 @@ export class UserFormComponent extends ApplicationBaseComponent<User> {
     };
     this.updateItem();
   }
-
   override canSave(): boolean {
     let valid = true;
     if (this.selectedItem) {
@@ -150,15 +136,12 @@ export class UserFormComponent extends ApplicationBaseComponent<User> {
         }
       });
     }
-
     return valid && !!this.confirmPassword;
   }
-
   isAdmin() {
     let roles = this.authService.roles.pop();
     return roles.includes('Admin');
   }
-
   changePassword() {
     let dto = {};
     Object.keys(this.formChangePassword.controls).forEach((prop) => {
@@ -167,10 +150,8 @@ export class UserFormComponent extends ApplicationBaseComponent<User> {
         [prop.toString()]: this.formChangePassword.controls[prop].value,
       };
     });
-
     dto = { ...dto, userName: this.authService.user.name };
     console.log(dto);
-
     this.authService.changePassword(dto).subscribe({
       next: (res) => {
         this.notificationService.showSuccess('Password successfully changed!');
@@ -181,13 +162,10 @@ export class UserFormComponent extends ApplicationBaseComponent<User> {
       },
     });
   }
-
   showUsersMangementPanel() {
     this.showUsersManagement = !this.showUsersManagement;
   }
-
   showUsers() {
-    // this.showUsersMangementPanel();
     this.authService.getUsers().subscribe({
       next: (res) => {
         if (res) {
@@ -198,12 +176,12 @@ export class UserFormComponent extends ApplicationBaseComponent<User> {
       complete: () => {},
     });
   }
-
   override mngUsers(): void {
     this.showUsersMangementPanel();
-    this.showUsers();
+    if (this.showUsersManagement) {
+      this.showUsers();
+    }
   }
-
   userDetalis(user: any) {
     let modalRef = this.modalService.open(UserLookupComponent, {
       animation: true,

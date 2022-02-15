@@ -1,6 +1,6 @@
 ﻿using Contracts;
 using Entities.DataTransferObjects;
-using Entities.Models;
+using Entities.Queries;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
@@ -26,9 +26,9 @@ namespace PasswordKEEP.Controllers
 
         [HttpGet]
         [ProducesResponseType(200)]
-        public async Task<IActionResult> GetAccountsForApplication(Guid applicationId)
+        public async Task<IActionResult> GetAccountsForApplication(Guid applicationId, [FromQuery] QueryParameters queryParameters)
         {
-            var result = await _accountsService.GetAccountsForApplicationAsync(applicationId);
+            var result = await _accountsService.PagedListAccountsAsync(applicationId, queryParameters);
             if (result.Succeded)
                 return Ok(result.Result);
             else

@@ -2,6 +2,7 @@
 using Contracts;
 using Entities.DataTransferObjects;
 using Entities.Models;
+using Entities.Queries;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
@@ -29,9 +30,9 @@ namespace PasswordKEEP.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllApplications(string userId)
+        public async Task<IActionResult> GetAllApplications(string userId, [FromQuery] QueryParameters queryParameters)
         {
-            var applications = await _repositoryManager.Application.FindByConditionAsync(app => app.UserId == userId, false);
+            var applications = await _repositoryManager.Application.PagediListWithSearch(app => app.UserId == userId, false, queryParameters);
             if (applications == null)
             {
                 return NotFound();

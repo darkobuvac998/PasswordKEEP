@@ -1,10 +1,10 @@
 ﻿using Contracts;
+using Entities.Queries;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Repositories
@@ -34,6 +34,12 @@ namespace Repositories
             trackChanges ? _context.Set<T>().Include(expressionInclude).Where(expressionCondition)
                          : _context.Set<T>().Include(expressionInclude).Where(expressionCondition)
                                             .AsNoTracking();
+
+        public async Task<IEnumerable<T>> PagedListAsync(Expression<Func<T, bool>> expression, bool trackChanges, QueryParameters queryParameters)
+        {
+            return await FindByCondition(expression, trackChanges).
+                Skip(queryParameters.PageSize * (queryParameters.PageNumber - 1)).Take(queryParameters.PageSize).ToListAsync();
+        }
 
         public void Update(T entity) => _context.Set<T>().Update(entity);
     }

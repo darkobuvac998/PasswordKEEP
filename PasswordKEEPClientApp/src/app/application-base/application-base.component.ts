@@ -120,6 +120,9 @@ export class ApplicationBaseComponent<T>
     this.search$.pipe(debounceTime(1000)).subscribe(() => {
       this.component.queryParameters.search = this._searchTerm;
       this.updateRouterUrl();
+      setTimeout(() => {
+        this.onLoadItems();
+      }, 500);
     });
   }
 
@@ -191,12 +194,17 @@ export class ApplicationBaseComponent<T>
     });
   }
   onLoadItems() {
+    this.component.queryParameters.resetPageNumber();
     this.component.items = [];
+    let url = `${
+      this.component.resourceUrl
+    }${this.component.queryParameters.buildQueryParameters()}`;
     this.subscription = this.httpService
-      .getAllItems<T>(this.component.resourceUrl, this.component.itemsType)
+      .getAllItems<T>(url, this.component.itemsType)
       .subscribe({
         next: (res) => {
           this.component.items = res;
+          this.updateRouterUrl();
         },
         error: (err) => {
           handleError(err);
@@ -326,7 +334,7 @@ export class ApplicationBaseComponent<T>
     return true;
   }
 
-  canDelete(){
+  canDelete() {
     return true;
   }
 
@@ -342,9 +350,12 @@ export class ApplicationBaseComponent<T>
   }
 
   private updateItems(value: any) {
-    this.items = this.items.map((item) => {
-      console.log(item);
-      item.id != value.id ? item : value;
+    this.component.items = this.component.items.map((item) => {
+      if (item.id != value?.id) {
+        return item;
+      } else {
+        return value;
+      }
     });
   }
 
@@ -354,7 +365,27 @@ export class ApplicationBaseComponent<T>
     }
   }
 
-  mngUsers(){
-    
+  mngUsers() {}
+
+  public loadMore() {
+    this.component.queryParameters.pageNumber++;
+    let url = `${this.component.resourceUrl}${this.component.queryParameters.buildQueryParameters()}`;
+    this.subscription = this.httpService
+      .getAllItems<T>(url, this.component.itemsType)
+      .subscribe({
+        next: (res) => {
+          if (res) {
+            this.component.items = [...this.component.items, ...res];
+            this.updateRouterUrl();
+          }
+        },
+        error: (err) => handleError(err),
+        complete: () => {},
+      });
+  }
+
+  disableLoadMore(){
+    let probablyNumberOfItems = this.component.queryParameters.pageNumber*this.component.queryParameters.pageSize;
+    return probablyNumberOfItems > this.component.items?.length;
   }
 }

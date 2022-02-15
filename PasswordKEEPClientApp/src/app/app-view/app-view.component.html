@@ -4,26 +4,30 @@
             <div class="d-flex justify-content-center w-100 h-100">
                 <div class="row gap-0 w-100 h-100">
                     <!-- <div class="d-flex"> -->
-                        <div class="col" *ngFor="let item of items">
-                            <app-card [item]="item" (onDoubleClick)="onItemDoubleClick($event)"
-                                (onSelected)="onSelectedItemChange($event)">
-                                <ng-template #cardTemplate let-item>
-                                    <h3 class="fs-2">{{item?.name}}</h3>
-                                    <!-- <h4 *ngIf="accounts?.items?.length">{{'Account number: ' + accounts?.items?.length}}
+                    <div class="col" *ngFor="let item of items">
+                        <app-card [item]="item" (onDoubleClick)="onItemDoubleClick($event)"
+                            (onSelected)="onSelectedItemChange($event)">
+                            <ng-template #cardTemplate let-item>
+                                <h3 class="fs-2">{{item?.name}}</h3>
+                                <!-- <h4 *ngIf="accounts?.items?.length">{{'Account number: ' + accounts?.items?.length}}
                                     </h4> -->
-                                    <ng-container *ngIf="item?.url">
-                                        <ng-template #tipContent let-greeting="gretting">
-                                            <p>{{item?.url}}</p>
-                                        </ng-template>
-                                        <span [ngbTooltip]="tipContent" class="link-text">
-                                            Go to application
-                                            <a [href]="item?.url"><i class="bi bi-arrow-right"></i></a>
-                                        </span>
-                                    </ng-container>
-                                </ng-template>
-                            </app-card>
-                        </div>
-                    <!-- </div> -->
+                                <ng-container *ngIf="item?.url">
+                                    <ng-template #tipContent let-greeting="gretting">
+                                        <p>{{item?.url}}</p>
+                                    </ng-template>
+                                    <span [ngbTooltip]="tipContent" class="link-text">
+                                        Go to application
+                                        <a [href]="item?.url"><i class="bi bi-arrow-right"></i></a>
+                                    </span>
+                                </ng-container>
+                            </ng-template>
+                        </app-card>
+                    </div>
+                    <div *ngIf="!disableLoadMore()" class="col-sm-1 d-flex justify-content-center align-self-center h-100">
+                        <button  (click)="loadMore()" style="transform: rotate(-90deg);" class="btn btn-outline-secondary">
+                            <i class="bi bi-arrow-clockwise pe-2 icon-size-20"></i><b class="fs-5">Load</b>
+                        </button>
+                    </div>
                 </div>
             </div>
         </ng-template>

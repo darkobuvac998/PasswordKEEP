@@ -1,5 +1,6 @@
 ﻿using Entities.DataTransferObjects;
 using Entities.Models;
+using Entities.Queries;
 using Entities.ResultModel;
 using System;
 using System.Collections.Generic;
@@ -16,5 +17,7 @@ namespace Contracts
 
         Task DeleteAccountForApplication(Guid applicationId, Guid id);
         Task DeleteAccountForApplication(AccountDto account);
+
+        Task<ServiceResult<IEnumerable<AccountDto>>> PagedListAccountsAsync(Guid applicationId, QueryParameters queryParameters);
     }
 }

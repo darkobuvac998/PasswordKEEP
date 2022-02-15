@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Entities.Queries;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
@@ -14,6 +15,8 @@ namespace Contracts
 
         Task<IEnumerable<T>> FindByConditionAsync(Expression<Func<T, bool>> expression, bool trackChanges);
         IQueryable<T> FindByConditionInclude(Expression<Func<T, bool>> expressionCondition, Expression<Func<T, object>> expressionInclude, bool trackChanges);
+
+        Task<IEnumerable<T>> PagedListAsync(Expression<Func<T, bool>> expression, bool trackChanges, QueryParameters queryParameters);
         void Create(T entity);
         void Update(T entity);
         void Delete(T entity);

@@ -56,6 +56,8 @@ export class AppViewComponent extends ApplicationBaseComponent<Application> {
     this.itemAdd = new Application();
     this.queryParameters = new QueryParameters();
     this.queryParameters.baseUrl = this.resourceUrl;
+    this.queryParameters.pageNumber = 1;
+    this.queryParameters.pageSize = 5;
   }
 
   override ngOnInit(): void {
@@ -141,5 +143,9 @@ export class AppViewComponent extends ApplicationBaseComponent<Application> {
       }
     });
     return res;
+  }
+
+  public override loadMore(): void {
+      super.loadMore();
   }
 }
