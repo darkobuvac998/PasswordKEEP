@@ -57,7 +57,7 @@ export class AppViewComponent extends ApplicationBaseComponent<Application> {
     this.queryParameters = new QueryParameters();
     this.queryParameters.baseUrl = this.resourceUrl;
     this.queryParameters.pageNumber = 1;
-    this.queryParameters.pageSize = 5;
+    this.queryParameters.pageSize = 30;
   }
 
   override ngOnInit(): void {

@@ -136,6 +136,8 @@ export class AccountViewComponent extends ApplicationBaseComponent<Account> {
         valid = userName && passwordLength;
       } else {
         valid = userName && password && confirmPassword;
+        let equals = this.formAdd.get('password')?.value == this.formAdd.get('confirmPassword')?.value;
+        valid = valid && equals;
       }
       return valid;
     }
